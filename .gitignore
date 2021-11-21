@@ -1,0 +1,75 @@
+# =============== #
+# Unity generated #
+# =============== #
+[Tt]emp/
+[Oo]bj/
+[Bb]uild
+[Bb]uilds/
+[Ll]ibrary/
+[Ll]ogs/
+[Uu]nityGenerated/
+[Uu]serSettings/
+sysinfo.txt
+[Bb]uilds.7z
+*.stackdump
+[Aa]ssets/AssetStoreTools*
+*.apk
+*.unitypackage
+*.unitypackage.meta
+*.pidb.meta
+*.pdb.meta
+[Tt]emp.meta
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+[Ee]xported[Oo]bj/
+.vs/
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln*
+*.user
+*.unityproj
+.consulo/
+*.tmp
+ExportedObj/
+*.booproj
+*.svd
+*.pdb
+*.opendb
+ 
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+[Tt]humbs.db
+[Dd]esktop.ini
+
+# ============ #
+# Resilio Sync #
+# ============ #
+
+
+# ============ #
+# LineEndings  #
+# ============ #
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted to native line endings on checkout.
+*.cs text eol=crlf
+
+# ============ #
+#    Ignore    #
+# ============ #
+[Aa]ssets/StoreAssets/AmplifyShaderEditor/
+[Aa]ssets/StoreAssets/AmplifyShaderEditor.meta
+[Aa]ssets/Editor/TempSettingsEzMoney.txt
+[Aa]ssets/Editor/TempSettingsEzMoney.txt.meta
+Assets/Temp

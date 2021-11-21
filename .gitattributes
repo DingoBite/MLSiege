@@ -1,0 +1,121 @@
+* text=auto
+
+*.cs diff=csharp
+*.csproj text
+*.sln text
+*.ps1 text
+*.cmd text
+
+# Unity YAML
+*.[mM][aA][tT] merge=unityyamlmerge eol=lf
+*.[aA][nN][iI][mM] merge=unityyamlmerge eol=lf
+*.[uU][nN][iI][tT][yY] merge=unityyamlmerge eol=lf
+*.[pP][rR][eE][fF][aA][bB] merge=unityyamlmerge eol=lf
+*.[pP][hH][yY][sS][iI][cC][mM][aA][tT][eE][rR][iI][aA][lL]2[dD] merge=unityyamlmerge eol=lf
+*.[pP][hH][yY][sS][iI][cC][mM][aA][tT][eE][rR][iI][aA][lL] merge=unityyamlmerge eol=lf
+*.[aA][sS][sS][eE][tT] merge=unityyamlmerge eol=lf
+*.[mM][eE][tT][aA] merge=unityyamlmerge eol=lf
+*.[cC][oO][nN][tT][rR][oO][lL][lL][eE][rR] merge=unityyamlmerge eol=lf
+
+# Unity LFS
+*.[cC][uU][bB][eE][mM][aA][pP] filter=lfs diff=lfs merge=lfs -text
+*.[uU][nN][iI][tT][yY][pP][aA][cC][kK][aA][gG][eE] filter=lfs diff=lfs merge=lfs -text
+
+## 3D models
+*.3[dD][mM] filter=lfs diff=lfs merge=lfs -text
+*.3[dD][sS] filter=lfs diff=lfs merge=lfs -text
+*.[bB][lL][eE][nN][dD] filter=lfs diff=lfs merge=lfs -text
+*.[cC]4[dD] filter=lfs diff=lfs merge=lfs -text
+*.[cC][oO][lL][lL][aA][dD][aA] filter=lfs diff=lfs merge=lfs -text
+*.[dD][aA][eE] filter=lfs diff=lfs merge=lfs -text
+*.[dD][xX][fF] filter=lfs diff=lfs merge=lfs -text
+*.[fF][bB][xX] filter=lfs diff=lfs merge=lfs -text
+*.[jJ][aA][sS] filter=lfs diff=lfs merge=lfs -text
+*.[lL][wW][sS] filter=lfs diff=lfs merge=lfs -text
+*.[lL][xX][oO] filter=lfs diff=lfs merge=lfs -text
+*.[mM][aA] filter=lfs diff=lfs merge=lfs -text
+*.[mM][aA][xX] filter=lfs diff=lfs merge=lfs -text
+*.[mM][bB] filter=lfs diff=lfs merge=lfs -text
+*.[oO][bB][jJ] filter=lfs diff=lfs merge=lfs -text
+*.[pP][lL][yY] filter=lfs diff=lfs merge=lfs -text
+*.[sS][kK][pP] filter=lfs diff=lfs merge=lfs -text
+*.[sS][tT][lL] filter=lfs diff=lfs merge=lfs -text
+*.[zZ][tT][lL] filter=lfs diff=lfs merge=lfs -text
+
+## Audio
+*.[aA][iI][fF] filter=lfs diff=lfs merge=lfs -text
+*.[aA][iI][fF][fF] filter=lfs diff=lfs merge=lfs -text
+*.[iI][tT] filter=lfs diff=lfs merge=lfs -text
+*.[mM][oO][dD] filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP]3 filter=lfs diff=lfs merge=lfs -text
+*.[oO][gG][gG] filter=lfs diff=lfs merge=lfs -text
+*.[sS]3[mM] filter=lfs diff=lfs merge=lfs -text
+*.[wW][aA][vV] filter=lfs diff=lfs merge=lfs -text
+*.[xX][mM] filter=lfs diff=lfs merge=lfs -text
+
+# Video
+*.[aA][sS][fF] filter=lfs diff=lfs merge=lfs -text
+*.[aA][vV][iI] filter=lfs diff=lfs merge=lfs -text
+*.[fF][lL][vV] filter=lfs diff=lfs merge=lfs -text
+*.[mM][oO][vV] filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP]4 filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP][eE][gG] filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP][gG] filter=lfs diff=lfs merge=lfs -text
+*.[oO][gG][vV] filter=lfs diff=lfs merge=lfs -text
+*.[wW][mM][vV] filter=lfs diff=lfs merge=lfs -text
+
+## Images
+*.[bB][mM][pP] filter=lfs diff=lfs merge=lfs -text
+*.[eE][xX][rR] filter=lfs diff=lfs merge=lfs -text
+*.[gG][iI][fF] filter=lfs diff=lfs merge=lfs -text
+*.[hH][dD][rR] filter=lfs diff=lfs merge=lfs -text
+*.[iI][fF][fF] filter=lfs diff=lfs merge=lfs -text
+*.[jJ][pP][eE][gG] filter=lfs diff=lfs merge=lfs -text
+*.[jJ][pP][gG] filter=lfs diff=lfs merge=lfs -text
+*.[pP][iI][cC][tT] filter=lfs diff=lfs merge=lfs -text
+*.[pP][nN][gG] filter=lfs diff=lfs merge=lfs -text
+*.[pP][sS][dD] filter=lfs diff=lfs merge=lfs -text
+*.[tT][gG][aA] filter=lfs diff=lfs merge=lfs -text
+*.[tT][iI][fF] filter=lfs diff=lfs merge=lfs -text
+*.[tT][iI][fF][fF] filter=lfs diff=lfs merge=lfs -text
+
+# Compressed Archive
+*.7[zZ] filter=lfs diff=lfs merge=lfs -text
+*.[bB][zZ]2 filter=lfs diff=lfs merge=lfs -text
+*.[gG][zZ] filter=lfs diff=lfs merge=lfs -text
+*.[rR][aA][rR] filter=lfs diff=lfs merge=lfs -text
+*.[tT][aA][rR] filter=lfs diff=lfs merge=lfs -text
+*.[zZ][iI][pP] filter=lfs diff=lfs merge=lfs -text
+
+# Compiled Dynamic Library
+*.[dD][lL][lL] filter=lfs diff=lfs merge=lfs -text
+*.[pP][dD][bB] filter=lfs diff=lfs merge=lfs -text
+*.[sS][oO] filter=lfs diff=lfs merge=lfs -text
+*.[sS][rR][cC][aA][aA][rR] filter=lfs diff=lfs merge=lfs -text
+*.[bB][uU][nN][dD][lL][eE] filter=lfs diff=lfs merge=lfs -text
+
+
+# Compiled Static Library
+*.[aA] filter=lfs diff=lfs merge=lfs -text
+
+# Packages
+*.[jJ][aA][rR] filter=lfs diff=lfs merge=lfs -text
+*.[nN][uU][pP][kK][gG] filter=lfs diff=lfs merge=lfs -text
+
+## Fonts
+*.[oO][tT][fF] filter=lfs diff=lfs merge=lfs -text
+*.[tT][tT][fF] filter=lfs diff=lfs merge=lfs -text
+
+# Executable/Installer
+*.[aA][pP][kK] filter=lfs diff=lfs merge=lfs -text
+*.[eE][xX][eE] filter=lfs diff=lfs merge=lfs -text
+
+# Documents
+*.[pP][dD][fF] filter=lfs diff=lfs merge=lfs -text
+
+# PLUG pugin
+client/Assets/Plugins/NCSDK/Plugins/iOS/NaverCafeSDK.framework/NaverCafeSDK filter=lfs diff=lfs merge=lfs -text
+client/Assets/Plugins/NCSDK/Plugins/iOS/KaleidoCore.framework/KaleidoCore filter=lfs diff=lfs merge=lfs -text
+client/Assets/Plugins/NCSDK/Plugins/iOS/NaverCafeSDKLive.framework/NaverCafeSDKLive filter=lfs diff=lfs merge=lfs -text
+
+*.[aA][aA][rR] filter=lfs diff=lfs merge=lfs -text
