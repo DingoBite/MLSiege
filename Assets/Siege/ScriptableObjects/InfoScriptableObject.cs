@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Siege.ScriptableObjects
 {
-    public abstract class InfoScriptableObject<T> : ScriptableObject where T : Enum
+    public abstract class InfoScriptableObject<TInfo> : ScriptableObject
     {
-        public abstract Tuple<T, IEnumerable<int>> GetInfo();
+        public abstract TInfo GetInfo();
     }
 }
