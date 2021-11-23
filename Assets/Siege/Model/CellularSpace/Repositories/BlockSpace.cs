@@ -12,15 +12,24 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 {
     public class BlockSpace: IBlockSpace
     {
-        [Inject] private readonly IGridShaper _gridShaper;
-        [Inject] private readonly IBlockConverter _blockConverter;
+        private readonly IGridShaper _gridShaper;
+        private readonly IBlockConverter _blockConverter;
 
-        [Inject] private readonly IRepository<OverallBlock> _overallBlocks;
-        [Inject] private readonly IIdRepository<Vector3Int> _ids;
+        private readonly IRepository<OverallBlock> _overallBlocks;
+        private readonly IIdRepository<Vector3Int> _ids;
 
         [Inject]
-        public BlockSpace(Grid grid)
+        public BlockSpace(
+            Grid grid,
+            IGridShaper gridShaper,
+            IBlockConverter blockConverter,
+            IRepository<OverallBlock> overallBlocks,
+            IIdRepository<Vector3Int> ids)
         {
+            _gridShaper = gridShaper;
+            _blockConverter = blockConverter;
+            _overallBlocks = overallBlocks;
+            _ids = ids;
             _gridShaper.Shape(grid, this);
         }
 

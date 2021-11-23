@@ -10,9 +10,13 @@ namespace Assets.Siege.Model.CellularSpace.Fabrics
 {
     public class BlockFabric: IBlockFabric
     {
-        [Inject] private IBlockFeaturesFabric _blockFeaturesFabric;
+        private readonly IBlockFeaturesFabric _blockFeaturesFabric;
 
-        public BlockFabric() { }
+        [Inject]
+        public BlockFabric(IBlockFeaturesFabric blockFeaturesFabric)
+        {
+            _blockFeaturesFabric = blockFeaturesFabric;
+        }
 
         public AbstractBlock MakeBlock(int id, BlockInfo blockInfo)
         {

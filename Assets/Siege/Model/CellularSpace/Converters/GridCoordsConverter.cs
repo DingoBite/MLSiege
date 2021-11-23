@@ -11,7 +11,9 @@ namespace Assets.Siege.Model.CellularSpace.Converters
 
         // In third dimension Grid y axis in size is z axis.
         // Offset on y dimension (z) is 0.
-        public GridCoordsConverter([Inject] Grid grid)
+
+        [Inject]
+        public GridCoordsConverter(Grid grid)
         {
             _cellSize = grid.cellSize;
             _offset = new Vector3(

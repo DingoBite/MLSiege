@@ -15,7 +15,7 @@ namespace Assets.Siege.MonoBehaviors.DIInstallers
 
         public override void InstallBindings()
         {
-            Container.Bind<Grid>().FromInstance(_tilemapGameObjectsGrid).AsSingle();
+            Container.Bind<Grid>().FromInstance(_tilemapGameObjectsGrid).AsSingle().NonLazy();
             Container.Bind<IGridShaper>().To<GridShaper>().AsSingle().NonLazy();
 
             Container.Bind<IRepository<OverallBlock>>().To<OverallBlockRepository>().AsTransient().NonLazy();

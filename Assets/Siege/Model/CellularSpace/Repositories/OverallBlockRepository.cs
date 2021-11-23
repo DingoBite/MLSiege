@@ -47,6 +47,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
                 return;
             
             _availableId.Push(id);
+            _overallBlocks[id].Destroy();
             _overallBlocks.Remove(id);
         }
 

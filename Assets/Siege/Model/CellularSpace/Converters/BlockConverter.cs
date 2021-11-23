@@ -8,16 +8,22 @@ namespace Assets.Siege.Model.CellularSpace.Converters
 {
     public class BlockConverter: IBlockConverter
     {
-        [Inject] private readonly IBlockFabric _blockFabric;
-        [Inject] private readonly IMonoBlockFabric _monoBlockFabric;
-        [Inject] private readonly IGridCoordsConverter _gridCoordsConverter;
+        private readonly IBlockFabric _blockFabric;
+        private readonly IMonoBlockFabric _monoBlockFabric;
+        private readonly IGridCoordsConverter _gridCoordsConverter;
 
-        public BlockConverter() { }
+        [Inject]
+        public BlockConverter(IBlockFabric blockFabric, IMonoBlockFabric monoBlockFabric, IGridCoordsConverter gridCoordsConverter)
+        {
+            _blockFabric = blockFabric;
+            _monoBlockFabric = monoBlockFabric;
+            _gridCoordsConverter = gridCoordsConverter;
+        }
 
         public OverallBlock Convert(Vector3Int coords, AbstractBlock block, int id)
         {
             var position = _gridCoordsConverter.Convert(coords);
-            return new OverallBlock(block, _monoBlockFabric.MakeMonoBlock(id, block), coords);
+            return new OverallBlock(block, _monoBlockFabric.MakeMonoBlock(id, position, block), coords);
         }
 
         public OverallBlock Convert(MonoBlock block, int id)

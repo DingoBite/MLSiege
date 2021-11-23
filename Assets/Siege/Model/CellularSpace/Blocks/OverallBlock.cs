@@ -12,8 +12,8 @@ namespace Assets.Siege.Model.CellularSpace.Blocks
 
         public OverallBlock(AbstractBlock block, MonoBlock monoBlockBlock, Vector3Int coords)
         {
-            if (block.Id != monoBlockBlock.Id)
-                throw new Exception("Block and _monoBlockBlock Id is not equal");
+            //if (block.Id != monoBlockBlock.Id)
+            //    throw new Exception("Block and MonoBlock Id is not equal");
             Block = block;
             MonoBlock = monoBlockBlock;
             Coords = coords;
@@ -26,6 +26,11 @@ namespace Assets.Siege.Model.CellularSpace.Blocks
             var tempPos = overallBlock.Coords;
             overallBlock.Coords = Coords;
             Coords = tempPos;
+        }
+
+        public void Destroy()
+        {
+            GameObject.Destroy(MonoBlock.gameObject);
         }
     }
 }
