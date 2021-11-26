@@ -1,3 +1,4 @@
+using Assets.Siege.Model.General.Enums;
 using UnityEngine;
 
 namespace Assets.Siege.MonoBehaviors.CellableObjects
@@ -6,8 +7,14 @@ namespace Assets.Siege.MonoBehaviors.CellableObjects
     {
         [SerializeField] private BlockScriptableObject _scriptableObject;
 
-        public readonly int Id;
+        public int Id { get; set; }
 
         public BlockInfo ScriptableObjectInfo() => _scriptableObject.GetInfo();
+        public BlockType BlockType() => _scriptableObject.GetInfo().BlockType;
+
+        public override string ToString()
+        {
+            return $"{this.name}: {Id}";
+        }
     }
 }

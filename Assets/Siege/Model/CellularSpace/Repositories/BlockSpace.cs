@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Siege.Model.CellularSpace.Blocks;
 using Assets.Siege.Model.CellularSpace.Interfaces;
 using Assets.Siege.Model.General.Interfaces;
+using Assets.Siege.Model.ObjectFeatures.Blocks;
 using Assets.Siege.MonoBehaviors.CellableObjects;
 using UnityEngine;
 using Zenject;
@@ -12,56 +13,83 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 {
     public class BlockSpace: IBlockSpace
     {
-        private readonly IGridShaper _gridShaper;
-        private readonly IBlockConverter _blockConverter;
-
+        private readonly IBlockCreator _blockCreator;
         private readonly IRepository<OverallBlock> _overallBlocks;
         private readonly IIdRepository<Vector3Int> _ids;
 
         [Inject]
         public BlockSpace(
-            Grid grid,
+            IGridHierarchy gridHierarchy,
             IGridShaper gridShaper,
-            IBlockConverter blockConverter,
+            IBlockCreator blockCreator,
             IRepository<OverallBlock> overallBlocks,
             IIdRepository<Vector3Int> ids)
         {
-            _gridShaper = gridShaper;
-            _blockConverter = blockConverter;
+            _blockCreator = blockCreator;
             _overallBlocks = overallBlocks;
             _ids = ids;
-            _gridShaper.Shape(grid, this);
+            gridShaper.Shape(gridHierarchy, this);
         }
 
-        public int NextId => _overallBlocks.PeekId(); 
+        public int PeekId => _overallBlocks.PeekId(); 
 
-        public bool TryGetBlock(int id, out AbstractBlock block)
+        public bool GetBlock(int id, out AbstractBlock block)
         {
             var successfulGet = _overallBlocks.TryGetCustomerById(id, out var overallBlock);
             block = !successfulGet ? null : overallBlock.Block;
             return successfulGet;
         }
 
-        public bool TryGetBlock(Vector3Int coords, out AbstractBlock block)
+        public bool GetBlock(Vector3Int coords, out AbstractBlock block)
         {
             var successfulGet = _overallBlocks.TryGetCustomerById(_ids[coords], out var overallBlock);
             block = !successfulGet ? null : overallBlock.Block;
             return successfulGet;
         }
 
-        public int InsertBlock(Vector3Int coords, AbstractBlock block)
+        public bool InsertBlock(Vector3Int coords, BlockFeatures blockFeatures, out int id)
         {
-            var id = _overallBlocks.InsertCustomer(_blockConverter.Convert(coords, block, NextId));
+            if (_ids.ContainsKey(coords))
+            {
+                id = -1;
+                return false;
+            }
+            id = _overallBlocks.InsertCustomer(_blockCreator.Create(PeekId, coords, blockFeatures));
             _ids.Add(coords, id);
-            return id;
+            return true;
         }
 
-        public int InsertBlock(MonoBlock block)
+        public bool InsertBlock(Vector3Int coords, BlockFeatures blockFeatures)
         {
-            var overallBlock = _blockConverter.Convert(block, NextId);
+            if (_ids.ContainsKey(coords))
+                return false;
+            
+            var id = _overallBlocks.InsertCustomer(_blockCreator.Create(PeekId, coords, blockFeatures));
+            _ids.Add(coords, id);
+            return true;
+        }
+
+        public bool InsertBlock(MonoBlock block, out int id)
+        {
+            var overallBlock = _blockCreator.Create(PeekId, block);
+            if (_ids.ContainsKey(overallBlock.Coords))
+            {
+                id = -1;
+                return false;
+            }
+            id = _overallBlocks.InsertCustomer(overallBlock);
+            _ids.Add(overallBlock.Coords, id);
+            return true;
+        }
+
+        public bool InsertBlock(MonoBlock block)
+        {
+            var overallBlock = _blockCreator.Create(PeekId, block);
+            if (_ids.ContainsKey(overallBlock.Coords))
+                return false;
             var id = _overallBlocks.InsertCustomer(overallBlock);
             _ids.Add(overallBlock.Coords, id);
-            return id;
+            return true;
         }
 
         public void SwapBlock(int id1, int id2)
@@ -86,6 +114,8 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 
         public void DeleteBlock(Vector3Int coords)
         {
+            if (!_ids.ContainsKey(coords))
+                return;
             _overallBlocks.DeleteCustomer(_ids[coords]);
             _ids.Remove(coords);
         }

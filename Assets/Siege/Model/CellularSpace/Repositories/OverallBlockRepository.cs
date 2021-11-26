@@ -66,6 +66,13 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 
         public void Clear()
         {
+            foreach (var overallBlock in _overallBlocks)
+            {
+                overallBlock.Value.Destroy();
+            }
+
+            _lastId = 0;
+            _availableId.Clear();
             _overallBlocks.Clear();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Siege.Model.CellularSpace.Interfaces;
+using Assets.Siege.Model.General.Interfaces;
 using UnityEngine;
 
 namespace Assets.Siege.Model.CellularSpace.Repositories
@@ -15,8 +16,15 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 
         public int this[Vector3Int coords] => _idByCords[coords];
 
-        public void Add(Vector3Int coords, int id) => _idByCords.Add(coords, id);
+        public bool Add(Vector3Int coords, int id)
+        {
+            if (ContainsKey(coords))
+                return false;
+            _idByCords.Add(coords, id);
+            return true;
+        }
 
+        public bool ContainsKey(Vector3Int coords) => _idByCords.ContainsKey(coords);
         public void Remove(Vector3Int coords) => _idByCords.Remove(coords);
         public void Clear() => _idByCords.Clear();
     }

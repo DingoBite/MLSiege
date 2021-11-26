@@ -1,4 +1,5 @@
-﻿using Assets.Siege.Model.CellularSpace.Interfaces;
+﻿using System;
+using Assets.Siege.Model.CellularSpace.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +9,7 @@ namespace Assets.Siege.Model.CellularSpace.Converters
     {
         private readonly Vector3 _cellSize;
         private readonly Vector3 _offset;
+        private readonly float _epsilon;
 
         // In third dimension Grid y axis in size is z axis.
         // Offset on y dimension (z) is 0.
@@ -17,18 +19,19 @@ namespace Assets.Siege.Model.CellularSpace.Converters
         {
             _cellSize = grid.cellSize;
             _offset = new Vector3(
-                _cellSize.x / 2 + 2 * float.Epsilon, 
-                _cellSize.z / 2 + 2 * float.Epsilon,
-                float.Epsilon
-                );
+                _cellSize.x / 2,
+                0,
+                _cellSize.z / 2
+            );
+            _epsilon = Vector3.kEpsilon;
         }
 
         public Vector3Int Convert(Vector3 coords)
         {
             return new Vector3Int(
-                (int) (coords.x / _cellSize.x + _offset.x),
-                (int) (coords.y / _cellSize.z + _offset.z),
-                (int) (coords.z / _cellSize.y + _offset.y)
+                (int) Math.Floor(coords.x / _cellSize.x + _offset.x - _epsilon),
+                (int) Math.Floor(coords.y / _cellSize.z),
+                (int) Math.Floor(coords.z / _cellSize.y + _offset.z - _epsilon)
             );
         }
 
@@ -36,8 +39,8 @@ namespace Assets.Siege.Model.CellularSpace.Converters
         {
             return new Vector3(
                 coords.x * _cellSize.x + _offset.x,
-                coords.y * _cellSize.z + _offset.z,
-                coords.z * _cellSize.y + _offset.y
+                coords.y * _cellSize.z,
+                coords.z * _cellSize.y + _offset.z
             );
         }
     }

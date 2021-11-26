@@ -8,9 +8,9 @@ namespace Assets.Siege.Model.CellularSpace.Shapers
     public class GridShaper: IGridShaper
     {
         public GridShaper() { }
-        public void Shape(Grid grid, IBlockSpace blockSpace)
+        public void Shape(IGridHierarchy gridHierarchy, IBlockSpace blockSpace)
         {
-            foreach (Transform tilemap in grid.transform)
+            foreach (Transform tilemap in gridHierarchy.GetChildren())
             {
                 var containsTilemap = tilemap.TryGetComponent(out Tilemap _);
                 if (!containsTilemap) continue;

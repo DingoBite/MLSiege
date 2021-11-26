@@ -1,18 +1,33 @@
-﻿using Assets.Siege.Model.CellularSpace.Blocks;
+﻿using System.Collections.Generic;
+using Assets.Siege.Model.CellularSpace.Blocks;
 using Assets.Siege.Model.CellularSpace.Interfaces;
+using Assets.Siege.Model.General.Enums;
 using Assets.Siege.MonoBehaviors.CellableObjects;
 using UnityEngine;
+using Zenject;
 
 namespace Assets.Siege.Model.CellularSpace.Fabrics
 {
     public class MonoBlockFabric: IMonoBlockFabric
     {
-        public MonoBlockFabric() { }
-        public MonoBlock MakeMonoBlock(int id, Vector3 position, AbstractBlock block)
+        private readonly IDictionary<BlockType, MonoBlock> _blockPrefabs;
+        private readonly IGridHierarchy _parentGrid;
+
+        [Inject]
+        public MonoBlockFabric(IDictionary<BlockType, MonoBlock> blockPrefabs, IGridHierarchy gridHierarchy)
         {
-            var kek = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            kek.transform.position = position;
-            return kek.AddComponent<MonoBlock>();
+            _blockPrefabs = blockPrefabs;
+            _parentGrid = gridHierarchy;
+        }
+
+        public MonoBlock MakeMonoBlock(int level, Vector3 position, AbstractBlock block)
+        {
+            var monoBlockPrefab = _blockPrefabs[block.Features.BlockType];
+            var gameObjectMonoBlock = Object.Instantiate(monoBlockPrefab, position, Quaternion.identity, _parentGrid.GetChild(level));
+            var monoBlock = gameObjectMonoBlock.GetComponent<MonoBlock>();
+            monoBlock.Id = block.Id;
+            gameObjectMonoBlock.name = monoBlock.ToString();
+            return monoBlock;
         }
     }
 }

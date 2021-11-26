@@ -1,21 +1,23 @@
 ﻿using System;
+using Assets.Siege.Model.General.Interfaces;
 using Assets.Siege.MonoBehaviors.CellableObjects;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Siege.Model.CellularSpace.Blocks
 {
-    public class OverallBlock
+    public class OverallBlock: IToggle
     {
         public readonly AbstractBlock Block;
         public readonly MonoBlock MonoBlock;
         public Vector3Int Coords { get; private set; }
 
-        public OverallBlock(AbstractBlock block, MonoBlock monoBlockBlock, Vector3Int coords)
+        public OverallBlock(AbstractBlock block, MonoBlock monoBlock, Vector3Int coords)
         {
-            //if (block.Id != monoBlockBlock.Id)
-            //    throw new Exception("Block and MonoBlock Id is not equal");
+            if (block.Id != monoBlock.Id)
+                throw new Exception("Block and MonoBlock Id is not equal");
             Block = block;
-            MonoBlock = monoBlockBlock;
+            MonoBlock = monoBlock;
             Coords = coords;
         }
 
@@ -28,9 +30,10 @@ namespace Assets.Siege.Model.CellularSpace.Blocks
             Coords = tempPos;
         }
 
-        public void Destroy()
-        {
-            GameObject.Destroy(MonoBlock.gameObject);
-        }
+        public void Enable() => MonoBlock.gameObject.SetActive(true);
+
+        public void Disable() => MonoBlock.gameObject.SetActive(false);
+
+        public void Destroy() => Object.Destroy(MonoBlock.gameObject);
     }
 }
