@@ -19,7 +19,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 
         [Inject]
         public BlockSpace(
-            IGridHierarchy gridHierarchy,
+            IGameObjectGrid gameObjectGrid,
             IGridShaper gridShaper,
             IBlockCreator blockCreator,
             IRepository<OverallBlock> overallBlocks,
@@ -28,7 +28,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
             _blockCreator = blockCreator;
             _overallBlocks = overallBlocks;
             _ids = ids;
-            gridShaper.Shape(gridHierarchy, this);
+            gridShaper.Shape(gameObjectGrid, this);
         }
 
         public int PeekId => _overallBlocks.PeekId(); 

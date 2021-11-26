@@ -14,7 +14,7 @@ namespace Assets.Siege.MonoBehaviors.CellableObjects
 
         public override string ToString()
         {
-            return $"{this.name}: {Id}";
+            return $"{_scriptableObject.GetInfo().BlockType}: {Id}";
         }
     }
 }

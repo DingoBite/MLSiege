@@ -11,19 +11,19 @@ namespace Assets.Siege.Model.CellularSpace.Fabrics
     public class MonoBlockFabric: IMonoBlockFabric
     {
         private readonly IDictionary<BlockType, MonoBlock> _blockPrefabs;
-        private readonly IGridHierarchy _parentGrid;
+        private readonly IGameObjectGrid _parentGameObjectGrid;
 
         [Inject]
-        public MonoBlockFabric(IDictionary<BlockType, MonoBlock> blockPrefabs, IGridHierarchy gridHierarchy)
+        public MonoBlockFabric(IDictionary<BlockType, MonoBlock> blockPrefabs, IGameObjectGrid gameObjectGrid)
         {
             _blockPrefabs = blockPrefabs;
-            _parentGrid = gridHierarchy;
+            _parentGameObjectGrid = gameObjectGrid;
         }
 
         public MonoBlock MakeMonoBlock(int level, Vector3 position, AbstractBlock block)
         {
             var monoBlockPrefab = _blockPrefabs[block.Features.BlockType];
-            var gameObjectMonoBlock = Object.Instantiate(monoBlockPrefab, position, Quaternion.identity, _parentGrid.GetChild(level));
+            var gameObjectMonoBlock = Object.Instantiate(monoBlockPrefab, position, Quaternion.identity, _parentGameObjectGrid.GetLevel(level).transform);
             var monoBlock = gameObjectMonoBlock.GetComponent<MonoBlock>();
             monoBlock.Id = block.Id;
             gameObjectMonoBlock.name = monoBlock.ToString();

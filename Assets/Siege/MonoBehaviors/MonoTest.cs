@@ -14,48 +14,56 @@ namespace Assets.Siege.MonoBehaviors
         [Inject] private IBlockSpace _blockSpace;
         [Inject] private IGridCoordsConverter _gridCoordsConverter;
 
-        public Vector3 vector3;
+        public Vector3 position;
         public BlockType blockType = BlockType.Null;
+
 
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.A))
-                vector3.z++;
+            {
+                position.x--;
+            }
             else if (Input.GetKeyDown(KeyCode.S))
-                vector3.x--;
+            {
+                position.z--;
+            }
             else if (Input.GetKeyDown(KeyCode.D))
-                vector3.z--;
+            {
+                position.x++;
+            }
             else if (Input.GetKeyDown(KeyCode.W))
-                vector3.x++;
+            {
+                position.z++;
+            }
             else if (Input.mouseScrollDelta.y > 0.2)
             {
-                vector3.y++;
+                position.y++;
                 MovePointer();
             }
             else if (Input.mouseScrollDelta.y < -0.2)
             {
-                vector3.y--;
+                position.y--;
                 MovePointer();
             }
             else if (Input.GetKeyDown(KeyCode.C))
                 _blockSpace.Clear();
             else if (Input.GetKeyDown(KeyCode.Space))
-                _blockSpace.DeleteBlock(_gridCoordsConverter.Convert(vector3));
+                _blockSpace.DeleteBlock(_gridCoordsConverter.Convert(position));
             else if (Input.GetKeyDown(KeyCode.F))
             {
-                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(vector3), GetBlock(), out var id);
+                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(position), GetBlock(), out var id);
                 print(id);
-                print(vector3);
-                print(_gridCoordsConverter.Convert(vector3));
+                print(position);
+                print(_gridCoordsConverter.Convert(position));
             }
 
-            if (Input.anyKeyDown)
-                MovePointer();
+            if (Input.anyKeyDown) MovePointer();
         }
 
         public void MovePointer()
         {
-            _pointer.gameObject.transform.position = vector3;
+            _pointer.gameObject.transform.position = position;
         }
 
         public BlockFeatures GetBlock()

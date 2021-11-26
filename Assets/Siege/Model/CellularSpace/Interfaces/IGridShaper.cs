@@ -2,6 +2,6 @@
 {
     public interface IGridShaper
     {
-        public void Shape(IGridHierarchy gridHierarchy, IBlockSpace blockSpace);
+        public void Shape(IGameObjectGrid gameObjectGrid, IBlockSpace blockSpace);
     }
 }

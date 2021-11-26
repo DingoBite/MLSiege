@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Assets.Siege.Model.CellularSpace.Converters
 {
-    public class GridCoordsConverter: IGridCoordsConverter
+    public class HardGridCoordsConverter: IGridCoordsConverter
     {
         private readonly Vector3 _cellSize;
         private readonly Vector3 _offset;
@@ -15,13 +15,13 @@ namespace Assets.Siege.Model.CellularSpace.Converters
         // Offset on y dimension (z) is 0.
 
         [Inject]
-        public GridCoordsConverter(Grid grid)
+        public HardGridCoordsConverter(IGameObjectGrid gameObjectGrid)
         {
-            _cellSize = grid.cellSize;
+            _cellSize = gameObjectGrid.GetGrid().cellSize;
             _offset = new Vector3(
                 _cellSize.x / 2,
-                0,
-                _cellSize.z / 2
+                _cellSize.z / 2,
+                _cellSize.y / 2
             );
             _epsilon = Vector3.kEpsilon;
         }
@@ -30,7 +30,7 @@ namespace Assets.Siege.Model.CellularSpace.Converters
         {
             return new Vector3Int(
                 (int) Math.Floor(coords.x / _cellSize.x + _offset.x - _epsilon),
-                (int) Math.Floor(coords.y / _cellSize.z),
+                (int) Math.Floor(coords.y / _cellSize.z + _offset.y - _epsilon),
                 (int) Math.Floor(coords.z / _cellSize.y + _offset.z - _epsilon)
             );
         }
@@ -39,7 +39,7 @@ namespace Assets.Siege.Model.CellularSpace.Converters
         {
             return new Vector3(
                 coords.x * _cellSize.x + _offset.x,
-                coords.y * _cellSize.z,
+                coords.y * _cellSize.z + _offset.y,
                 coords.z * _cellSize.y + _offset.z
             );
         }
