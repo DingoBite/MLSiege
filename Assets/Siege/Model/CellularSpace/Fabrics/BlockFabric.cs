@@ -9,14 +9,14 @@ namespace Assets.Siege.Model.CellularSpace.Fabrics
     {
         public BlockFabric() { }
 
-        public CommonBlock Make(int id, BlockFeatures blockFeatures)
+        public Block Make(int id, BlockFeatures blockFeatures)
         {
-            return new CommonBlock(id, blockFeatures);
+            return new Block(id, blockFeatures);
         }
 
-        public CommonBlock Make(int id, BlockInfo blockInfo)
+        public Block Make(int id, BlockInfo blockInfo)
         {
-            return new CommonBlock(id, new BlockFeatures(blockInfo));
+            return new Block(id, new BlockFeatures(blockInfo));
         }
     }
 }

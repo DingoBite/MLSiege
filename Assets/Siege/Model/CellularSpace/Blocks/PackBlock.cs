@@ -8,12 +8,12 @@ namespace Assets.Siege.Model.CellularSpace.Blocks
 {
     public class PackBlock: IToggle
     {
-        public readonly CommonBlock Block;
+        public readonly Block Block;
         public readonly MonoBlock MonoBlock;
 
         public Vector3Int Coords { get; private set; }
 
-        public PackBlock(CommonBlock block, MonoBlock monoBlock, Vector3Int coords)
+        public PackBlock(Block block, MonoBlock monoBlock, Vector3Int coords)
         {
             if (block.Id != monoBlock.Id)
                 throw new Exception("Block and MonoBlock Id is not equal");

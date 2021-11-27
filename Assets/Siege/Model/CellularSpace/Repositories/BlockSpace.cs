@@ -40,7 +40,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
             return successfulGet;
         }
 
-        public bool GetBlock(int id, out CommonBlock block)
+        public bool GetBlock(int id, out Block block)
         {
             var successfulGet = GetPackBlock(id, out PackBlock packBlock);
             block = !successfulGet ? null : packBlock.Block;
@@ -54,7 +54,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
             return successfulGet;
         }
 
-        public bool GetBlock(Vector3Int coords, out CommonBlock block)
+        public bool GetBlock(Vector3Int coords, out Block block)
         {
             var successfulGet = GetPackBlock(coords, out PackBlock packBlock);
             block = !successfulGet ? null : packBlock.Block;
@@ -145,7 +145,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
             return _packBlocks.GetCustomers();
         }
 
-        public IEnumerable<CommonBlock> GetBlocks()
+        public IEnumerable<Block> GetBlocks()
         {
             return GetPackBlocks().Select(b => b.Block);
         }

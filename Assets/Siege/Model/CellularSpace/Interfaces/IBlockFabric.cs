@@ -6,7 +6,7 @@ namespace Assets.Siege.Model.CellularSpace.Interfaces
 {
     public interface IBlockFabric
     {
-        public CommonBlock Make(int id, BlockFeatures blockFeatures);
-        public CommonBlock Make(int id, BlockInfo blockInfo);
+        public Block Make(int id, BlockFeatures blockFeatures);
+        public Block Make(int id, BlockInfo blockInfo);
     }
 }

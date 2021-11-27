@@ -6,6 +6,6 @@ namespace Assets.Siege.Model.CellularSpace.Interfaces
 {
     public interface IMonoBlockFabric
     {
-        public MonoBlock Make(int level, Vector3 position, CommonBlock block);
+        public MonoBlock Make(int level, Vector3 position, Block block);
     }
 }
