@@ -20,15 +20,14 @@ namespace Assets.Siege.MonoBehaviors.DIInstallers
         {
             Container.Bind<Tilemap>().FromInstance(_tilemapPrefab).AsSingle().NonLazy();
             Container.Bind<Grid>().FromInstance(_tilemapGameObjectsGrid).AsTransient().NonLazy();
-            Container.Bind<IGameObjectGrid>().To<BlockGameObjectGrid>().AsSingle().NonLazy();
+            Container.Bind<IGameObjectGrid>().To<BlockLevelsGrid>().AsSingle().NonLazy();
             Container.Bind<IGridShaper>().To<LevelGridShaper>().AsSingle().NonLazy();
 
-            Container.Bind<IRepository<OverallBlock>>().To<OverallBlockRepository>().AsTransient().NonLazy();
+            Container.Bind<IRepository<PackBlock>>().To<PackBlockRepository>().AsTransient().NonLazy();
             Container.Bind<IIdRepository<Vector3Int>>().To<Vector3IntIdRepository>().AsTransient().NonLazy();
 
-            Container.Bind<IGridCoordsConverter>().To<HardGridCoordsConverter>().AsTransient().NonLazy();
-            Container.Bind<IBlockCreator>().To<BlockCreator>().AsSingle().NonLazy();
-
+            Container.Bind<IGridCoordsConverter>().To<HandGridCoordsConverter>().AsSingle().NonLazy();
+            Container.Bind<IPackBlockFabric>().To<PackBlockFabric>().AsSingle().NonLazy();
 
             Container.Bind<IBlockSpace>().To<BlockSpace>().AsSingle();
         }

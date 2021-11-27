@@ -1,7 +1,6 @@
 using Assets.Siege.Model.CellularSpace.Interfaces;
 using Assets.Siege.Model.General.Enums;
 using Assets.Siege.Model.ObjectFeatures.Blocks;
-using Assets.Siege.Model.ObjectFeatures.Blocks.Realizations;
 using UnityEngine;
 using Zenject;
 
@@ -52,7 +51,7 @@ namespace Assets.Siege.MonoBehaviors
                 _blockSpace.DeleteBlock(_gridCoordsConverter.Convert(position));
             else if (Input.GetKeyDown(KeyCode.F))
             {
-                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(position), GetBlock(), out var id);
+                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(position), new BlockFeatures(blockType, BlockSolidity.Solid), out var id);
                 print(id);
                 print(position);
                 print(_gridCoordsConverter.Convert(position));
@@ -64,16 +63,6 @@ namespace Assets.Siege.MonoBehaviors
         public void MovePointer()
         {
             _pointer.gameObject.transform.position = position;
-        }
-
-        public BlockFeatures GetBlock()
-        {
-            return blockType switch
-            {
-                BlockType.Dirt => new CommonBlockFeatures(BlockType.Dirt),
-                BlockType.Stone => new CommonBlockFeatures(BlockType.Stone),
-                _ => new NullBlockFeatures()
-            };
         }
     }
 }

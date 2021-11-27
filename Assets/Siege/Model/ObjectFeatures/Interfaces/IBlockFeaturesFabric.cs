@@ -5,6 +5,6 @@ namespace Assets.Siege.Model.ObjectFeatures.Interfaces
 {
     public interface IBlockFeaturesFabric
     {
-        public BlockFeatures MakeFeatures(BlockInfo blockInfo);
+        public BlockFeatures Make(BlockInfo blockInfo);
     }
 }

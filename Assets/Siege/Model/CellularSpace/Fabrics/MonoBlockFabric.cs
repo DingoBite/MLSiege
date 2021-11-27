@@ -20,7 +20,7 @@ namespace Assets.Siege.Model.CellularSpace.Fabrics
             _parentGameObjectGrid = gameObjectGrid;
         }
 
-        public MonoBlock MakeMonoBlock(int level, Vector3 position, AbstractBlock block)
+        public MonoBlock Make(int level, Vector3 position, CommonBlock block)
         {
             var monoBlockPrefab = _blockPrefabs[block.Features.BlockType];
             var gameObjectMonoBlock = Object.Instantiate(monoBlockPrefab, position, Quaternion.identity, _parentGameObjectGrid.GetLevel(level).transform);

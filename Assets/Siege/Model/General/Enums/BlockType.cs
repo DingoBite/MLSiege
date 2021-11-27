@@ -4,6 +4,7 @@
     {
         Null,
         Dirt,
-        Stone
+        Stone,
+        Flag
     }
 }

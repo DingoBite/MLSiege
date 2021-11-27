@@ -13,37 +13,51 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 {
     public class BlockSpace: IBlockSpace
     {
-        private readonly IBlockCreator _blockCreator;
-        private readonly IRepository<OverallBlock> _overallBlocks;
+        private readonly IPackBlockFabric _packBlockFabric;
+        private readonly IRepository<PackBlock> _packBlocks;
         private readonly IIdRepository<Vector3Int> _ids;
 
         [Inject]
         public BlockSpace(
             IGameObjectGrid gameObjectGrid,
             IGridShaper gridShaper,
-            IBlockCreator blockCreator,
-            IRepository<OverallBlock> overallBlocks,
+            IPackBlockFabric packBlockFabric,
+            IRepository<PackBlock> packBlocks,
             IIdRepository<Vector3Int> ids)
         {
-            _blockCreator = blockCreator;
-            _overallBlocks = overallBlocks;
+            _packBlockFabric = packBlockFabric;
+            _packBlocks = packBlocks;
             _ids = ids;
             gridShaper.Shape(gameObjectGrid, this);
         }
 
-        public int PeekId => _overallBlocks.PeekId(); 
+        private int PeekId => _packBlocks.PeekId();
 
-        public bool GetBlock(int id, out AbstractBlock block)
+        public bool GetPackBlock(int id, out PackBlock block)
         {
-            var successfulGet = _overallBlocks.TryGetCustomerById(id, out var overallBlock);
-            block = !successfulGet ? null : overallBlock.Block;
+            var successfulGet = _packBlocks.TryGetCustomerById(id, out var overallBlock);
+            block = !successfulGet ? null : overallBlock;
             return successfulGet;
         }
 
-        public bool GetBlock(Vector3Int coords, out AbstractBlock block)
+        public bool GetBlock(int id, out CommonBlock block)
         {
-            var successfulGet = _overallBlocks.TryGetCustomerById(_ids[coords], out var overallBlock);
-            block = !successfulGet ? null : overallBlock.Block;
+            var successfulGet = GetPackBlock(id, out PackBlock packBlock);
+            block = !successfulGet ? null : packBlock.Block;
+            return successfulGet;
+        }
+
+        public bool GetPackBlock(Vector3Int coords, out PackBlock block)
+        {
+            var successfulGet = _packBlocks.TryGetCustomerById(_ids[coords], out var overallBlock);
+            block = !successfulGet ? null : overallBlock;
+            return successfulGet;
+        }
+
+        public bool GetBlock(Vector3Int coords, out CommonBlock block)
+        {
+            var successfulGet = GetPackBlock(coords, out PackBlock packBlock);
+            block = !successfulGet ? null : packBlock.Block;
             return successfulGet;
         }
 
@@ -54,7 +68,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
                 id = -1;
                 return false;
             }
-            id = _overallBlocks.InsertCustomer(_blockCreator.Create(PeekId, coords, blockFeatures));
+            id = _packBlocks.InsertCustomer(_packBlockFabric.Make(PeekId, coords, blockFeatures));
             _ids.Add(coords, id);
             return true;
         }
@@ -64,38 +78,38 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
             if (_ids.ContainsKey(coords))
                 return false;
             
-            var id = _overallBlocks.InsertCustomer(_blockCreator.Create(PeekId, coords, blockFeatures));
+            var id = _packBlocks.InsertCustomer(_packBlockFabric.Make(PeekId, coords, blockFeatures));
             _ids.Add(coords, id);
             return true;
         }
 
         public bool InsertBlock(MonoBlock block, out int id)
         {
-            var overallBlock = _blockCreator.Create(PeekId, block);
+            var overallBlock = _packBlockFabric.Make(PeekId, block);
             if (_ids.ContainsKey(overallBlock.Coords))
             {
                 id = -1;
                 return false;
             }
-            id = _overallBlocks.InsertCustomer(overallBlock);
+            id = _packBlocks.InsertCustomer(overallBlock);
             _ids.Add(overallBlock.Coords, id);
             return true;
         }
 
         public bool InsertBlock(MonoBlock block)
         {
-            var overallBlock = _blockCreator.Create(PeekId, block);
+            var overallBlock = _packBlockFabric.Make(PeekId, block);
             if (_ids.ContainsKey(overallBlock.Coords))
                 return false;
-            var id = _overallBlocks.InsertCustomer(overallBlock);
+            var id = _packBlocks.InsertCustomer(overallBlock);
             _ids.Add(overallBlock.Coords, id);
             return true;
         }
 
         public void SwapBlock(int id1, int id2)
         {
-            var successfulGet1 = _overallBlocks.TryGetCustomerById(id1, out var block1);
-            var successfulGet2 = _overallBlocks.TryGetCustomerById(id2, out var block2);
+            var successfulGet1 = _packBlocks.TryGetCustomerById(id1, out var block1);
+            var successfulGet2 = _packBlocks.TryGetCustomerById(id2, out var block2);
             if (successfulGet1 && successfulGet2)
                 block1.SwapPosition(block2);
             else
@@ -104,8 +118,8 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
 
         public void SwapBlock(Vector3Int cords1, Vector3Int cords2)
         {
-            var successfulGet1 = _overallBlocks.TryGetCustomerById(_ids[cords1], out var block1);
-            var successfulGet2 = _overallBlocks.TryGetCustomerById(_ids[cords2], out var block2);
+            var successfulGet1 = _packBlocks.TryGetCustomerById(_ids[cords1], out var block1);
+            var successfulGet2 = _packBlocks.TryGetCustomerById(_ids[cords2], out var block2);
             if (successfulGet1 && successfulGet2)
                 block1.SwapPosition(block2);
             else
@@ -116,19 +130,24 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
         {
             if (!_ids.ContainsKey(coords))
                 return;
-            _overallBlocks.DeleteCustomer(_ids[coords]);
+            _packBlocks.DeleteCustomer(_ids[coords]);
             _ids.Remove(coords);
         }
 
         public void Clear()
         {
-            _overallBlocks.Clear();
+            _packBlocks.Clear();
             _ids.Clear();
         }
 
-        public IEnumerable<AbstractBlock> GetCustomers()
+        public IEnumerable<PackBlock> GetPackBlocks()
         {
-            return _overallBlocks.GetCustomers().Select(ob => ob.Block);
+            return _packBlocks.GetCustomers();
+        }
+
+        public IEnumerable<CommonBlock> GetBlocks()
+        {
+            return GetPackBlocks().Select(b => b.Block);
         }
     }
 }

@@ -6,8 +6,8 @@ namespace Assets.Siege.Model.CellularSpace.Interfaces
 {
     public interface IBlockSpaceContext
     {
-        public IEnumerable<AbstractBlock> GetCustomers();
-        public bool GetBlock(int id, out AbstractBlock block);
-        public bool GetBlock(Vector3Int coords, out AbstractBlock block);
+        public IEnumerable<CommonBlock> GetBlocks();
+        public bool GetBlock(int id, out CommonBlock block);
+        public bool GetBlock(Vector3Int coords, out CommonBlock block);
     }
 }

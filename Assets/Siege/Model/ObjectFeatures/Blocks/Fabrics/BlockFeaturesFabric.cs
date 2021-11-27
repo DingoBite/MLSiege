@@ -1,5 +1,4 @@
-﻿using Assets.Siege.Model.ObjectFeatures.Blocks.Realizations;
-using Assets.Siege.Model.ObjectFeatures.Interfaces;
+﻿using Assets.Siege.Model.ObjectFeatures.Interfaces;
 using Assets.Siege.MonoBehaviors.CellableObjects;
 
 namespace Assets.Siege.Model.ObjectFeatures.Blocks.Fabrics
@@ -8,6 +7,9 @@ namespace Assets.Siege.Model.ObjectFeatures.Blocks.Fabrics
     {
         public BlockFeaturesFabric() { }
 
-        public BlockFeatures MakeFeatures(BlockInfo blockInfo) => new NullBlockFeatures();
+        public BlockFeatures Make(BlockInfo blockInfo)
+        {
+            return new BlockFeatures(blockInfo);
+        }
     }
 }

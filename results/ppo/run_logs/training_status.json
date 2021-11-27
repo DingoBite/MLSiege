@@ -1,0 +1,29 @@
+{
+    "MoveToFlag": {
+        "checkpoints": [
+            {
+                "steps": 21795,
+                "file_path": "results\\ppo\\MoveToFlag\\MoveToFlag-21795.onnx",
+                "reward": 24.66752126227077,
+                "creation_time": 1638034527.1179829,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MoveToFlag\\MoveToFlag-21795.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 21795,
+            "file_path": "results\\ppo\\MoveToFlag.onnx",
+            "reward": 24.66752126227077,
+            "creation_time": 1638034527.1179829,
+            "auxillary_file_paths": [
+                "results\\ppo\\MoveToFlag\\MoveToFlag-21795.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
