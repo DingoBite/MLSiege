@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3daeeddad3654d4f91d44d96471ad4b, type: 3}
+  m_Script: {fileID: 11500000, guid: f12cc2fb048ce9b44a2d2380a23ee397, type: 3}
   m_Name: Dirt
   m_EditorClassIdentifier: 
-  _blockType: 1
-  _prefab: {fileID: 2699123708143957967, guid: adcfdc74459a0ca4397a154cc5a9e8b8, type: 3}
+  _durability: 20

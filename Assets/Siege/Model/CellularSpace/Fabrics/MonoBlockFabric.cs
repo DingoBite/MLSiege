@@ -2,7 +2,7 @@
 using Assets.Siege.Model.CellularSpace.Blocks;
 using Assets.Siege.Model.CellularSpace.Interfaces;
 using Assets.Siege.Model.General.Enums;
-using Assets.Siege.MonoBehaviors.CellableObjects;
+using Assets.Siege.MonoBehaviors.Blocks;
 using UnityEngine;
 using Zenject;
 

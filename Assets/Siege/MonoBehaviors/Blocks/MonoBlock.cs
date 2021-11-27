@@ -1,16 +1,15 @@
-using Assets.Siege.Model.General.Enums;
+using Assets.Siege.ScriptableObjects;
 using UnityEngine;
 
-namespace Assets.Siege.MonoBehaviors.CellableObjects
+namespace Assets.Siege.MonoBehaviors.Blocks
 {
     public class MonoBlock : MonoBehaviour
     {
-        [SerializeField] private BlockScriptableObject _scriptableObject;
+        [SerializeField] private InfoScriptableObject<BlockInfo> _scriptableObject;
 
         public int Id { get; set; }
 
-        public BlockInfo ScriptableObjectInfo() => _scriptableObject.GetInfo();
-        public BlockType BlockType() => _scriptableObject.GetInfo().BlockType;
+        public BlockInfo GetInfo() => _scriptableObject.GetInfo();
 
         public override string ToString()
         {

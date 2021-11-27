@@ -1,5 +1,5 @@
 ﻿using Assets.Siege.Model.CellularSpace.Blocks;
-using Assets.Siege.MonoBehaviors.CellableObjects;
+using Assets.Siege.MonoBehaviors.Blocks;
 using UnityEngine;
 
 namespace Assets.Siege.Model.CellularSpace.Interfaces

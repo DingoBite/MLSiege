@@ -1,6 +1,6 @@
 ﻿using System;
 using Assets.Siege.Model.General.Interfaces;
-using Assets.Siege.MonoBehaviors.CellableObjects;
+using Assets.Siege.MonoBehaviors.Blocks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

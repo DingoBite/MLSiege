@@ -1,8 +1,8 @@
 ﻿using Assets.Siege.Model.General.Enums;
 
-namespace Assets.Siege.MonoBehaviors.CellableObjects
+namespace Assets.Siege.MonoBehaviors.Blocks
 {
-    public readonly struct BlockInfo
+    public class BlockInfo
     {
         public readonly BlockType BlockType;
         public readonly BlockSolidity BlockSolidity;

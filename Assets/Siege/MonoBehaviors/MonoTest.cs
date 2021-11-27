@@ -1,6 +1,6 @@
 using Assets.Siege.Model.CellularSpace.Interfaces;
 using Assets.Siege.Model.General.Enums;
-using Assets.Siege.Model.ObjectFeatures.Blocks;
+using Assets.Siege.MonoBehaviors.Blocks;
 using UnityEngine;
 using Zenject;
 
@@ -51,7 +51,7 @@ namespace Assets.Siege.MonoBehaviors
                 _blockSpace.DeleteBlock(_gridCoordsConverter.Convert(position));
             else if (Input.GetKeyDown(KeyCode.F))
             {
-                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(position), new BlockFeatures(blockType, BlockSolidity.Solid), out var id);
+                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(position), new BlockInfo(blockType, BlockSolidity.Solid), out var id);
                 print(id);
                 print(position);
                 print(_gridCoordsConverter.Convert(position));

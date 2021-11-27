@@ -4,8 +4,7 @@ using System.Linq;
 using Assets.Siege.Model.CellularSpace.Blocks;
 using Assets.Siege.Model.CellularSpace.Interfaces;
 using Assets.Siege.Model.General.Interfaces;
-using Assets.Siege.Model.ObjectFeatures.Blocks;
-using Assets.Siege.MonoBehaviors.CellableObjects;
+using Assets.Siege.MonoBehaviors.Blocks;
 using UnityEngine;
 using Zenject;
 
@@ -61,24 +60,24 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
             return successfulGet;
         }
 
-        public bool InsertBlock(Vector3Int coords, BlockFeatures blockFeatures, out int id)
+        public bool InsertBlock(Vector3Int coords, BlockInfo blockInfo, out int id)
         {
             if (_ids.ContainsKey(coords))
             {
                 id = -1;
                 return false;
             }
-            id = _packBlocks.InsertCustomer(_packBlockFabric.Make(PeekId, coords, blockFeatures));
+            id = _packBlocks.InsertCustomer(_packBlockFabric.Make(PeekId, coords, blockInfo));
             _ids.Add(coords, id);
             return true;
         }
 
-        public bool InsertBlock(Vector3Int coords, BlockFeatures blockFeatures)
+        public bool InsertBlock(Vector3Int coords, BlockInfo blockInfo)
         {
             if (_ids.ContainsKey(coords))
                 return false;
             
-            var id = _packBlocks.InsertCustomer(_packBlockFabric.Make(PeekId, coords, blockFeatures));
+            var id = _packBlocks.InsertCustomer(_packBlockFabric.Make(PeekId, coords, blockInfo));
             _ids.Add(coords, id);
             return true;
         }

@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3daeeddad3654d4f91d44d96471ad4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 156950d58fc2aae4d9098f9d51dbb4f3, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
-  _blockType: 2
-  _prefab: {fileID: 3000725844389477690, guid: 67cf8f6b2055d454283816eb34bb6805, type: 3}
+  _durability: 40

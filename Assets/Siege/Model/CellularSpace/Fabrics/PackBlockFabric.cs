@@ -1,7 +1,6 @@
 ﻿using Assets.Siege.Model.CellularSpace.Blocks;
 using Assets.Siege.Model.CellularSpace.Interfaces;
-using Assets.Siege.Model.ObjectFeatures.Blocks;
-using Assets.Siege.MonoBehaviors.CellableObjects;
+using Assets.Siege.MonoBehaviors.Blocks;
 using UnityEngine;
 using Zenject;
 
@@ -24,9 +23,9 @@ namespace Assets.Siege.Model.CellularSpace.Fabrics
             _gridCoordsConverter = gridCoordsConverter;
         }
 
-        public PackBlock Make(int id, Vector3Int coords, BlockFeatures blockFeatures)
+        public PackBlock Make(int id, Vector3Int coords, BlockInfo blockInfo)
         {
-            var block = _blockFabric.Make(id, blockFeatures);
+            var block = _blockFabric.Make(id, blockInfo);
             var position = _gridCoordsConverter.Convert(coords);
             return new PackBlock(block, _monoBlockFabric.Make(coords.y, position, block), coords);
         }
@@ -36,7 +35,7 @@ namespace Assets.Siege.Model.CellularSpace.Fabrics
             block.Id = id;
             block.name = block.ToString();
             var coords = _gridCoordsConverter.Convert(block.transform.position);
-            return new PackBlock(_blockFabric.Make(id, block.ScriptableObjectInfo()), block, coords);
+            return new PackBlock(_blockFabric.Make(id, block.GetInfo()), block, coords);
         }
     }
 }
