@@ -47,7 +47,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
                 return;
             
             _availableId.Push(id);
-            _packBlocks[id].Destroy();
+            _packBlocks[id].Dispose();
             _packBlocks.Remove(id);
         }
 
@@ -68,7 +68,7 @@ namespace Assets.Siege.Model.CellularSpace.Repositories
         {
             foreach (var overallBlock in _packBlocks)
             {
-                overallBlock.Value.Destroy();
+                overallBlock.Value.Dispose();
             }
 
             _lastId = 0;

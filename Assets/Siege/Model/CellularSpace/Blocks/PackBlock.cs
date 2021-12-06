@@ -1,15 +1,15 @@
 ﻿using System;
 using Assets.Siege.Model.General.Interfaces;
-using Assets.Siege.MonoBehaviors.Blocks;
+using Assets.Siege.View.Blocks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Assets.Siege.Model.CellularSpace.Blocks
 {
-    public class PackBlock: IToggle
+    public class PackBlock: IToggle, IDisposable
     {
         public readonly Block Block;
-        public readonly MonoBlock MonoBlock;
+        private readonly MonoBlock _monoBlock;
 
         public Vector3Int Coords { get; private set; }
 
@@ -18,7 +18,7 @@ namespace Assets.Siege.Model.CellularSpace.Blocks
             if (block.Id != monoBlock.Id)
                 throw new Exception("Block and MonoBlock Id is not equal");
             Block = block;
-            MonoBlock = monoBlock;
+            _monoBlock = monoBlock;
             Coords = coords;
         }
 
@@ -31,10 +31,12 @@ namespace Assets.Siege.Model.CellularSpace.Blocks
             Coords = tempPos;
         }
 
-        public void Enable() => MonoBlock.gameObject.SetActive(true);
+        public void Enable() => _monoBlock.gameObject.SetActive(true);
 
-        public void Disable() => MonoBlock.gameObject.SetActive(false);
+        public void Disable() => _monoBlock.gameObject.SetActive(false);
 
-        public void Destroy() => Object.Destroy(MonoBlock.gameObject);
+        public void Dispose() => Object.Destroy(_monoBlock.gameObject);
+
+        ~PackBlock() => Dispose();
     }
 }

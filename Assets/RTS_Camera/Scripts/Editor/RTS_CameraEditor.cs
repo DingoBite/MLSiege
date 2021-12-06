@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Assets.RTS_Camera.Scripts;
 using UnityEditor;
 
 namespace RTS_Cam

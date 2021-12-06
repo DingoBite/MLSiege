@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Assets.Siege.Model.Agents;
 using Assets.Siege.Model.CellularSpace.Interfaces;
 using Assets.Siege.Model.General.Enums;
-using Assets.Siege.Model.ObjectFeatures.Blocks;
 
 namespace Assets.Siege.Model.CellularSpace.Blocks
 {
@@ -9,12 +8,16 @@ namespace Assets.Siege.Model.CellularSpace.Blocks
     {
         public readonly int Id;
         public readonly BlockFeatures Features;
-        public readonly Func<int, IBlockSpace, ActionType, bool> BlockBehavior;
+        private readonly BlockBehavior _blockBehavior;
 
-        public Block(int id, BlockFeatures features)
+        public Block(int id, BlockInfo blockInfo)
         {
             Id = id;
-            Features = features;
+            Features = new BlockFeatures(blockInfo);
+            _blockBehavior = blockInfo.BlockBehavior;
         }
+
+        public bool CommitAction(SiegeAgent sender, IBlockSpace blockSpace, ActionType actionType) 
+            => _blockBehavior(sender, this, blockSpace, actionType);
     }
 }

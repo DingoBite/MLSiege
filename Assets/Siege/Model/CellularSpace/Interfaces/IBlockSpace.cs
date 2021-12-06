@@ -2,6 +2,5 @@
 {
     public interface IBlockSpace: IBlockSpaceContext, IPackBlockSpaceContext, IBlockSpaceController
     {
-        public void Clear();
     }
 }
