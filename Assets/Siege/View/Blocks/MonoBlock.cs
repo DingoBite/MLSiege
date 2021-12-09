@@ -1,21 +1,21 @@
-using Assets.Siege.Model.CellularSpace.Blocks;
-using Assets.Siege.View.General;
+using System;
+using Assets.Siege.Model.BlockSpace.Blocks;
+using Assets.Siege.View.Blocks.Abstracts;
 using UnityEngine;
 
 namespace Assets.Siege.View.Blocks
 {
-    public class MonoBlock : MonoBehaviour
+    public class MonoBlock : BlockSpaceMonoObject<BlockInfo>
     {
-        [SerializeField] private InfoScriptableObject<BlockInfo> _scriptableObject;
-
-        public int Id { get; set; }
-
-        private BlockInfo _blockInfo;
-        public BlockInfo GetInfo() => _blockInfo ??= _scriptableObject.GetInfo();
+        public override void Move(Vector3 position, Action action = null) => this.transform.position = position;
+        public override void Act<T>(T actType, Action postAnimationAction = null)
+        {
+            throw new NotImplementedException();
+        }
 
         public override string ToString()
         {
-            return $"{_scriptableObject.GetInfo().BlockType}: {Id}";
+            return $"{_scriptableObjectInfo.GetInfo().BlockData.BlockType}";
         }
     }
 }

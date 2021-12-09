@@ -2,8 +2,7 @@
 {
     public interface IIdRepository<in TKey>
     {
-        public int this[TKey key] { get; }
-        public bool Add(TKey key, int id);
+        public int this[TKey key] { get; set; }
         public bool ContainsKey(TKey key);
         public void Remove(TKey key);
         public void Clear();

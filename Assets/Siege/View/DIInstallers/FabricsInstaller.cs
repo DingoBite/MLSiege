@@ -1,5 +1,6 @@
-using Assets.Siege.Model.CellularSpace.Fabrics;
-using Assets.Siege.Model.CellularSpace.Fabrics.Interfaces;
+using Assets.Siege.Model.BlockSpace.Fabrics;
+using Assets.Siege.Model.BlockSpace.Fabrics.Interfaces;
+using Assets.Siege.View.Blocks;
 using Zenject;
 
 namespace Assets.Siege.View.DIInstallers
@@ -8,7 +9,7 @@ namespace Assets.Siege.View.DIInstallers
     {
         public override void InstallBindings()
         {
-            Container.Bind<IMonoBlockFabric>().To<MonoBlockFabric>().AsSingle().NonLazy();
+            Container.Bind<IMonoFabric<MonoBlock>>().To<MonoBlockFabric>().AsSingle().NonLazy();
         }
     }
 }

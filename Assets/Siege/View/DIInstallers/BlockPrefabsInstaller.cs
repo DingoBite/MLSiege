@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Siege.Model.General.Enums;
+using Assets.Siege.Model.BlockSpace.Blocks.Enums;
 using Assets.Siege.View.Blocks;
 using UnityEngine;
 using Zenject;
