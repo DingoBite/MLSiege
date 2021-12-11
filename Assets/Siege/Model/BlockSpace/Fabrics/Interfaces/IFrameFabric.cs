@@ -1,13 +1,12 @@
-﻿using Assets.Siege.Model.BlockSpace.Blocks;
-using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
-using Assets.Siege.View.Blocks.Abstracts;
+﻿using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
+using Assets.Siege.View.General.MonoBehaviors;
 using UnityEngine;
 
 namespace Assets.Siege.Model.BlockSpace.Fabrics.Interfaces
 {
     public interface IFrameFabric<TFrame, TInfo, TMono> where TMono: BlockSpaceMonoObject<TInfo>
     {
-        public FrameBlock Make(Vector3Int coords, TInfo blockInfo, IBlockSpace<TFrame, TInfo, TMono> blockSpace);
-        public FrameBlock Make(TMono block, IBlockSpace<TFrame, TInfo, TMono> blockSpace);
+        public TFrame Make(Vector3Int coords, TInfo info, IBlockSpace<TFrame, TInfo, TMono> space);
+        public TFrame Make(TMono mono, IBlockSpace<TFrame, TInfo, TMono> space);
     }
 }

@@ -2,14 +2,14 @@
 using Assets.Siege.Model.BlockSpace.Agents.Enums;
 using Assets.Siege.Model.BlockSpace.Blocks.Enums;
 using Assets.Siege.Model.BlockSpace.Features;
+using Assets.Siege.Model.BlockSpace.General;
+using Assets.Siege.Model.BlockSpace.General.CellObjects;
+using Assets.Siege.Model.BlockSpace.General.Interfaces;
 using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
-using Assets.Siege.Model.General;
-using Assets.Siege.Model.General.BlockSpaceObjects;
-using Assets.Siege.Model.General.Interfaces;
 
 namespace Assets.Siege.Model.BlockSpace.Blocks
 {
-    public class Block: BlockSpaceObject<BlockFeatures>, 
+    public class Block: CellObject<BlockFeatures>, 
         IActionCommitter<FrameAgent, FrameBlock, AgentAction>,
         IActionCommitter<FrameBlock, FrameBlock, BlockAction>
     {

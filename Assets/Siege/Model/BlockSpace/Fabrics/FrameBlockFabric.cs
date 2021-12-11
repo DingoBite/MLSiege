@@ -9,30 +9,30 @@ namespace Assets.Siege.Model.BlockSpace.Fabrics
 {
     public class FrameBlockFabric: IFrameFabric<FrameBlock, BlockInfo, MonoBlock>
     {
-        private readonly IMonoFabric<MonoBlock> _monoFabric;
+        private readonly IMonoFabric<MonoBlock, Block> _monoFabric;
 
         [Inject]
-        public FrameBlockFabric(
-            IMonoFabric<MonoBlock> monoFabric)
+        public FrameBlockFabric(IMonoFabric<MonoBlock, Block> monoFabric)
         {
             _monoFabric = monoFabric;
         }
 
-        public FrameBlock Make(Vector3Int coords, BlockInfo blockInfo, IBlockSpace<FrameBlock, BlockInfo, MonoBlock> blockSpace)
+        public FrameBlock Make(Vector3Int coords, BlockInfo blockInfo, IBlockSpace<FrameBlock, BlockInfo, MonoBlock> space)
         {
-            var id = blockSpace.PeekId();
+            var id = space.PeekId;
             var block = new Block(blockInfo);
-            var position = blockSpace.Convert(coords);
+            var position = space.Convert(coords);
             var monoBlock = _monoFabric.Make(id, coords.y, position, block);
-            return new FrameBlock(blockSpace, block, monoBlock, coords);
+            return new FrameBlock(space, block, monoBlock, coords);
         }
 
-        public FrameBlock Make(MonoBlock monoBlock, IBlockSpace<FrameBlock, BlockInfo, MonoBlock> blockSpace)
+        public FrameBlock Make(MonoBlock mono, IBlockSpace<FrameBlock, BlockInfo, MonoBlock> space)
         {
-            monoBlock.name = monoBlock.ToString();
-            var coords = blockSpace.Convert(monoBlock.transform.position);
-            var block = new Block(monoBlock.GetInfo());
-            return new FrameBlock(blockSpace, block, monoBlock, coords);
+            mono.name = mono.ToString();
+            mono.Id = space.PeekId;
+            var coords = space.Convert(mono.transform.position);
+            var block = new Block(mono.GetInfo());
+            return new FrameBlock(space, block, mono, coords);
         }
     }
 }

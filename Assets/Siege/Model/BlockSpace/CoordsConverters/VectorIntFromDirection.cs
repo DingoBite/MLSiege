@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.Siege.Model.General.Enums;
+using Assets.Siege.Model.BlockSpace.General.Enums;
 using UnityEngine;
 
 namespace Assets.Siege.Model.BlockSpace.CoordsConverters
@@ -12,9 +12,9 @@ namespace Assets.Siege.Model.BlockSpace.CoordsConverters
         {
             Directions = new Dictionary<Direction, Vector3Int>
             {
-                {Direction.North, Vector3Int.up},
+                {Direction.North, Vector3Int.forward},
                 {Direction.West, Vector3Int.left},
-                {Direction.South, Vector3Int.down},
+                {Direction.South, Vector3Int.back},
                 {Direction.East, Vector3Int.right}
             };
         }

@@ -2,22 +2,22 @@
     "MoveToFlag": {
         "checkpoints": [
             {
-                "steps": 21795,
-                "file_path": "results\\ppo\\MoveToFlag\\MoveToFlag-21795.onnx",
-                "reward": 24.66752126227077,
-                "creation_time": 1638034527.1179829,
+                "steps": 319399,
+                "file_path": "results\\ppo\\MoveToFlag\\MoveToFlag-319399.onnx",
+                "reward": -4.004475391705831,
+                "creation_time": 1639257242.8005285,
                 "auxillary_file_paths": [
-                    "results\\ppo\\MoveToFlag\\MoveToFlag-21795.pt"
+                    "results\\ppo\\MoveToFlag\\MoveToFlag-319399.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 21795,
+            "steps": 319399,
             "file_path": "results\\ppo\\MoveToFlag.onnx",
-            "reward": 24.66752126227077,
-            "creation_time": 1638034527.1179829,
+            "reward": -4.004475391705831,
+            "creation_time": 1639257242.8005285,
             "auxillary_file_paths": [
-                "results\\ppo\\MoveToFlag\\MoveToFlag-21795.pt"
+                "results\\ppo\\MoveToFlag\\MoveToFlag-319399.pt"
             ]
         }
     },

@@ -2,22 +2,24 @@
 using Assets.Siege.Model.BlockSpace.Blocks;
 using Assets.Siege.Model.BlockSpace.Blocks.Enums;
 using Assets.Siege.Model.BlockSpace.Features;
+using Assets.Siege.Model.BlockSpace.General;
+using Assets.Siege.Model.BlockSpace.General.CellObjects;
+using Assets.Siege.Model.BlockSpace.General.Interfaces;
 using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
-using Assets.Siege.Model.General;
-using Assets.Siege.Model.General.BlockSpaceObjects;
-using Assets.Siege.Model.General.Interfaces;
 
 namespace Assets.Siege.Model.BlockSpace.Agents
 {
-    public class Agent : BlockSpaceObject<AgentFeatures>,
+    public class Agent : CellObject<AgentFeatures>,
         IActionCommitter<FrameAgent, FrameAgent, AgentAction>,
         IActionCommitter<FrameBlock, FrameAgent, BlockAction>
     {
         private readonly BlockObjectBehavior<FrameAgent, FrameAgent, AgentAction> _agentToAgentBehavior;
         private readonly BlockObjectBehavior<FrameBlock, FrameAgent, BlockAction> _blockToAgentBehavior;
 
-        public Agent(AgentFeatures features) : base(features)
+        public Agent(AgentInfo info) : base(new AgentFeatures(info.AgentData))
         {
+            _agentToAgentBehavior = info.AgentToAgentBehavior;
+            _blockToAgentBehavior = info.BlockToAgentBehavior;
         }
 
         public void CommitAction(FrameAgent sender, FrameAgent committer, IFrameSpaceContext<FrameAgent> senderSpace,

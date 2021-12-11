@@ -1,4 +1,4 @@
-﻿using Assets.Siege.View.Blocks.Abstracts;
+﻿using Assets.Siege.View.General.MonoBehaviors;
 
 namespace Assets.Siege.Model.BlockSpace.Repositories.Interfaces
 {

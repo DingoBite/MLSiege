@@ -3,14 +3,14 @@ using Assets.Siege.Model.BlockSpace.Agents;
 using Assets.Siege.Model.BlockSpace.Agents.Enums;
 using Assets.Siege.Model.BlockSpace.Blocks.Enums;
 using Assets.Siege.Model.BlockSpace.Features;
+using Assets.Siege.Model.BlockSpace.General.CellObjects;
 using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
-using Assets.Siege.Model.General.BlockSpaceObjects;
 using Assets.Siege.View.Blocks;
 using UnityEngine;
 
 namespace Assets.Siege.Model.BlockSpace.Blocks
 {
-    public class FrameBlock: BlockObjectFrame<FrameBlock, Block, MonoBlock, BlockFeatures>
+    public class FrameBlock: CellObjectFrame<FrameBlock, Block, MonoBlock, BlockFeatures>
     {
         public FrameBlock(IFrameSpaceContext<FrameBlock> frameSpace, Block block, MonoBlock monoBlock, Vector3Int coords)
             : base(frameSpace, block, monoBlock, coords)

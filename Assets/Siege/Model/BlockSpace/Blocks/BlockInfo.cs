@@ -1,7 +1,7 @@
 ﻿using Assets.Siege.Model.BlockSpace.Agents;
 using Assets.Siege.Model.BlockSpace.Agents.Enums;
 using Assets.Siege.Model.BlockSpace.Blocks.Enums;
-using Assets.Siege.Model.General;
+using Assets.Siege.Model.BlockSpace.General;
 
 namespace Assets.Siege.Model.BlockSpace.Blocks
 {

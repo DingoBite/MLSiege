@@ -17,55 +17,55 @@ namespace Assets.Siege.View.Test
         [Inject] private IGridCoordsConverter _gridCoordsConverter;
         [Inject] private IDictionary<BlockType, MonoBlock> _blockPrefabs;
 
-        public Vector3 position;
-        public BlockType blockType = BlockType.Null;
+        public Vector3 _position;
+        public BlockType _blockType = BlockType.Null;
 
 
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
-                position.x--;
+                _position.x--;
                 MovePointer();
             }
             else if (Input.GetKeyDown(KeyCode.S))
             {
-                position.z--;
+                _position.z--;
                 MovePointer();
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
-                position.x++;
+                _position.x++;
                 MovePointer();
             }
             else if (Input.GetKeyDown(KeyCode.W))
             {
-                position.z++;
+                _position.z++;
                 MovePointer();
             }
             else if (Input.mouseScrollDelta.y > 0.2)
             {
-                position.y++;
+                _position.y++;
                 MovePointer();
             }
             else if (Input.mouseScrollDelta.y < -0.2)
             {
-                position.y--;
+                _position.y--;
                 MovePointer();
             }
             else if (Input.GetKeyDown(KeyCode.C))
                 _blockSpace.Clear();
             else if (Input.GetKeyDown(KeyCode.Space))
-                _blockSpace.DeleteBlock(_gridCoordsConverter.Convert(position));
+                _blockSpace.DeleteBlock(_gridCoordsConverter.Convert(_position));
             else if (Input.GetKeyDown(KeyCode.F))
             {
-                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(position), _blockPrefabs[blockType].GetInfo(), out var id);
+                _blockSpace.InsertBlock(_gridCoordsConverter.Convert(_position), _blockPrefabs[_blockType].GetInfo(), out var id);
                 print(id);
-                print(position);
-                print(_gridCoordsConverter.Convert(position));
+                print(_position);
+                print(_gridCoordsConverter.Convert(_position));
             }
         }
 
-        private void MovePointer() => _pointer.gameObject.transform.position = position;
+        private void MovePointer() => _pointer.gameObject.transform.position = _position;
     }
 }

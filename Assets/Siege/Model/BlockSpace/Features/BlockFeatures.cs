@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Siege.Model.BlockSpace.Blocks;
 using Assets.Siege.Model.BlockSpace.Blocks.Enums;
-using Assets.Siege.Model.General.Interfaces;
+using Assets.Siege.Model.BlockSpace.General.Interfaces;
 
 namespace Assets.Siege.Model.BlockSpace.Features
 {
@@ -19,21 +19,26 @@ namespace Assets.Siege.Model.BlockSpace.Features
             BlockSolidity = blockData.BlockSolidity;
         }
 
-        public void CommitFeatureChange(int feature, int value)
+        public void FeatureSet(int index, int value)
         {
-            _featuresValues[feature] += value;
+            _featuresValues[index] = value;
         }
 
-        public void CommitFeatureChange(int feature, int value, IModifier modifier)
+        public void FeatureChange(int index, int value)
         {
-            _featuresValues[feature] += modifier.ModifyChangeValue(value);
+            _featuresValues[index] += value;
         }
 
-        public void CommitFeatureChange(int feature, int value, IEnumerable<IModifier> modifiers)
+        public void FeatureChange(int index, int value, IModifier modifier)
+        {
+            _featuresValues[index] += modifier.ModifyChangeValue(value);
+        }
+
+        public void FeatureChange(int index, int value, IEnumerable<IModifier> modifiers)
         {
             foreach (var modifier in modifiers)
             {
-                CommitFeatureChange(feature, value, modifier);
+                FeatureChange(index, value, modifier);
             }
         }
     }

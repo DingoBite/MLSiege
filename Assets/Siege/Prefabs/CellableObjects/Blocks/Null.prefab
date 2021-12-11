@@ -139,4 +139,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a30ca4c87dd7ec409e52fc0af5ea442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scriptableObject: {fileID: 11400000, guid: 69ab4b17542278d49933745cde896ea5, type: 2}
+  _actableScriptableObject: {fileID: 11400000, guid: e7d058dc1120db342bf898531ca25ee0, type: 2}

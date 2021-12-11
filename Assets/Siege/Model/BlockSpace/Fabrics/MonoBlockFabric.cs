@@ -9,22 +9,22 @@ using Zenject;
 
 namespace Assets.Siege.Model.BlockSpace.Fabrics
 {
-    public class MonoBlockFabric: IMonoFabric<MonoBlock>
+    public class MonoBlockFabric: IMonoFabric<MonoBlock, Block>
     {
         private readonly IDictionary<BlockType, MonoBlock> _blockPrefabs;
-        private readonly IGameObjectGrid _gameObjectGrid;
+        private readonly ITilemapLevelsGrid _tilemapLevelsGrid;
 
-        [Inject]
-        public MonoBlockFabric(IDictionary<BlockType, MonoBlock> blockPrefabs, IGameObjectGrid gameObjectGrid)
+        public MonoBlockFabric([Inject] IDictionary<BlockType, MonoBlock> blockPrefabs, [Inject] ITilemapLevelsGrid tilemapLevelsGrid, Grid grid)
         {
             _blockPrefabs = blockPrefabs;
-            _gameObjectGrid = gameObjectGrid;
+            _tilemapLevelsGrid = tilemapLevelsGrid;
+            _tilemapLevelsGrid.Init(grid);
         }
 
         public MonoBlock Make(int id, int level, Vector3 position, Block block)
         {
             var monoBlockPrefab = _blockPrefabs[block.Features.BlockType];
-            var gameObjectMonoBlock = Object.Instantiate(monoBlockPrefab, position, Quaternion.identity, _gameObjectGrid.GetLevel(level).transform);
+            var gameObjectMonoBlock = Object.Instantiate(monoBlockPrefab, position, Quaternion.identity, _tilemapLevelsGrid.GetLevel(level).transform);
             var monoBlock = gameObjectMonoBlock.GetComponent<MonoBlock>();
             monoBlock.Id = id;
             gameObjectMonoBlock.name = monoBlock.ToString();
