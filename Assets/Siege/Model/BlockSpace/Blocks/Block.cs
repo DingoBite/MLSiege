@@ -23,14 +23,14 @@ namespace Assets.Siege.Model.BlockSpace.Blocks
         }
 
         public void CommitAction(FrameAgent sender, FrameBlock committer,
-            IFrameSpaceContext<FrameAgent> agentSpace, IFrameSpaceContext<FrameBlock> committerSpace, AgentAction action) 
+            IFrameSpaceInfo<FrameAgent> agentSpace, IFrameSpaceInfo<FrameBlock> committerSpace, AgentAction action) 
             => _agentToBlockBehavior(sender, committer, agentSpace, committerSpace, action);
 
         public void CommitAction(FrameBlock sender, FrameBlock committer,
-            IFrameSpaceContext<FrameBlock> senderSpace, IFrameSpaceContext<FrameBlock> committerSpace, BlockAction action)
+            IFrameSpaceInfo<FrameBlock> senderSpace, IFrameSpaceInfo<FrameBlock> committerSpace, BlockAction action)
             => _blockToBlockBehavior(sender, committer, senderSpace, committerSpace, action);
 
-        public void CommitAction(FrameBlock sender, FrameBlock committer, IFrameSpaceContext<FrameBlock> space, BlockAction action)
+        public void CommitAction(FrameBlock sender, FrameBlock committer, IFrameSpaceInfo<FrameBlock> space, BlockAction action)
             => CommitAction(sender, committer, space, space, action);
     }
 }

@@ -17,7 +17,7 @@ namespace Assets.Siege.Model.BlockSpace.Fabrics
             _monoFabric = monoFabric;
         }
 
-        public FrameAgent Make(Vector3Int coords, AgentInfo info, IBlockSpace<FrameAgent, AgentInfo, MonoAgent> space)
+        public FrameAgent Make(Vector3Int coords, AgentInfo info, IFrameSpaceContext<FrameAgent> space)
         {
             var id = space.PeekId;
             var agent = new Agent(info);
@@ -26,8 +26,9 @@ namespace Assets.Siege.Model.BlockSpace.Fabrics
             return new FrameAgent(space, agent, monoAgent, coords);
         }
 
-        public FrameAgent Make(MonoAgent mono, IBlockSpace<FrameAgent, AgentInfo, MonoAgent> space)
+        public FrameAgent Make(MonoAgent mono, IFrameSpaceContext<FrameAgent> space)
         {
+            mono.Id = space.PeekId;
             mono.name = mono.ToString();
             var coords = space.Convert(mono.transform.position);
             var agent = new Agent(mono.GetInfo());

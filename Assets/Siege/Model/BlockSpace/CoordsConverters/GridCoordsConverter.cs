@@ -24,22 +24,18 @@ namespace Assets.Siege.Model.BlockSpace.CoordsConverters
             _epsilon = Vector3.kEpsilon;
         }
 
-        public Vector3Int Convert(Vector3 coords)
-        {
-            return new Vector3Int(
+        public Vector3Int Convert(Vector3 coords) =>
+            new Vector3Int(
                 (int) Math.Floor(coords.x / _cellSize.x + _offset.x - _epsilon),
                 (int) Math.Floor(coords.y / _cellSize.z + _offset.y - _epsilon),
                 (int) Math.Floor(coords.z / _cellSize.y + _offset.z - _epsilon)
             );
-        }
 
-        public Vector3 Convert(Vector3Int coords)
-        {
-            return new Vector3(
+        public Vector3 Convert(Vector3Int coords) =>
+            new Vector3(
                 coords.x * _cellSize.x + _offset.x,
                 coords.y * _cellSize.z + _offset.y,
                 coords.z * _cellSize.y + _offset.z
             );
-        }
     }
 }

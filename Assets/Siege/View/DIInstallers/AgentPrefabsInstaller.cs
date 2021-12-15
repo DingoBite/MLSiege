@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Siege.Model.BlockSpace.Agents.Enums;
+using Assets.Siege.Model.BlockSpace.General;
+using Assets.Siege.Model.BlockSpace.General.Interfaces;
 using Assets.Siege.View.Agents;
 using UnityEngine;
 using Zenject;
@@ -16,7 +18,7 @@ namespace Assets.Siege.View.DIInstallers
             var agentPrefabs = _agentPrefabs
                 .ToDictionary(mb => mb.GetInfo().AgentType, mb => mb);
 
-            Container.Bind<IDictionary<AgentType, MonoAgent>>().FromInstance(agentPrefabs).AsSingle();
+            Container.Bind<IPrefabsByType<AgentType, MonoAgent>>().FromInstance(new PrefabsByType<AgentType, MonoAgent>(agentPrefabs)).AsSingle();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Siege.Model.BlockSpace.Features;
 using Assets.Siege.Model.BlockSpace.General.Interfaces;
 using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
 using Assets.Siege.View.General.MonoBehaviors;
@@ -7,42 +8,50 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Siege.Model.BlockSpace.General.CellObjects
 {
-    public abstract class CellObjectFrame<TSelf, TCellObj, TMono, TFeatures> : IToggle, IDisposable
+    public abstract class CellObjectFrame<TSelf, TCellObj, TMono, TFeatures> : IToggle, IDisposable, ISpaceLocated
         where TSelf : CellObjectFrame<TSelf, TCellObj, TMono, TFeatures>
         where TCellObj : CellObject<TFeatures>
         where TMono : ActableMono
+        where TFeatures : AbstractFeatures
     {
-        protected readonly IFrameSpaceContext<TSelf> _frameSpace;
-        protected readonly TCellObj _data;
-        protected readonly TMono _mono;
+        protected readonly IFrameSpaceContext<TSelf> _context;
+        protected readonly TCellObj _cellObj;
+        private readonly TMono _mono;
 
-        protected CellObjectFrame(IFrameSpaceContext<TSelf> frameSpace,
-            TCellObj data, TMono mono, Vector3Int coords)
+        protected CellObjectFrame(IFrameSpaceContext<TSelf> context,
+            TCellObj cellObj, TMono mono, Vector3Int coords)
         {
-            _frameSpace = frameSpace;
-            _data = data;
+            _context = context;
+            _cellObj = cellObj;
             _mono = mono;
             Coords = coords;
         }
-
         public int Id => _mono.Id;
 
-        public abstract TFeatures Features { get; }
+        public TFeatures Features => _cellObj.Features;
 
         public Vector3Int Coords
         {
             get => _coords;
-            set => _mono.Move(_frameSpace.Convert(value), () => _coords = value);
+            private set => _context.MoveTo(value, Id);
         }
 
         private Vector3Int _coords;
 
-        public void SwapPosition(TSelf packObject)
+        public void HardSetCoords(Vector3Int newCoords)
+        {
+            _mono.Move(newCoords, () => _coords = newCoords);
+        }
+
+        public void SwapPosition(ISpaceLocated packObject)
         {
             var tempPos = packObject.Coords;
-            packObject.Coords = Coords;
+            _context.MoveTo(Coords, packObject.Id);
             Coords = tempPos;
         }
+
+        protected void PostAnimationCommit<T>(T action, Action commitAction) where T : Enum =>
+            _mono.Act(action, commitAction);
 
         public void Enable() => _mono.gameObject.SetActive(true);
 

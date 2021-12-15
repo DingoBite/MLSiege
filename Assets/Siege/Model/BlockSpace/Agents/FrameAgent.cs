@@ -1,5 +1,4 @@
-﻿using System;
-using Assets.Siege.Model.BlockSpace.Agents.Enums;
+﻿using Assets.Siege.Model.BlockSpace.Agents.Enums;
 using Assets.Siege.Model.BlockSpace.Blocks;
 using Assets.Siege.Model.BlockSpace.Blocks.Enums;
 using Assets.Siege.Model.BlockSpace.CoordsConverters;
@@ -14,43 +13,33 @@ namespace Assets.Siege.Model.BlockSpace.Agents
 {
     public class FrameAgent : CellObjectFrame<FrameAgent, Agent, MonoAgent, AgentFeatures>
     {
-        public FrameAgent(IFrameSpaceContext<FrameAgent> frameSpace, Agent data, MonoAgent mono, Vector3Int coords) : base(frameSpace, data, mono, coords)
+        public FrameAgent(IFrameSpaceContext<FrameAgent> context, Agent cellObj, MonoAgent mono, Vector3Int coords) : base(context, cellObj, mono, coords)
         {
         }
 
-        public override AgentFeatures Features => _data.Features;
-
-        private void PostAnimationCommit(Action commitAction)
-        {
-            // TODO Animation, postAnimation commit
-            _mono.transform.localScale *= 0.8f;
-            commitAction?.Invoke();
-        }
-
-        public bool Move(Direction direction, IFrameSpaceContext<FrameBlock> blockSpace, IFrameSpaceContext<FrameAgent> agentSpace)
+        public bool Move(Direction direction, IFrameSpaceInfo<FrameBlock> blockSpace)
         {
             var coords = Coords + VectorIntFromDirection.GetVector(direction);
-            if (CoordsAvailableCheck(coords, blockSpace, agentSpace))
+            if (CoordsAvailableCheck(coords, blockSpace))
             {
-                Coords = coords;
+                _context.MoveTo(coords, Id);
                 coords.y -= 1;
-                while (CoordsAvailableCheck(coords, blockSpace, agentSpace))
+                while (CoordsAvailableCheck(coords, blockSpace))
                 {
-                    Coords = coords;
+                    _context.MoveTo(coords, Id);
                     coords.y -= 1;
                 }
                 return true;
             }
             coords.y += 1;
-            if (!CoordsAvailableCheck(coords, blockSpace, agentSpace)) return false;
+            if (!CoordsAvailableCheck(coords, blockSpace)) return false;
 
-            Coords = coords;
+            _context.MoveTo(coords, Id);
             return true;
         }
 
-        private bool CoordsAvailableCheck(Vector3Int coords,
-            IFrameSpaceContext<FrameBlock> blockSpace, IFrameSpaceContext<FrameAgent> agentSpace)
-            => !blockSpace.GetFrame(coords, out _) && !agentSpace.GetFrame(coords, out _) &&
+        private bool CoordsAvailableCheck(Vector3Int coords, IFrameSpaceInfo<FrameBlock> blockSpace)
+            => !blockSpace.GetFrame(coords, out _) && !_context.GetFrame(coords, out _) &&
                coords.x >= blockSpace.FormingPoints.Item1.x &&
                coords.y >= blockSpace.FormingPoints.Item1.y &&
                coords.z >= blockSpace.FormingPoints.Item1.z &&
@@ -58,13 +47,13 @@ namespace Assets.Siege.Model.BlockSpace.Agents
                coords.y <= blockSpace.FormingPoints.Item2.y &&
                coords.z <= blockSpace.FormingPoints.Item2.z;
 
-        public void CommitAction(FrameAgent sender, AgentAction action, IFrameSpaceContext<FrameAgent> senderSpace)
-            => PostAnimationCommit(() => _data.CommitAction(sender, this, senderSpace, _frameSpace, action));
+        public void CommitAction(FrameAgent sender, AgentAction action, IFrameSpaceInfo<FrameAgent> senderSpace)
+            => PostAnimationCommit(action, () => _cellObj.CommitAction(sender, this, senderSpace, _context, action));
 
-        public void CommitAction(FrameBlock sender, BlockAction action, IFrameSpaceContext<FrameBlock> senderSpace)
-            => PostAnimationCommit(() => _data.CommitAction(sender, this, senderSpace, _frameSpace, action));
+        public void CommitAction(FrameBlock sender, BlockAction action, IFrameSpaceInfo<FrameBlock> senderSpace)
+            => PostAnimationCommit(action, () => _cellObj.CommitAction(sender, this, senderSpace, _context, action));
 
         public void CommitAction(FrameAgent sender, AgentAction action)
-            => PostAnimationCommit(() => _data.CommitAction(sender, this, _frameSpace, action));
+            => PostAnimationCommit(action, () => _cellObj.CommitAction(sender, this, _context, action));
     }
 }

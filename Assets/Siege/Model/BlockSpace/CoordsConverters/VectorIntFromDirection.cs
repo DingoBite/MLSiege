@@ -15,7 +15,8 @@ namespace Assets.Siege.Model.BlockSpace.CoordsConverters
                 {Direction.North, Vector3Int.forward},
                 {Direction.West, Vector3Int.left},
                 {Direction.South, Vector3Int.back},
-                {Direction.East, Vector3Int.right}
+                {Direction.East, Vector3Int.right},
+                {Direction.Stop, Vector3Int.zero}
             };
         }
 

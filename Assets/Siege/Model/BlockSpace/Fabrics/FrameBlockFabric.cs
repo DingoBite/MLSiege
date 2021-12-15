@@ -17,7 +17,7 @@ namespace Assets.Siege.Model.BlockSpace.Fabrics
             _monoFabric = monoFabric;
         }
 
-        public FrameBlock Make(Vector3Int coords, BlockInfo blockInfo, IBlockSpace<FrameBlock, BlockInfo, MonoBlock> space)
+        public FrameBlock Make(Vector3Int coords, BlockInfo blockInfo, IFrameSpaceContext<FrameBlock> space)
         {
             var id = space.PeekId;
             var block = new Block(blockInfo);
@@ -26,10 +26,10 @@ namespace Assets.Siege.Model.BlockSpace.Fabrics
             return new FrameBlock(space, block, monoBlock, coords);
         }
 
-        public FrameBlock Make(MonoBlock mono, IBlockSpace<FrameBlock, BlockInfo, MonoBlock> space)
+        public FrameBlock Make(MonoBlock mono, IFrameSpaceContext<FrameBlock> space)
         {
-            mono.name = mono.ToString();
             mono.Id = space.PeekId;
+            mono.name = mono.ToString();
             var coords = space.Convert(mono.transform.position);
             var block = new Block(mono.GetInfo());
             return new FrameBlock(space, block, mono, coords);

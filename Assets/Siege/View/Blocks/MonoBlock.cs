@@ -3,7 +3,7 @@ using Assets.Siege.View.General.MonoBehaviors;
 
 namespace Assets.Siege.View.Blocks
 {
-    public class MonoBlock : BlockSpaceMonoObject<BlockInfo>
+    public class MonoBlock : FrameSpaceMonoObject<BlockInfo>
     {
         public override string ToString()
         {

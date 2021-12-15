@@ -5,8 +5,8 @@ namespace Assets.Siege.Model.BlockSpace.General.Interfaces
     public interface IActionCommitter<TSender, TCommitter, in TAction>
     {
         public void CommitAction(TSender sender, TCommitter committer, 
-            IFrameSpaceContext<TSender> senderSpace,
-            IFrameSpaceContext<TCommitter> committerSpace, 
+            IFrameSpaceInfo<TSender> senderSpace,
+            IFrameSpaceInfo<TCommitter> committerSpace, 
             TAction action);
     }
 }

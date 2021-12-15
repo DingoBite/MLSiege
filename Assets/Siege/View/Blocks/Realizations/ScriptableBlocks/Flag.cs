@@ -20,14 +20,14 @@ namespace Assets.Siege.View.Blocks.Realizations.ScriptableBlocks
             throw new NotImplementedException();
         }
 
-        protected override void CommitAction(FrameAgent sender, FrameBlock committer, IFrameSpaceContext<FrameAgent> senderSpace,
-            IFrameSpaceContext<FrameBlock> committerSpace, AgentAction action)
+        protected override void CommitAction(FrameAgent sender, FrameBlock committer, IFrameSpaceInfo<FrameAgent> senderSpace,
+            IFrameSpaceInfo<FrameBlock> committerSpace, AgentAction action)
         {
             throw new NotImplementedException();
         }
 
-        protected override void CommitAction(FrameBlock sender, FrameBlock committer, IFrameSpaceContext<FrameBlock> senderSpace,
-            IFrameSpaceContext<FrameBlock> committerSpace, BlockAction action)
+        protected override void CommitAction(FrameBlock sender, FrameBlock committer, IFrameSpaceInfo<FrameBlock> senderSpace,
+            IFrameSpaceInfo<FrameBlock> committerSpace, BlockAction action)
         {
             throw new NotImplementedException();
         }

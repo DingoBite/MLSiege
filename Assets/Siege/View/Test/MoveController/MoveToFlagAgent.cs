@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Assets.Siege.Model.BlockSpace.Agents;
 using Assets.Siege.Model.BlockSpace.Blocks;
@@ -19,38 +18,41 @@ namespace Assets.Siege.View.Test.MoveController
     public class MoveToFlagAgent: Agent
     {
         [SerializeField] private BlockType _flagBlockType;
+        [SerializeField] private bool _isMovable;
 
-        [Inject] private IBlockSpace<FrameBlock, BlockInfo, MonoBlock> _blockSpace;
-        [Inject] private IBlockSpace<FrameAgent, AgentInfo, MonoAgent> _agentSpace;
+        [Inject] private IFrameSpace<FrameBlock, BlockInfo, MonoBlock> _blockSpace;
+        [Inject] private IFrameSpace<FrameAgent, AgentInfo, MonoAgent> _agentSpace;
 
         private FrameBlock _flagBlock;
         private FrameAgent _frameAgent;
         private int _steps;
         private float _res;
-        private float _prevDistance;
         private readonly Direction[] _directions = {Direction.North, Direction.West, Direction.South, Direction.East};
         private Vector3Int _basePos;
-        private ReadOnlyCollection<float> _obs;
 
         private void Start()
         {
-            _basePos = _agentSpace.Convert(this.transform.position);
-            Debug.Log(_blockSpace.FormingPoints);
+            if (_isMovable)
+                _basePos = _agentSpace.Convert(this.transform.position);
+            Debug.Log(_blockSpace);
+            Debug.Log(_agentSpace);
         }
 
         public override void OnEpisodeBegin()
         {
             _flagBlock ??= _blockSpace.GetBlocks().FirstOrDefault(x => x.Features.BlockType == _flagBlockType);
             _frameAgent ??= _agentSpace.GetBlocks().First();
-
+            if (_blockSpace == null)
+                throw new NullReferenceException("Block space null reference");
             if (_flagBlock == null)
                 throw new Exception("Block space doesn't contain flag block");
             if (!_blockSpace.GetFrame(_flagBlock.Id, out _))
                 throw new Exception("Something wrong in Block space id system");
+            if (!_isMovable) return;
             Debug.Log("New episode");
             _steps = 0;
             _res = 0;
-            _frameAgent.Coords = _basePos;
+            _agentSpace.MoveTo(_basePos, _frameAgent.Id);
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -60,17 +62,15 @@ namespace Assets.Siege.View.Test.MoveController
 
         public override void OnActionReceived(ActionBuffers actions)
         {
+            if (!_isMovable) return;
             var direction = _directions[actions.DiscreteActions[0]];
-            var moved = _frameAgent.Move(direction, _blockSpace, _agentSpace);
+            var moved = _frameAgent.Move(direction, _blockSpace);
 
             //var distance = (Vector3.Normalize(_flagBlock.Coords) - Vector3.Normalize(_frameAgent.Coords)).magnitude;
             var distance = (_flagBlock.Coords - _frameAgent.Coords).magnitude;
             _res += 0.0001f;
             if (!moved) _res += 0.0002f;
-
-            _prevDistance = distance;
             _steps += 1;
-
 
             if (distance <= 2)
             {
@@ -81,6 +81,20 @@ namespace Assets.Siege.View.Test.MoveController
             }
 
             SetReward(-1 + _res);
+        }
+
+        private Direction _direction = Direction.Stop;
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.W)) _direction = Direction.North;
+            else if (Input.GetKeyDown(KeyCode.A)) _direction = Direction.West;
+            else if (Input.GetKeyDown(KeyCode.S)) _direction = Direction.South;
+            else if (Input.GetKeyDown(KeyCode.D)) _direction = Direction.East;
+            if (_direction == Direction.Stop) return;
+
+            _frameAgent.Move(_direction, _blockSpace);
+            _direction = Direction.Stop;
         }
 
         public override void Heuristic(in ActionBuffers actionsOut)

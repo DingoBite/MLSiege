@@ -9,10 +9,10 @@ namespace Assets.Siege.View.Blocks.Realizations.ScriptableBlockTypes
     public abstract class ActionCommitterBlock: CommonBlock
     {
         protected abstract void CommitAction(FrameAgent sender, FrameBlock committer,
-            IFrameSpaceContext<FrameAgent> senderSpace, IFrameSpaceContext<FrameBlock> committerSpace,
+            IFrameSpaceInfo<FrameAgent> senderSpace, IFrameSpaceInfo<FrameBlock> committerSpace,
             AgentAction action);
         protected abstract void CommitAction(FrameBlock sender, FrameBlock committer,
-            IFrameSpaceContext<FrameBlock> senderSpace, IFrameSpaceContext<FrameBlock> committerSpace,
+            IFrameSpaceInfo<FrameBlock> senderSpace, IFrameSpaceInfo<FrameBlock> committerSpace,
             BlockAction action);
     }
 }

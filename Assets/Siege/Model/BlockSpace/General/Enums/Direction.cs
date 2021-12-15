@@ -5,6 +5,7 @@
         North,
         West,
         South,
-        East
+        East,
+        Stop
     }
 }

@@ -5,7 +5,8 @@ namespace Assets.Siege.View.General.MonoBehaviors
 {
     public abstract class ActableMono: MonoBehaviour
     {
-        public bool IsActive { get; protected set; }
+        public bool ReadyToMove { get; protected set; } = true;
+        public bool ReadyToAct { get; protected set; } = true;
 
         public int Id
         {

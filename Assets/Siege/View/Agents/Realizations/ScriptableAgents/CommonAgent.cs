@@ -8,7 +8,7 @@ using Assets.Siege.View.General.MonoBehaviors;
 using Assets.Siege.View.General.ScriptableObjects;
 using UnityEngine;
 
-namespace Assets.Siege.View.Agents
+namespace Assets.Siege.View.Agents.Realizations.ScriptableAgents
 {
     [CreateAssetMenu(fileName = "Dirt", menuName = "ScriptableObjects/Agents/CommonAgent")]
     public class CommonAgent : ActableScriptableObject<AgentInfo>
@@ -17,14 +17,14 @@ namespace Assets.Siege.View.Agents
             new AgentInfo(new AgentData(AgentType.Agent), CommitAction, CommitAction);
 
         private void CommitAction(FrameBlock sender, FrameAgent committer,
-            IFrameSpaceContext<FrameBlock> senderSpace, IFrameSpaceContext<FrameAgent> committerSpace,
+            IFrameSpaceInfo<FrameBlock> senderSpace, IFrameSpaceInfo<FrameAgent> committerSpace,
             BlockAction action)
         {
             throw new NotImplementedException();
         }
 
         private void CommitAction(FrameAgent sender, FrameAgent committer,
-            IFrameSpaceContext<FrameAgent> senderSpace, IFrameSpaceContext<FrameAgent> committerSpace,
+            IFrameSpaceInfo<FrameAgent> senderSpace, IFrameSpaceInfo<FrameAgent> committerSpace,
             AgentAction action)
         {
             throw new NotImplementedException();

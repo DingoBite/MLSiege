@@ -1,26 +1,22 @@
 ﻿using System.Collections.Generic;
 using Assets.Siege.Model.BlockSpace.GridShapers.Interfaces;
+using Assets.Siege.View.General.MonoBehaviors;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Zenject;
-using Object = UnityEngine.Object;
 
 namespace Assets.Siege.Model.BlockSpace.GridShapers
 {
-    public class TilemapLevelsGrid: ITilemapLevelsGrid
+    public class TilemapLevelsGrid<TMono> : ITilemapLevelsGrid<TMono> where TMono : ActableMono
     {
-        private Grid _grid;
+        private readonly Grid _grid;
         private readonly Tilemap _prefab;
-        private List<Tilemap> _levels;
+        private readonly List<Tilemap> _levels;
 
-        [Inject]
-        public TilemapLevelsGrid(Tilemap prefab)
+        
+        public TilemapLevelsGrid([Inject] Tilemap prefab, Grid grid)
         {
             _prefab = prefab;
-        }
-
-        public void Init(Grid grid)
-        {
             _grid = grid;
             _levels = LevelsInit();
         }
@@ -66,12 +62,21 @@ namespace Assets.Siege.Model.BlockSpace.GridShapers
 
         public Vector3 GetCellSize() => _grid.cellSize;
 
-        public Tilemap GetLevel(int index)
+        private Tilemap GetLevel(int index)
         {
             if (index < _levels.Count) return _levels[index];
 
             CreateLevels(index);
             return _levels[index];
+        }
+
+        public TMono PutIntoLevel(int level, TMono prefab, Vector3 position, int id)
+        {
+            var gameObjectMono = Object.Instantiate(prefab, position, Quaternion.identity, GetLevel(level).transform);
+            var mono = gameObjectMono.GetComponent<TMono>();
+            mono.Id = id;
+            gameObjectMono.name = mono.ToString();
+            return mono;
         }
 
         public IEnumerable<Tilemap> GetLevels() => _levels;

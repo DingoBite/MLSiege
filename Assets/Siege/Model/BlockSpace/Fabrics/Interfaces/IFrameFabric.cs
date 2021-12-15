@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Assets.Siege.Model.BlockSpace.Fabrics.Interfaces
 {
-    public interface IFrameFabric<TFrame, TInfo, TMono> where TMono: BlockSpaceMonoObject<TInfo>
+    public interface IFrameFabric<TFrame, in TInfo, in TMono> where TMono: FrameSpaceMonoObject<TInfo>
     {
-        public TFrame Make(Vector3Int coords, TInfo info, IBlockSpace<TFrame, TInfo, TMono> space);
-        public TFrame Make(TMono mono, IBlockSpace<TFrame, TInfo, TMono> space);
+        public TFrame Make(Vector3Int coords, TInfo info, IFrameSpaceContext<TFrame> space);
+        public TFrame Make(TMono mono, IFrameSpaceContext<TFrame> space);
     }
 }
