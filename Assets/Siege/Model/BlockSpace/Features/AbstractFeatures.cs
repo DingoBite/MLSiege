@@ -7,10 +7,12 @@ namespace Assets.Siege.Model.BlockSpace.Features
     {
         protected readonly List<int> _featuresValues;
 
-        public AbstractFeatures()
+        protected AbstractFeatures()
         {
             _featuresValues = new List<int>();
         }
+
+        public abstract int this[int i] { get; }
 
         public void FeatureSet(int index, int value)
         {

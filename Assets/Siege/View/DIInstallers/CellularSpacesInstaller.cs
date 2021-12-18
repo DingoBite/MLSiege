@@ -3,7 +3,6 @@ using Assets.Siege.Model.BlockSpace.Blocks;
 using Assets.Siege.Model.BlockSpace.CoordsConverters;
 using Assets.Siege.Model.BlockSpace.Fabrics;
 using Assets.Siege.Model.BlockSpace.Fabrics.Interfaces;
-using Assets.Siege.Model.BlockSpace.Features;
 using Assets.Siege.Model.BlockSpace.GridShapers;
 using Assets.Siege.Model.BlockSpace.GridShapers.Interfaces;
 using Assets.Siege.Model.BlockSpace.Repositories;

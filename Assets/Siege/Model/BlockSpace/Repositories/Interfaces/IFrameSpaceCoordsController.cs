@@ -2,7 +2,7 @@
 
 namespace Assets.Siege.Model.BlockSpace.Repositories.Interfaces
 {
-    public interface IFrameSpaceMover
+    public interface IFrameSpaceCoordsController
     {
         public void Swap(int id1, int id2);
         public void Swap(Vector3Int cords1, Vector3Int cords2);

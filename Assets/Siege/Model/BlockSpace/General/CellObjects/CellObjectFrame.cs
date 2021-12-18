@@ -18,14 +18,14 @@ namespace Assets.Siege.Model.BlockSpace.General.CellObjects
         protected readonly TCellObj _cellObj;
         private readonly TMono _mono;
 
-        protected CellObjectFrame(IFrameSpaceContext<TSelf> context,
-            TCellObj cellObj, TMono mono, Vector3Int coords)
+        protected CellObjectFrame(IFrameSpaceContext<TSelf> context, TCellObj cellObj, TMono mono, Vector3Int coords)
         {
             _context = context;
             _cellObj = cellObj;
             _mono = mono;
-            Coords = coords;
+            _coords = coords;
         }
+
         public int Id => _mono.Id;
 
         public TFeatures Features => _cellObj.Features;
@@ -38,10 +38,7 @@ namespace Assets.Siege.Model.BlockSpace.General.CellObjects
 
         private Vector3Int _coords;
 
-        public void HardSetCoords(Vector3Int newCoords)
-        {
-            _mono.Move(newCoords, () => _coords = newCoords);
-        }
+        public void UnsafeCoordsChange(Vector3Int newCoords) => _mono.Move(newCoords, () => _coords = newCoords);
 
         public void SwapPosition(ISpaceLocated packObject)
         {
@@ -50,8 +47,7 @@ namespace Assets.Siege.Model.BlockSpace.General.CellObjects
             Coords = tempPos;
         }
 
-        protected void PostAnimationCommit<T>(T action, Action commitAction) where T : Enum =>
-            _mono.Act(action, commitAction);
+        protected void PostAnimationCommit<T>(T action, Action commitAction) where T : Enum => _mono.Act(action, commitAction);
 
         public void Enable() => _mono.gameObject.SetActive(true);
 

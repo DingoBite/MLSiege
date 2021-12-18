@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Assets.Siege.Model.BlockSpace.Blocks;
+﻿using Assets.Siege.Model.BlockSpace.Blocks;
 using Assets.Siege.Model.BlockSpace.Blocks.Enums;
-using Assets.Siege.Model.BlockSpace.General.Interfaces;
 
 namespace Assets.Siege.Model.BlockSpace.Features
 {
@@ -15,5 +13,6 @@ namespace Assets.Siege.Model.BlockSpace.Features
             BlockSolidity = blockData.BlockSolidity;
         }
 
+        public override int this[int i] => _featuresValues[i];
     }
 }

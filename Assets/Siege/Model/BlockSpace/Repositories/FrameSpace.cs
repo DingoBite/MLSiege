@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Assets.Siege.Model.BlockSpace.CoordsConverters.Interfaces;
 using Assets.Siege.Model.BlockSpace.Fabrics.Interfaces;
-using Assets.Siege.Model.BlockSpace.Features;
 using Assets.Siege.Model.BlockSpace.General.CellObjects;
 using Assets.Siege.Model.BlockSpace.General.Interfaces;
 using Assets.Siege.Model.BlockSpace.GridShapers.Interfaces;
@@ -142,7 +141,7 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
 
             _idByCoords[newCoords] = id;
             _idByCoords.Remove(frame.Coords);
-            frame.HardSetCoords(newCoords);
+            frame.UnsafeCoordsChange(newCoords);
         }
 
         public void MoveTo(Vector3 newPosition, int id) => MoveTo(Convert(newPosition), id);

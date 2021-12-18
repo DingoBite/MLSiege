@@ -9,7 +9,7 @@ namespace Assets.Siege.Model.BlockSpace.GridShapers
     {
         private readonly ITilemapLevelsGrid<TMono> _tilemapLevelsGrid;
 
-        protected GridShaper(ITilemapLevelsGrid<TMono> tilemapLevelsGrid)
+        public GridShaper(ITilemapLevelsGrid<TMono> tilemapLevelsGrid)
         {
             _tilemapLevelsGrid = tilemapLevelsGrid;
         }

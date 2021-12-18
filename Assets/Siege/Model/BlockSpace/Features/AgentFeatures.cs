@@ -11,5 +11,7 @@ namespace Assets.Siege.Model.BlockSpace.Features
         {
             AgentType = agentData.AgentType;
         }
+
+        public override int this[int i] => _featuresValues[i];
     }
 }

@@ -25,8 +25,7 @@ namespace Assets.Siege.Model.BlockSpace.Blocks
 
         public BlockInfo(BlockData blockData,
             BlockObjectBehavior<FrameAgent, FrameBlock, AgentAction> agentToBlockBehavior,
-            BlockObjectBehavior<FrameBlock, FrameBlock, BlockAction> blockToBlockBehavior
-            )
+            BlockObjectBehavior<FrameBlock, FrameBlock, BlockAction> blockToBlockBehavior)
         {
             BlockData = blockData;
             AgentToBlockBehavior = agentToBlockBehavior;

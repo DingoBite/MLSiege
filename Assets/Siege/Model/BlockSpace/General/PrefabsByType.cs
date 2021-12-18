@@ -6,49 +6,49 @@ using Assets.Siege.View.General.MonoBehaviors;
 
 namespace Assets.Siege.Model.BlockSpace.General
 {
-    public class PrefabsByType<TType, TMono> : IPrefabsByType<TType, TMono>
-    where TMono : ActableMono
-    where TType : Enum
+    public class PrefabsByType<TKey, TPrefab> : IPrefabsByType<TKey, TPrefab>
+    where TKey : Enum
+    where TPrefab : ActableMono
     {
-        private readonly IDictionary<TType, TMono> _prefabsByTypeDictionary;
+        private readonly IDictionary<TKey, TPrefab> _prefabsByTypeDictionary;
 
-        public PrefabsByType(IDictionary<TType, TMono> dictionary)
+        public PrefabsByType(IDictionary<TKey, TPrefab> dictionary)
         {
             _prefabsByTypeDictionary = dictionary;
         }
 
-        public IEnumerator<KeyValuePair<TType, TMono>> GetEnumerator() => _prefabsByTypeDictionary.GetEnumerator();
+        public IEnumerator<KeyValuePair<TKey, TPrefab>> GetEnumerator() => _prefabsByTypeDictionary.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => _prefabsByTypeDictionary.GetEnumerator();
 
-        public void Add(KeyValuePair<TType, TMono> item) => _prefabsByTypeDictionary.Add(item);
+        public void Add(KeyValuePair<TKey, TPrefab> item) => _prefabsByTypeDictionary.Add(item);
 
         public void Clear() => _prefabsByTypeDictionary.Clear();
 
-        public bool Contains(KeyValuePair<TType, TMono> item) => _prefabsByTypeDictionary.Contains(item);
+        public bool Contains(KeyValuePair<TKey, TPrefab> item) => _prefabsByTypeDictionary.Contains(item);
 
-        public void CopyTo(KeyValuePair<TType, TMono>[] array, int arrayIndex) => _prefabsByTypeDictionary.CopyTo(array, arrayIndex);
+        public void CopyTo(KeyValuePair<TKey, TPrefab>[] array, int arrayIndex) => _prefabsByTypeDictionary.CopyTo(array, arrayIndex);
 
-        public bool Remove(KeyValuePair<TType, TMono> item) => _prefabsByTypeDictionary.Remove(item);
+        public bool Remove(KeyValuePair<TKey, TPrefab> item) => _prefabsByTypeDictionary.Remove(item);
 
         public int Count => _prefabsByTypeDictionary.Count;
 
         public bool IsReadOnly => _prefabsByTypeDictionary.IsReadOnly;
-        public void Add(TType key, TMono value) => _prefabsByTypeDictionary.Add(key, value);
+        public void Add(TKey key, TPrefab value) => _prefabsByTypeDictionary.Add(key, value);
 
-        public bool ContainsKey(TType key) => _prefabsByTypeDictionary.ContainsKey(key);
+        public bool ContainsKey(TKey key) => _prefabsByTypeDictionary.ContainsKey(key);
 
-        public bool Remove(TType key) => _prefabsByTypeDictionary.Remove(key);
+        public bool Remove(TKey key) => _prefabsByTypeDictionary.Remove(key);
 
-        public bool TryGetValue(TType key, out TMono value) => _prefabsByTypeDictionary.TryGetValue(key, out value);
+        public bool TryGetValue(TKey key, out TPrefab value) => _prefabsByTypeDictionary.TryGetValue(key, out value);
 
-        public TMono this[TType key]
+        public TPrefab this[TKey key]
         {
             get => _prefabsByTypeDictionary[key];
             set => _prefabsByTypeDictionary[key] = value;
         }
 
-        public ICollection<TType> Keys => _prefabsByTypeDictionary.Keys;
-        public ICollection<TMono> Values => _prefabsByTypeDictionary.Values;
+        public ICollection<TKey> Keys => _prefabsByTypeDictionary.Keys;
+        public ICollection<TPrefab> Values => _prefabsByTypeDictionary.Values;
     }
 }
