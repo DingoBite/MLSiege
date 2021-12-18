@@ -7,9 +7,9 @@ namespace Assets.Siege.Model.BlockSpace.GridShapers
 {
     public class GridShaper<TInfo, TMono> : IGridShaper<TInfo, TMono> where TMono : FrameSpaceMonoObject<TInfo>
     {
-        private readonly ITilemapLevelsGrid<TMono> _tilemapLevelsGrid;
+        private ITilemapLevelsGrid<TMono> _tilemapLevelsGrid;
 
-        public GridShaper(ITilemapLevelsGrid<TMono> tilemapLevelsGrid)
+        public void Init(ITilemapLevelsGrid<TMono> tilemapLevelsGrid)
         {
             _tilemapLevelsGrid = tilemapLevelsGrid;
         }

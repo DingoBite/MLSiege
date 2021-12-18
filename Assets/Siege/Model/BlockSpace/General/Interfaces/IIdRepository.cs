@@ -1,10 +1,15 @@
-﻿namespace Assets.Siege.Model.BlockSpace.General.Interfaces
+﻿using System.Collections.Generic;
+
+namespace Assets.Siege.Model.BlockSpace.General.Interfaces
 {
-    public interface IIdRepository<in TKey>
+    public interface IRepository<in TKey, TValue>
     {
-        public int this[TKey key] { get; set; }
+        public TValue this[TKey id] { get; set; }
         public bool ContainsKey(TKey key);
+        public bool TryGetCustomer(TKey key, out TValue customer);
+        public void Save();
         public void Remove(TKey key);
         public void Clear();
+        public IEnumerable<TValue> GetCustomers();
     }
 }

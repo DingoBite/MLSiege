@@ -10,7 +10,6 @@ using Assets.Siege.View.Blocks;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
-using Zenject;
 using Agent = Unity.MLAgents.Agent;
 
 namespace Assets.Siege.View.Test.MoveController
@@ -19,9 +18,13 @@ namespace Assets.Siege.View.Test.MoveController
     {
         [SerializeField] private BlockType _flagBlockType;
         [SerializeField] private bool _isMovable;
+        [SerializeField] private MonoAgent _agent;
 
-        [Inject] private IFrameSpace<FrameBlock, BlockInfo, MonoBlock> _blockSpace;
-        [Inject] private IFrameSpace<FrameAgent, AgentInfo, MonoAgent> _agentSpace;
+        [SerializeField] private BlockSpaceGrid _blockSpaceGrid;
+        [SerializeField] private AgentSpaceGrid _agentSpaceGrid;
+
+        private IFrameSpace<FrameBlock, BlockInfo, MonoBlock> _blockSpace;
+        private IFrameSpace<FrameAgent, AgentInfo, MonoAgent> _agentSpace;
 
         private FrameBlock _flagBlock;
         private FrameAgent _frameAgent;
@@ -32,16 +35,23 @@ namespace Assets.Siege.View.Test.MoveController
 
         private void Start()
         {
-            if (_isMovable)
-                _basePos = _agentSpace.Convert(this.transform.position);
-            Debug.Log(_blockSpace);
-            Debug.Log(_agentSpace);
+            _blockSpaceGrid.Init();
+            _agentSpaceGrid.Init();
+            _blockSpace = _blockSpaceGrid.BlockSpace;
+            _agentSpace = _agentSpaceGrid.AgentSpace;
+            Debug.Log(_blockSpace.FormingPoints);
         }
 
         public override void OnEpisodeBegin()
         {
-            _flagBlock ??= _blockSpace.GetBlocks().FirstOrDefault(x => x.Features.BlockType == _flagBlockType);
-            _frameAgent ??= _agentSpace.GetBlocks().First();
+            _flagBlock ??= _blockSpace.GetFrames().FirstOrDefault(x => x.Features.BlockType == _flagBlockType);
+            if (_frameAgent == null)
+            {
+                Debug.Log(_agentSpace.GetFrame(_agent.Id, out var tempAgent));
+                _frameAgent = tempAgent;
+                if (_isMovable)
+                    _basePos = _frameAgent.Coords;
+            }
             if (_blockSpace == null)
                 throw new NullReferenceException("Block space null reference");
             if (_flagBlock == null)
@@ -93,7 +103,8 @@ namespace Assets.Siege.View.Test.MoveController
             else if (Input.GetKeyDown(KeyCode.D)) _direction = Direction.East;
             if (_direction == Direction.Stop) return;
 
-            _frameAgent.Move(_direction, _blockSpace);
+            Debug.Log(_direction);
+            Debug.Log(_frameAgent.Move(_direction, _blockSpace));
             _direction = Direction.Stop;
         }
 

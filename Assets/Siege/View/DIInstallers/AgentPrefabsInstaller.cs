@@ -18,7 +18,8 @@ namespace Assets.Siege.View.DIInstallers
             var agentPrefabs = _agentPrefabs
                 .ToDictionary(mb => mb.GetInfo().AgentType, mb => mb);
 
-            Container.Bind<IPrefabsByType<AgentType, MonoAgent>>().FromInstance(new PrefabsByType<AgentType, MonoAgent>(agentPrefabs)).AsSingle();
+            Container.Bind<IPrefabsByType<AgentType, MonoAgent>>().FromInstance(new PrefabsByType<AgentType, MonoAgent>(agentPrefabs))
+                .AsSingle().NonLazy();
         }
     }
 }

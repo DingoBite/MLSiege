@@ -13,7 +13,8 @@ namespace Assets.Siege.View.DIInstallers
         {
             Container.Bind<IRepository<FrameAgent>>().To<FrameRepository<FrameAgent>>().AsTransient();
             Container.Bind<IRepository<FrameBlock>>().To<FrameRepository<FrameBlock>>().AsTransient();
-            Container.Bind<IIdRepository<Vector3Int>>().To<Vector3IntIdRepository>().AsTransient();
+            Container.Bind<IRepository<int, Vector3Int>>().To<IdVectorRepository>().AsTransient();
+            Container.Bind<IRepository<Vector3Int, int>>().To<VectorIdRepository>().AsTransient();
         }
     }
 }

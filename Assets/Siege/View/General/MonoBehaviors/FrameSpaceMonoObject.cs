@@ -15,13 +15,23 @@ namespace Assets.Siege.View.General.MonoBehaviors
         public override void Move(Vector3 position, Action postAnimationAction = null)
         {
             if (!ReadyToMove) return;
-            _actableScriptableObject.Move(this, position, postAnimationAction);
+            ReadyToMove = false;
+            _actableScriptableObject.Move(this, position, () =>
+            {
+                postAnimationAction?.Invoke();
+                ReadyToMove = true;
+            });
         }
 
         public override void Act<T>(T actType, Action postAnimationAction = null)
         {
             if (!ReadyToAct) return;
-            _actableScriptableObject.Act(this, actType, postAnimationAction);
+            ReadyToAct = false;
+            _actableScriptableObject.Act(this, actType, () =>
+            {
+                postAnimationAction?.Invoke();
+                ReadyToAct = true;
+            });
         }
     }
 }

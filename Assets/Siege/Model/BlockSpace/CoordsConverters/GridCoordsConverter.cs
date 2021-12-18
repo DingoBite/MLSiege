@@ -6,14 +6,20 @@ namespace Assets.Siege.Model.BlockSpace.CoordsConverters
 {
     public class GridCoordsConverter: IGridCoordsConverter
     {
-        private readonly Vector3 _cellSize;
-        private readonly Vector3 _offset;
+        private Vector3 _cellSize;
+        private Vector3 _offset;
         private readonly float _epsilon;
 
         // In third dimension Grid y axis in size is z axis.
         // Offset on y dimension (z) is 0.
 
-        public GridCoordsConverter(Vector3 cellSize)
+        public GridCoordsConverter()
+        {
+            _epsilon = Vector3.kEpsilon;
+
+        }
+
+        public void Init(Vector3 cellSize)
         {
             _cellSize = cellSize;
             _offset = new Vector3(
@@ -21,7 +27,6 @@ namespace Assets.Siege.Model.BlockSpace.CoordsConverters
                 _cellSize.z / 2,
                 _cellSize.y / 2
             );
-            _epsilon = Vector3.kEpsilon;
         }
 
         public Vector3Int Convert(Vector3 coords) =>

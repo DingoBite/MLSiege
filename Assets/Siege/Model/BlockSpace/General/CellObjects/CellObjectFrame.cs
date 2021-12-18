@@ -8,46 +8,30 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Siege.Model.BlockSpace.General.CellObjects
 {
-    public abstract class CellObjectFrame<TSelf, TCellObj, TMono, TFeatures> : IToggle, IDisposable, ISpaceLocated
+    public abstract class CellObjectFrame<TSelf, TCellObj, TMono, TFeatures> : IToggle, IDisposable, IMovable
         where TSelf : CellObjectFrame<TSelf, TCellObj, TMono, TFeatures>
         where TCellObj : CellObject<TFeatures>
         where TMono : ActableMono
         where TFeatures : AbstractFeatures
     {
-        protected readonly IFrameSpaceContext<TSelf> _context;
+        public readonly IFrameSpaceContext<TSelf> SelfSpace;
         protected readonly TCellObj _cellObj;
-        private readonly TMono _mono;
+        protected readonly TMono _mono;
 
-        protected CellObjectFrame(IFrameSpaceContext<TSelf> context, TCellObj cellObj, TMono mono, Vector3Int coords)
+        protected CellObjectFrame(IFrameSpaceContext<TSelf> selfSpace, TCellObj cellObj, TMono mono)
         {
-            _context = context;
+            SelfSpace = selfSpace;
             _cellObj = cellObj;
             _mono = mono;
-            _coords = coords;
         }
 
         public int Id => _mono.Id;
 
+        public Vector3Int Coords => SelfSpace[Id];
+
         public TFeatures Features => _cellObj.Features;
 
-        public Vector3Int Coords
-        {
-            get => _coords;
-            private set => _context.MoveTo(value, Id);
-        }
-
-        private Vector3Int _coords;
-
-        public void UnsafeCoordsChange(Vector3Int newCoords) => _mono.Move(newCoords, () => _coords = newCoords);
-
-        public void SwapPosition(ISpaceLocated packObject)
-        {
-            var tempPos = packObject.Coords;
-            _context.MoveTo(Coords, packObject.Id);
-            Coords = tempPos;
-        }
-
-        protected void PostAnimationCommit<T>(T action, Action commitAction) where T : Enum => _mono.Act(action, commitAction);
+        public void Move(Vector3 position, Action postAnimationAction) => _mono.Move(position, postAnimationAction);
 
         public void Enable() => _mono.gameObject.SetActive(true);
 

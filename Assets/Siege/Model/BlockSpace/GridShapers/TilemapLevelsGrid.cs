@@ -9,35 +9,38 @@ namespace Assets.Siege.Model.BlockSpace.GridShapers
 {
     public class TilemapLevelsGrid<TMono> : ITilemapLevelsGrid<TMono> where TMono : ActableMono
     {
-        private readonly Grid _grid;
         private readonly Tilemap _prefab;
         private readonly List<Tilemap> _levels;
+        private Grid _grid;
 
-        
-        public TilemapLevelsGrid([Inject] Tilemap prefab, Grid grid)
+        [Inject]
+        public TilemapLevelsGrid(Tilemap prefab)
         {
             _prefab = prefab;
-            _grid = grid;
-            _levels = LevelsInit();
+            _levels = new List<Tilemap>();
         }
 
-        private List<Tilemap> LevelsInit()
+        public void Init(Grid grid)
         {
-            var levels = new List<Tilemap>();
+            _grid = grid;
+            LevelsInit();
+        }
+
+        private void LevelsInit()
+        {
+            _levels.Clear();
             foreach (Transform tilemap in _grid.transform)
             {
                 var containsTilemap = tilemap.TryGetComponent(out Tilemap level);
                 if (!containsTilemap) continue;
-                levels.Add(level);
+                _levels.Add(level);
             }
-            levels.Sort((l1, l2) => l1.transform.position.y.CompareTo(l2.transform.position.y));
+            _levels.Sort((l1, l2) => l1.transform.position.y.CompareTo(l2.transform.position.y));
             var i = 0;
-            foreach (var level in levels)
+            foreach (var level in _levels)
             {
                 level.name = $"Level {i++}";
             }
-
-            return levels;
         }
 
         private void CreateLevel(int i)

@@ -1,5 +1,4 @@
-﻿using Assets.Siege.Model.BlockSpace.General.CellObjects;
-using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
+﻿using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
 
 namespace Assets.Siege.Model.BlockSpace.General
 {

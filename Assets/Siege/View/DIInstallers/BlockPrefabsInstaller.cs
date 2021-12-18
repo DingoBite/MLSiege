@@ -18,7 +18,8 @@ namespace Assets.Siege.View.DIInstallers
             var blockPrefabs = _blockPrefabs
                 .ToDictionary(mb => mb.GetInfo().BlockType, mb => mb);
 
-            Container.Bind<IPrefabsByType<BlockType, MonoBlock>>().FromInstance(new PrefabsByType<BlockType, MonoBlock>(blockPrefabs)).AsSingle();
+            Container.Bind<IPrefabsByType<BlockType, MonoBlock>>().FromInstance(new PrefabsByType<BlockType, MonoBlock>(blockPrefabs))
+                .AsSingle().NonLazy();
         }
     }
 }

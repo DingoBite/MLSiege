@@ -12,35 +12,57 @@ using Zenject;
 
 namespace Assets.Siege.Model.BlockSpace.Repositories
 {
-    public sealed class FrameSpace<TFrame, TInfo, TMono> : IFrameSpace<TFrame, TInfo, TMono> 
-        where TFrame: ISpaceLocated
-        where TMono: FrameSpaceMonoObject<TInfo>
+    public sealed class FrameSpace<TFrame, TInfo, TMono> : IFrameSpace<TFrame, TInfo, TMono>
+        where TFrame : IMovable
+        where TMono : FrameSpaceMonoObject<TInfo>
     {
         private readonly IFrameFabric<TFrame, TInfo, TMono> _frameFabric;
         private readonly IRepository<TFrame> _frameRepository;
-        private readonly IIdRepository<Vector3Int> _idByCoords;
+        private readonly IRepository<Vector3Int, int> _idByCoords;
+        private readonly IRepository<int, Vector3Int> _coordsById;
+        private readonly IGridShaper<TInfo, TMono> _gridShaper;
         private readonly IGridCoordsConverter _gridCoordsConverter;
 
-        private FrameSpace(
-            [Inject] IFrameFabric<TFrame, TInfo, TMono> frameFabric,
-            [Inject] IRepository<TFrame> frameRepositoryRepository,
-            [Inject] IIdRepository<Vector3Int> idRepository,
-            [Inject] IGridShaper<TInfo, TMono> gridShaper,
-            IGridCoordsConverter gridCoordsConverter)
+        [Inject]
+        private FrameSpace(IFrameFabric<TFrame, TInfo, TMono> frameFabric, IRepository<TFrame> frameRepository,
+            IRepository<Vector3Int, int> idByCoordsRepository, IRepository<int, Vector3Int> coordsByIdRepository,
+            IGridShaper<TInfo, TMono> gridShaper, IGridCoordsConverter gridCoordsConverter)
         {
             _frameFabric = frameFabric;
-            _frameRepository = frameRepositoryRepository;
-            _idByCoords = idRepository;
+            _frameRepository = frameRepository;
+            _coordsById = coordsByIdRepository;
+            _idByCoords = idByCoordsRepository;
+            _gridShaper = gridShaper;
             _gridCoordsConverter = gridCoordsConverter;
+        }
 
-            var (minPoint, maxPoint) = gridShaper.Shape(this);
+        public void Init(ITilemapLevelsGrid<TMono> tilemapLevelsGrid)
+        {
+            _frameRepository.Clear();
+            _coordsById.Clear();
+            _idByCoords.Clear();
 
+            _frameFabric.Init(tilemapLevelsGrid);
+            _gridShaper.Init(tilemapLevelsGrid);
+            _gridCoordsConverter.Init(tilemapLevelsGrid.GetCellSize());
+
+            var (minPoint, maxPoint) = _gridShaper.Shape(this);
             FormingPoints = (Convert(minPoint), Convert(maxPoint));
         }
 
+        public int this[Vector3Int coords] => _idByCoords[coords];
+
+        public Vector3Int this[int id] => _coordsById[id];
+
         public int PeekId => _frameRepository.PeekId;
 
-        public (Vector3Int, Vector3Int) FormingPoints { get; }
+        public (Vector3Int, Vector3Int) FormingPoints { get; private set; }
+
+        private void UpdateKeys(Vector3Int coords, int id)
+        {
+            _idByCoords[coords] = id;
+            _coordsById[id] = coords;
+        }
 
         public Vector3 Convert(Vector3Int coords) => _gridCoordsConverter.Convert(coords);
 
@@ -48,8 +70,8 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
 
         public bool GetFrame(int id, out TFrame frame)
         {
-            var successfulGet = _frameRepository.TryGetCustomerById(id, out var frameAgent);
-            frame = !successfulGet ? default : frameAgent;
+            var successfulGet = _frameRepository.TryGetCustomer(id, out var tempFrame);
+            frame = !successfulGet ? default : tempFrame;
             return successfulGet;
         }
 
@@ -60,7 +82,7 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
                 frame = default;
                 return false;
             }
-            var successfulGet = _frameRepository.TryGetCustomerById(_idByCoords[coords], out var frameAgent);
+            var successfulGet = _frameRepository.TryGetCustomer(_idByCoords[coords], out var frameAgent);
             frame = !successfulGet ? default : frameAgent;
             return successfulGet;
         }
@@ -73,7 +95,7 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
                 return false;
             }
             id = _frameRepository.InsertCustomer(_frameFabric.Make(coords, info, this));
-            _idByCoords[coords] = id;
+            UpdateKeys(coords, id);
             return true;
         }
 
@@ -84,48 +106,65 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
 
             var id = _frameRepository.InsertCustomer(_frameFabric.Make(coords, info, this));
             _idByCoords[coords] = id;
+            _coordsById[id] = coords;
             return true;
         }
 
         public bool Insert(TMono mono, out int id)
         {
             var frameAgent = _frameFabric.Make(mono, this);
-            if (_idByCoords.ContainsKey(frameAgent.Coords))
+            var coords = Convert(mono.transform.position);
+
+            if (_idByCoords.ContainsKey(coords))
             {
                 id = -1;
                 return false;
             }
+
             id = _frameRepository.InsertCustomer(frameAgent);
-            _idByCoords[frameAgent.Coords] = id;
+            UpdateKeys(coords, id);
             return true;
         }
 
         public bool Insert(TMono mono)
         {
             var frameAgent = _frameFabric.Make(mono, this);
-            if (_idByCoords.ContainsKey(frameAgent.Coords))
+            var coords = Convert(mono.transform.position);
+
+            if (_idByCoords.ContainsKey(coords))
                 return false;
+
             var id = _frameRepository.InsertCustomer(frameAgent);
-            _idByCoords[frameAgent.Coords] = id;
+            UpdateKeys(coords, id);
             return true;
         }
 
         public void Swap(int id1, int id2)
         {
-            var successfulGet1 = _frameRepository.TryGetCustomerById(id1, out var agent1);
-            var successfulGet2 = _frameRepository.TryGetCustomerById(id2, out var agent2);
+            var successfulGet1 = _coordsById.TryGetCustomer(id1, out var coords1);
+            var successfulGet2 = _coordsById.TryGetCustomer(id2, out var coords2);
             if (successfulGet1 && successfulGet2)
-                agent1.SwapPosition(agent2);
+            {
+                _frameRepository.TryGetCustomer(id1, out var frame1);
+                frame1.Move(Convert(coords2), () => UpdateKeys(coords2, id1));
+                _frameRepository.TryGetCustomer(id2, out var frame2);
+                frame2.Move(Convert(coords1), () => UpdateKeys(coords1, id2));
+            }
             else
                 throw new NullReferenceException("Swap frame by id null reference exception");
         }
 
-        public void Swap(Vector3Int cords1, Vector3Int cords2)
+        public void Swap(Vector3Int coords1, Vector3Int coords2)
         {
-            var successfulGet1 = _frameRepository.TryGetCustomerById(_idByCoords[cords1], out var agent1);
-            var successfulGet2 = _frameRepository.TryGetCustomerById(_idByCoords[cords2], out var agent2);
+            var successfulGet1 = _idByCoords.TryGetCustomer(coords1, out var id1);
+            var successfulGet2 = _idByCoords.TryGetCustomer(coords2, out var id2);
             if (successfulGet1 && successfulGet2)
-                agent1.SwapPosition(agent2);
+            {
+                _frameRepository.TryGetCustomer(id1, out var frame1);
+                frame1.Move(Convert(coords2), () => UpdateKeys(coords2, id1));
+                _frameRepository.TryGetCustomer(id2, out var frame2);
+                frame2.Move(Convert(coords1), () => UpdateKeys(coords1, id2));
+            }
             else
                 throw new NullReferenceException("Swap frame by coords null reference exception");
         }
@@ -135,13 +174,14 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
             if (_idByCoords.ContainsKey(newCoords))
                 throw new Exception($"Agent space is already have frame on new Coords = {newCoords}");
 
-            var successfulGet = _frameRepository.TryGetCustomerById(id, out var frame);
+            var successfulGet = _coordsById.TryGetCustomer(id, out var coords);
             if (!successfulGet)
                 throw new KeyNotFoundException($"Agent space doesn't contains id = {id}");
 
-            _idByCoords[newCoords] = id;
-            _idByCoords.Remove(frame.Coords);
-            frame.UnsafeCoordsChange(newCoords);
+            _frameRepository.TryGetCustomer(id, out var frame);
+            UpdateKeys(newCoords, id);
+            _idByCoords.Remove(coords);
+            frame.Move(Convert(coords));
         }
 
         public void MoveTo(Vector3 newPosition, int id) => MoveTo(Convert(newPosition), id);
@@ -157,26 +197,27 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
 
         public void Delete(int id)
         {
-            if (!_frameRepository.TryGetCustomerById(id, out var frame))
+            if (!_coordsById.TryGetCustomer(id, out var frame))
                 return;
+            var coords = _coordsById[id];
             _frameRepository.DeleteCustomer(id);
-            _idByCoords.Remove(frame.Coords);
+            _idByCoords.Remove(coords);
+            _coordsById.Remove(id);
         }
 
         public void Delete(Vector3Int coords)
         {
             if (!_idByCoords.ContainsKey(coords))
                 return;
-            _frameRepository.DeleteCustomer(_idByCoords[coords]);
-            _idByCoords.Remove(coords);
+            Delete(_idByCoords[coords]);
         }
 
         public void Clear()
         {
-            _frameRepository.Clear();
+            _coordsById.Clear();
             _idByCoords.Clear();
         }
 
-        public IEnumerable<TFrame> GetBlocks() => _frameRepository.GetCustomers();
+        public IEnumerable<TFrame> GetFrames() => _frameRepository.GetCustomers();
     }
 }

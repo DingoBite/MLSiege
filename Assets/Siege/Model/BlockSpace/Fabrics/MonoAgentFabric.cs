@@ -12,12 +12,16 @@ namespace Assets.Siege.Model.BlockSpace.Fabrics
     public class MonoAgentFabric: IMonoFabric<MonoAgent, Agent>
     {
         private readonly IPrefabsByType<AgentType, MonoAgent> _agentPrefabs;
-        private readonly ITilemapLevelsGrid<MonoAgent> _tilemapLevelsGrid;
+        private ITilemapLevelsGrid<MonoAgent> _tilemapLevelsGrid;
 
         [Inject]
-        public MonoAgentFabric(IPrefabsByType<AgentType, MonoAgent> agentPrefabs, ITilemapLevelsGrid<MonoAgent> tilemapLevelsGrid)
+        public MonoAgentFabric(IPrefabsByType<AgentType, MonoAgent> blockPrefabs)
         {
-            _agentPrefabs = agentPrefabs;
+            _agentPrefabs = blockPrefabs;
+        }
+
+        public void Init(ITilemapLevelsGrid<MonoAgent> tilemapLevelsGrid)
+        {
             _tilemapLevelsGrid = tilemapLevelsGrid;
         }
 

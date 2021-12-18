@@ -1,5 +1,6 @@
 ﻿using Assets.Siege.Model.BlockSpace.Blocks;
 using Assets.Siege.Model.BlockSpace.Fabrics.Interfaces;
+using Assets.Siege.Model.BlockSpace.GridShapers.Interfaces;
 using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
 using Assets.Siege.View.Blocks;
 using UnityEngine;
@@ -17,22 +18,23 @@ namespace Assets.Siege.Model.BlockSpace.Fabrics
             _monoFabric = monoFabric;
         }
 
+        public void Init(ITilemapLevelsGrid<MonoBlock> tilemapLevelsGrid) => _monoFabric.Init(tilemapLevelsGrid);
+
         public FrameBlock Make(Vector3Int coords, BlockInfo blockInfo, IFrameSpaceContext<FrameBlock> space)
         {
             var id = space.PeekId;
             var block = new Block(blockInfo);
             var position = space.Convert(coords);
             var monoBlock = _monoFabric.Make(id, coords.y, position, block);
-            return new FrameBlock(space, block, monoBlock, coords);
+            return new FrameBlock(space, block, monoBlock);
         }
 
-        public FrameBlock Make(MonoBlock mono, IFrameSpaceContext<FrameBlock> space)
+        public FrameBlock Make(MonoBlock monoAgent, IFrameSpaceContext<FrameBlock> space)
         {
-            mono.Id = space.PeekId;
-            mono.name = mono.ToString();
-            var coords = space.Convert(mono.transform.position);
-            var block = new Block(mono.GetInfo());
-            return new FrameBlock(space, block, mono, coords);
+            monoAgent.Id = space.PeekId;
+            monoAgent.name = monoAgent.ToString();
+            var block = new Block(monoAgent.GetInfo());
+            return new FrameBlock(space, block, monoAgent);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Assets.Siege.Model.BlockSpace.Repositories
 
         public IEnumerable<TFrame> GetCustomers() => _frameBlocks.Values;
 
-        public bool TryGetCustomerById(int id, out TFrame customer) => _frameBlocks.TryGetValue(id, out customer);
+        public bool TryGetCustomer(int id, out TFrame customer) => _frameBlocks.TryGetValue(id, out customer);
 
         public int InsertCustomer(TFrame customer)
         {

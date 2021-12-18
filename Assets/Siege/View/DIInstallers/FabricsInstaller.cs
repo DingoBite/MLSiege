@@ -12,8 +12,10 @@ namespace Assets.Siege.View.DIInstallers
     {
         public override void InstallBindings()
         {
-            Container.Bind<IFrameFabric<FrameBlock, BlockInfo, MonoBlock>>().To<FrameBlockFabric>().AsSingle().NonLazy();
-            Container.Bind<IFrameFabric<FrameAgent, AgentInfo, MonoAgent>>().To<FrameAgentFabric>().AsSingle().NonLazy();
+            Container.Bind<IFrameFabric<FrameBlock, BlockInfo, MonoBlock>>().To<FrameBlockFabric>().AsTransient();
+            Container.Bind<IFrameFabric<FrameAgent, AgentInfo, MonoAgent>>().To<FrameAgentFabric>().AsTransient();
+            Container.Bind<IMonoFabric<MonoBlock, Block>>().To<MonoBlockFabric>().AsTransient();
+            Container.Bind<IMonoFabric<MonoAgent, Agent>>().To<MonoAgentFabric>().AsTransient();
         }
     }
 }
