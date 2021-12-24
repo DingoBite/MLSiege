@@ -68,8 +68,4 @@ ehthumbs.db
 # ============ #
 #    Ignore    #
 # ============ #
-[Aa]ssets/StoreAssets/AmplifyShaderEditor/
-[Aa]ssets/StoreAssets/AmplifyShaderEditor.meta
-[Aa]ssets/Editor/TempSettingsEzMoney.txt
-[Aa]ssets/Editor/TempSettingsEzMoney.txt.meta
-Assets/Temp
+*.meta
