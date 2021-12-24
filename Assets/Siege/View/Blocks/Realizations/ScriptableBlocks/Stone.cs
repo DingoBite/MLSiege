@@ -1,5 +1,5 @@
-﻿using Assets.Siege.Model.BlockSpace.Blocks;
-using Assets.Siege.Model.BlockSpace.Blocks.Enums;
+﻿using Assets.Siege.CellularSpace.Blocks;
+using Assets.Siege.CellularSpace.Blocks.Enums;
 using Assets.Siege.View.Blocks.Realizations.ScriptableBlockTypes;
 using UnityEngine;
 

@@ -1,9 +1,9 @@
-﻿using Assets.Siege.Model.BlockSpace.Agents;
+﻿using Assets.Siege.CellularSpace.Agents;
 using Assets.Siege.View.General.MonoBehaviors;
 
 namespace Assets.Siege.View.Agents
 {
-    public class MonoAgent: FrameSpaceMonoObject<AgentInfo>
+    public class MonoAgent: CellularSpaceMonoObject<AgentInfo>
     {
         
     }

@@ -1,7 +1,7 @@
-﻿using Assets.Siege.Model.BlockSpace.Agents;
-using Assets.Siege.Model.BlockSpace.Blocks;
-using Assets.Siege.Model.BlockSpace.General.Interfaces;
-using Assets.Siege.Model.BlockSpace.Repositories;
+﻿using Assets.Siege.CellularSpace.Agents;
+using Assets.Siege.CellularSpace.Blocks;
+using Assets.Siege.CellularSpace.General.Interfaces;
+using Assets.Siege.CellularSpace.Repositories;
 using UnityEngine;
 using Zenject;
 

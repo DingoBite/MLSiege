@@ -1,6 +1,6 @@
 ﻿using System;
-using Assets.Siege.Model.BlockSpace.Blocks;
-using Assets.Siege.Model.BlockSpace.Blocks.Enums;
+using Assets.Siege.CellularSpace.Blocks;
+using Assets.Siege.CellularSpace.Blocks.Enums;
 using Assets.Siege.View.General.MonoBehaviors;
 using Assets.Siege.View.General.ScriptableObjects;
 using UnityEngine;

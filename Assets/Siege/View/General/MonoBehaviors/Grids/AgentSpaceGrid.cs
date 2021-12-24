@@ -1,6 +1,6 @@
-﻿using Assets.Siege.Model.BlockSpace.Agents;
-using Assets.Siege.Model.BlockSpace.GridShapers.Interfaces;
-using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
+﻿using Assets.Siege.CellularSpace.Agents;
+using Assets.Siege.CellularSpace.GridShapers.Interfaces;
+using Assets.Siege.CellularSpace.Repositories.Interfaces;
 using Assets.Siege.View.Agents;
 using UnityEngine;
 using Zenject;

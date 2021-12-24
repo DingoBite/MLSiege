@@ -1,9 +1,9 @@
 ﻿using System;
-using Assets.Siege.Model.BlockSpace.Agents;
-using Assets.Siege.Model.BlockSpace.Agents.Enums;
-using Assets.Siege.Model.BlockSpace.Blocks;
-using Assets.Siege.Model.BlockSpace.Blocks.Enums;
-using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
+using Assets.Siege.CellularSpace.Agents;
+using Assets.Siege.CellularSpace.Agents.Enums;
+using Assets.Siege.CellularSpace.Blocks;
+using Assets.Siege.CellularSpace.Blocks.Enums;
+using Assets.Siege.CellularSpace.Repositories.Interfaces;
 using Assets.Siege.View.General.MonoBehaviors;
 using Assets.Siege.View.General.ScriptableObjects;
 using UnityEngine;
@@ -13,8 +13,7 @@ namespace Assets.Siege.View.Agents.Realizations.ScriptableAgents
     [CreateAssetMenu(fileName = "Dirt", menuName = "ScriptableObjects/Agents/CommonAgent")]
     public class CommonAgent : ActableScriptableObject<AgentInfo>
     {
-        public override AgentInfo GetInfo() =>
-            new AgentInfo(new AgentData(AgentType.Agent), CommitAction, CommitAction);
+        public override AgentInfo GetInfo() => new AgentInfo(new AgentData(AgentType.Agent), CommitAction, CommitAction);
 
         private void CommitAction(FrameBlock sender, FrameAgent committer,
             IFrameSpaceInfo<FrameBlock> senderSpace, IFrameSpaceInfo<FrameAgent> committerSpace,

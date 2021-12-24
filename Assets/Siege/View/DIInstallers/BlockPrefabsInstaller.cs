@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Siege.Model.BlockSpace.Blocks.Enums;
-using Assets.Siege.Model.BlockSpace.General;
-using Assets.Siege.Model.BlockSpace.General.Interfaces;
+using Assets.Siege.CellularSpace.Blocks.Enums;
+using Assets.Siege.CellularSpace.General;
+using Assets.Siege.CellularSpace.General.Interfaces;
 using Assets.Siege.View.Blocks;
 using UnityEngine;
 using Zenject;

@@ -1,7 +1,7 @@
-using Assets.Siege.Model.BlockSpace.Agents;
-using Assets.Siege.Model.BlockSpace.Blocks;
-using Assets.Siege.Model.BlockSpace.Fabrics;
-using Assets.Siege.Model.BlockSpace.Fabrics.Interfaces;
+using Assets.Siege.CellularSpace.Agents;
+using Assets.Siege.CellularSpace.Blocks;
+using Assets.Siege.CellularSpace.Fabrics;
+using Assets.Siege.CellularSpace.Fabrics.Interfaces;
 using Assets.Siege.View.Agents;
 using Assets.Siege.View.Blocks;
 using Zenject;

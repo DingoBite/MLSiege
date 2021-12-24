@@ -1,9 +1,9 @@
-using Assets.Siege.Model.BlockSpace.Blocks;
+using Assets.Siege.CellularSpace.Blocks;
 using Assets.Siege.View.General.MonoBehaviors;
 
 namespace Assets.Siege.View.Blocks
 {
-    public class MonoBlock : FrameSpaceMonoObject<BlockInfo>
+    public class MonoBlock : CellularSpaceMonoObject<BlockInfo>
     {
         public override string ToString()
         {

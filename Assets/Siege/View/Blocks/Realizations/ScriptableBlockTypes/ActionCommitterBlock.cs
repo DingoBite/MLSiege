@@ -1,8 +1,8 @@
-﻿using Assets.Siege.Model.BlockSpace.Agents;
-using Assets.Siege.Model.BlockSpace.Agents.Enums;
-using Assets.Siege.Model.BlockSpace.Blocks;
-using Assets.Siege.Model.BlockSpace.Blocks.Enums;
-using Assets.Siege.Model.BlockSpace.Repositories.Interfaces;
+﻿using Assets.Siege.CellularSpace.Agents;
+using Assets.Siege.CellularSpace.Agents.Enums;
+using Assets.Siege.CellularSpace.Blocks;
+using Assets.Siege.CellularSpace.Blocks.Enums;
+using Assets.Siege.CellularSpace.Repositories.Interfaces;
 
 namespace Assets.Siege.View.Blocks.Realizations.ScriptableBlockTypes
 {
