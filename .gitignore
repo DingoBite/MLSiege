@@ -18,6 +18,7 @@ sysinfo.txt
 *.unitypackage.meta
 *.pidb.meta
 *.pdb.meta
+*.meta
 [Tt]emp.meta
 
 # ===================================== #
@@ -68,4 +69,3 @@ ehthumbs.db
 # ============ #
 #    Ignore    #
 # ============ #
-*.meta
