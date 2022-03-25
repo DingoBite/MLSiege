@@ -7,14 +7,12 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 {
     public class CellBlock : AbstractCellObject
     {
-        public CellBlock(Action<FlexibleData> commitReaction) : base(commitReaction)
+        public CellBlock(int id, Action<FlexibleData> commitReaction, Action disposeAction) : base(id, commitReaction, disposeAction)
         {
         }
 
         public override void CommitAction(FlexibleData flexibleData)
         {
-            if (!IsReadyToAct()) return;
-
             if (!(flexibleData is ActionPerformanceData<CellBlockLogicAction> performanceData))
             {
                 if (flexibleData is ActionPerformanceData<CellObjectBaseAction> data)
@@ -43,23 +41,17 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 
         public override void CommitAction(CellObjectBaseAction baseActionType)
         {
-            if (!IsReadyToAct()) return;
-            
             ActionPerformanceData<CellBlockViewAction> actionResult;
             switch (baseActionType)
             {
                 case CellObjectBaseAction.Dispose:
-                    Dispose();
+                    var disposeResult = new ActionPerformanceData<CellBlockViewAction>(CellBlockViewAction.Dispose);
+                    _commitReaction?.Invoke(disposeResult);
+                    _disposeAction?.Invoke();
                     return;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);
             }
-        }
-
-        protected override void OnDispose()
-        {
-            var disposeResult = new ActionPerformanceData<CellBlockViewAction>(CellBlockViewAction.Dispose);
-            _commitReaction?.Invoke(disposeResult);
         }
     }
 }

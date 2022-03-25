@@ -15,7 +15,7 @@ namespace Game.Scripts.CellularSpace
         private IGridLevelsManager _gridLevelsManager;
         private IGridCoordsConverter _gridCoordsConverter;
         private ICellGrid _cellGrid;
-        private AbstractCellObject _selectedCellObject;
+        private int _selectedCellObjectId;
         
         [Inject]
         public GridFacade(
@@ -37,31 +37,29 @@ namespace Game.Scripts.CellularSpace
 
         public void CommitAction(Vector3 position)
         {
-            OnCommitAction();
-            if (!_cellGrid.TryGetCell(_gridCoordsConverter.Convert(position), out var cell)) return;
-            _selectedCellObject?.CommitAction(new ActionPerformanceData<CellBlockLogicAction>(CellBlockLogicAction.Unselect));
+            if (!_cellGrid.TryGetCell(_gridCoordsConverter.Convert(position), out var cell)) 
+                return;
+            if (_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCell))
+                selectedCell.CommitAction(new ActionPerformanceData<CellBlockLogicAction>(CellBlockLogicAction.Unselect));
+            
             cell.CellObject.CommitAction(new ActionPerformanceData<CellBlockLogicAction>(CellBlockLogicAction.Select));
-            _selectedCellObject = cell.CellObject;
+            _selectedCellObjectId = cell.CellObject.Id;
         }
         
         public void CommitAction(Vector3 position, FlexibleData actionPerformanceData)
         {
-            OnCommitAction();
-            if (actionPerformanceData == null) throw new ArgumentNullException(nameof(actionPerformanceData));
-            if (!_cellGrid.TryGetCell(_gridCoordsConverter.Convert(position), out var cell)) return;
+            if (actionPerformanceData == null) 
+                throw new ArgumentNullException(nameof(actionPerformanceData));
+            if (!_cellGrid.TryGetCell(_gridCoordsConverter.Convert(position), out var cell)) 
+                return;
             
             cell.CellObject.CommitAction(actionPerformanceData);
         }
 
         public void CommitAction(FlexibleData actionPerformanceData)
         {
-            OnCommitAction();
-            _selectedCellObject?.CommitAction(actionPerformanceData);
-        }
-
-        private void OnCommitAction()
-        {
-            _cellGrid.ClearDisposed();
+            if (_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCell))
+                selectedCell.CommitAction(actionPerformanceData);
         }
     }
 }

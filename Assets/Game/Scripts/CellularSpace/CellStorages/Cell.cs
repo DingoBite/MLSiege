@@ -9,21 +9,19 @@ namespace Game.Scripts.CellularSpace.CellStorages
     {
         private ICellGrid _parentCellGrid;
         public Vector3Int Coords { get; }
+
         public AbstractCellObject CellObject { get; set; }
 
-        public Cell(ICellGrid parentCellGrid, Vector3Int coords, AbstractCellObject cellObject = null)
+        public Cell(ICellGrid parentCellGrid, Vector3Int coords)
         {
             _parentCellGrid = parentCellGrid;
             Coords = coords;
-            CellObject = cellObject;
         }
 
         public bool IsEmpty => CellObject == null;
 
         public void Clear()
         {
-            if (!CellObject.IsDisposed)
-                CellObject.Dispose();
             CellObject = null;
         }
     }
