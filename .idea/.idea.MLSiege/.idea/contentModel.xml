@@ -76,6 +76,10 @@
                 <e p="ActionPerformanceData.cs" t="Include" />
                 <e p="FlexibleData.cs" t="Include" />
               </e>
+              <e p="Repos" t="Include">
+                <e p="IdRepository.cs" t="Include" />
+                <e p="IIdRepository.cs" t="Include" />
+              </e>
               <e p="StaticUtils" t="Include">
                 <e p="Enums" t="Include">
                   <e p="EnumInfo.cs" t="Include" />
