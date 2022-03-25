@@ -1,20 +1,48 @@
-﻿using Game.Scripts.CellularSpace.CellStorages.CellObjects;
+﻿using System;
+using System.Linq;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
+using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
 namespace Game.Scripts.View.CellObjects
 {
     public class MonoCellBlock : AbstractMonoCellObject
     {
-        public override AbstractCellObject GetCellObject() => new CellBlock();
+        [SerializeField] private Material _selectedMaterial;
 
+        private MeshRenderer _mesh;
+        private Material[] _meshMaterials;
+
+        private void OnEnable()
+        {
+            _mesh = GetComponent<MeshRenderer>();
+            _meshMaterials = _mesh.materials;
+        }
+        
         protected override CellObjectType GetCellObjectType() => CellObjectType.Block;
 
         public override void CommitAction(FlexibleData cellObjectFuncResult)
         {
-            var color = cellObjectFuncResult?.GetVector4Param("Color");
-            if (color == null) return;
-            GetComponent<MeshRenderer>().material.color = color.Value;
+            if (!(cellObjectFuncResult is ActionPerformanceData<CellBlockViewAction> performanceData)) return;
+            switch (performanceData.ActionType)
+            {
+                case CellBlockViewAction.Select:
+                    var materialsWithSelect = _meshMaterials.ToList();
+                    materialsWithSelect.Add(_selectedMaterial);
+                    _mesh.materials = materialsWithSelect.ToArray();
+                    return;
+                case CellBlockViewAction.Unselect:
+                    _mesh.materials = _meshMaterials;
+                    return;
+                case CellBlockViewAction.Dispose:
+                    Destroy(gameObject);
+                    return;
+                case CellBlockViewAction.Error:
+                    _mesh.material.color = Color.red;
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(performanceData.ActionType), performanceData.ActionType, null);
+            }
         }
     }
 }

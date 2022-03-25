@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
@@ -46,9 +47,17 @@ namespace Game.Scripts.CellularSpace.CellStorages
                     for (var k = 0; k < _sizeVector.z; k++)
                     {
                         var coords = new Vector3Int(i, j, k) + _minFormingPoint;
-                        var cell = cellObjects.TryGetValue(coords, out var cellObject)
-                            ? new Cell(cellObject.GetCellObject())
-                            : new Cell();
+                        
+                        Cell cell;
+                        if (cellObjects.TryGetValue(coords, out var cellObject))
+                        {
+                            var monoCellObject = new CellBlock(cellObject.CommitAction);
+                            cell = new Cell(this, coords, monoCellObject);
+                        }
+                        else
+                        {
+                            cell = new Cell(this, coords);
+                        }
                         _cells[i][j].Add(cell);
                     }
                 }
@@ -66,7 +75,8 @@ namespace Game.Scripts.CellularSpace.CellStorages
                     _cells[i].Add(new List<ICell>());
                     for (var k = 0; k < _sizeVector.z; k++)
                     {
-                        _cells[i][j].Add(new Cell());
+                        var coords = new Vector3Int(i, j, k) + _minFormingPoint;
+                        _cells[i][j].Add(new Cell(this, coords));
                     }
                 }
             }
@@ -88,6 +98,21 @@ namespace Game.Scripts.CellularSpace.CellStorages
                 throw new Exception("Try to extend space bellow min forming point");
             coords -=_minFormingPoint;
             return TryGetCell(coords.x, coords.y, coords.z, out cell);
+        }
+
+        public void ClearDisposed()
+        {
+            for (var i = 0; i < _sizeVector.x; i++)
+            {
+                for (var j = 0; j < _sizeVector.y; j++)
+                {
+                    for (var k = 0; k < _sizeVector.z; k++)
+                    {
+                        var cell = _cells[i][j][k];
+                        if (!cell.IsEmpty && cell.CellObject.IsDisposed) cell.Clear();
+                    }
+                }
+            }
         }
 
         public IEnumerable<ICell> GetCells() => 

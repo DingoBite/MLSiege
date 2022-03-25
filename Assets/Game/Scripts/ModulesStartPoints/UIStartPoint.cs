@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Scripts
+namespace Game.Scripts.ModulesStartPoints
 {
     public class UIStartPoint : MonoBehaviour
     {

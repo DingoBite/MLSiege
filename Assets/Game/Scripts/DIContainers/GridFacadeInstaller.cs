@@ -1,4 +1,4 @@
-using Game.Scripts.CellularSpace.GridShape;
+using Game.Scripts.CellularSpace;
 using Zenject;
 
 namespace Game.Scripts.DIContainers

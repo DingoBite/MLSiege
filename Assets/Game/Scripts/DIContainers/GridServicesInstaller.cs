@@ -1,4 +1,5 @@
 using Game.Scripts.CellularSpace.CellStorages;
+using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;

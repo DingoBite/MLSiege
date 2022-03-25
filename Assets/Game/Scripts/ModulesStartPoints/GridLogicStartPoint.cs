@@ -1,8 +1,8 @@
-using Game.Scripts.CellularSpace.GridShape;
+using Game.Scripts.CellularSpace;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.View
+namespace Game.Scripts.ModulesStartPoints
 {
     public class GridLogicStartPoint : MonoBehaviour
     {

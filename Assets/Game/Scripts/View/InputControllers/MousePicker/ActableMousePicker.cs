@@ -1,6 +1,6 @@
 using System;
+using Game.Scripts.CellularSpace.General.Interfaces;
 using Game.Scripts.Time.Interfaces;
-using Game.Scripts.View.CellObjects.Interfaces;
 using UnityEngine;
 
 namespace Game.Scripts.View.InputControllers
@@ -8,7 +8,7 @@ namespace Game.Scripts.View.InputControllers
     public class ActableMousePicker<TActParam> : IUpdatable
     {
         private Camera _camera;
-        public event Func<Transform, TActParam> CommitFuncEvent;
+        public event Action<Transform> CommitFuncEvent;
         
         public void Init(Camera camera)
         {
@@ -17,7 +17,7 @@ namespace Game.Scripts.View.InputControllers
         
         public void OnUpdate()
         {
-            if (!Input.GetMouseButtonDown(0)) return;
+            if (!Input.GetMouseButtonDown(0) || _camera == null) return;
             
             var raycast = _camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(raycast, out var hit))
@@ -25,8 +25,7 @@ namespace Game.Scripts.View.InputControllers
                 if (!hit.transform.TryGetComponent<IActable<TActParam>>(out var interactable))
                     return;
                 if (CommitFuncEvent == null) return;
-                var commitResult = CommitFuncEvent.Invoke(hit.transform);
-                interactable.CommitAction(commitResult);
+                CommitFuncEvent.Invoke(hit.transform);
             }
         }
     }

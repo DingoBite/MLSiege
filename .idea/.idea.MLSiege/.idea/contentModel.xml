@@ -22,7 +22,9 @@
                     </e>
                   </e>
                   <e p="Enums" t="Include">
-                    <e p="CellBlockAction.cs" t="Include" />
+                    <e p="CellBlockLogicAction.cs" t="Include" />
+                    <e p="CellBlockViewAction.cs" t="Include" />
+                    <e p="CellObjectBaseAction.cs" t="Include" />
                     <e p="CellObjectType.cs" t="Include" />
                   </e>
                 </e>
@@ -52,6 +54,7 @@
                     <e p="IGridCoordsConverter.cs" t="Include" />
                   </e>
                 </e>
+                <e p="GridLevel.cs" t="Include" />
                 <e p="GridLevelsManager.cs" t="Include" />
                 <e p="Interfaces" t="Include">
                   <e p="IGridLevelsManager.cs" t="Include" />
@@ -70,6 +73,7 @@
                 <e p="Vector3IntExtension.cs" t="Include" />
               </e>
               <e p="FlexibleDataApi" t="Include">
+                <e p="ActionPerformanceData.cs" t="Include" />
                 <e p="FlexibleData.cs" t="Include" />
               </e>
               <e p="StaticUtils" t="Include">
@@ -97,12 +101,14 @@
                 <e p="AbstractMonoCellObject.cs" t="Include" />
                 <e p="MonoCellBlock.cs" t="Include" />
               </e>
-              <e p="GridLevels" t="Include">
-                <e p="GridLevel.cs" t="Include" />
-              </e>
               <e p="InputControllers" t="Include">
-                <e p="ActableMousePicker.cs" t="Include" />
-                <e p="CellObjectMousePicker.cs" t="Include" />
+                <e p="KeyHandler" t="Include">
+                  <e p="KeyInputHandler.cs" t="Include" />
+                </e>
+                <e p="MousePicker" t="Include">
+                  <e p="ActableMousePicker.cs" t="Include" />
+                  <e p="CellObjectMousePicker.cs" t="Include" />
+                </e>
               </e>
             </e>
           </e>

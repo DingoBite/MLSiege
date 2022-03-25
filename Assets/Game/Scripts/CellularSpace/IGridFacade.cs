@@ -1,11 +1,13 @@
-﻿using Game.Scripts.CellularSpace.CellStorages.CellObjects;
+﻿using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.GridShape
+namespace Game.Scripts.CellularSpace
 {
     public interface IGridFacade
     {
         void Init(Grid grid);
-        FlexibleData CommitAction(Vector3 position);
+        void CommitAction(Vector3 position);
+        void CommitAction(Vector3 position, FlexibleData actionPerformanceData);
+        void CommitAction(FlexibleData actionPerformanceData);
     }
 }

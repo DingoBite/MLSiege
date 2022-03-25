@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
+using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.ModulesStartPoints;
+using UnityEngine;
 
-namespace Game.Scripts.View
+namespace Game.Scripts
 {
     public class StartPoint : MonoBehaviour
     {
@@ -21,6 +24,8 @@ namespace Game.Scripts.View
         {
             _inputHandlersStartPoint.CellObjectMousePickEvent += 
                 tr => _gridLogicStartPoint.GridFacade.CommitAction(tr.position);
+            _inputHandlersStartPoint.SpaceDownEvent += () => 
+                _gridLogicStartPoint.GridFacade.CommitAction(new ActionPerformanceData<CellObjectBaseAction>(CellObjectBaseAction.Dispose));
         }
     }
 }

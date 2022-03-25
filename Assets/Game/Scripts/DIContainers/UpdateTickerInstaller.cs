@@ -3,12 +3,15 @@ using Game.Scripts.Time.Interfaces;
 using UnityEngine;
 using Zenject;
 
-public class UpdateTickerInstaller : MonoInstaller
+namespace Game.Scripts.DIContainers
 {
-    [SerializeField] private UpdateTicker _updateTicker;
-    
-    public override void InstallBindings()
+    public class UpdateTickerInstaller : MonoInstaller
     {
-        Container.Bind<IUpdateTicker>().FromInstance(_updateTicker).AsSingle();
+        [SerializeField] private UpdateTicker _updateTicker;
+    
+        public override void InstallBindings()
+        {
+            Container.Bind<IUpdateTicker>().FromInstance(_updateTicker).AsSingle();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.View.CellObjects.Interfaces
+﻿namespace Game.Scripts.CellularSpace.General.Interfaces
 {
     public interface IActable<in TParam>
     {

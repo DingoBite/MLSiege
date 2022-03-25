@@ -1,9 +1,7 @@
 ﻿namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums
 {
-    public enum CellBlockAction
+    public enum CellObjectBaseAction
     {
-        Kek,
-        Lol,
-        Lel
+        Dispose
     }
 }

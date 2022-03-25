@@ -18,8 +18,13 @@ namespace Game.Scripts.Time
             }
         }
 
+        public bool Contains(int id) => _updatableList.ContainsKey(id);
+
+        public bool Contains(IUpdatable updatable) => _updatableList.ContainsValue(updatable);
+
         public int AddUpdatable(IUpdatable updatable)
         {
+            if (updatable == null) return -1;
             lock (_updatableList)
             {
                 int id;
