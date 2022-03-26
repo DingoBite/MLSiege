@@ -6,11 +6,8 @@ using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages.Interfaces
 {
-    public interface ICellGrid
+    public interface ICellGrid : ICellGridContext
     {
         void Init(IGridLevelsManager gridLevelsManager, IGridCoordsConverter gridCoordsConverter);
-        bool TryGetCellObject(int id, out AbstractCellObject cellObject);
-        bool TryGetCell(Vector3Int coords, out ICell cell);
-        IEnumerable<ICell> GetCells();
     }
 }

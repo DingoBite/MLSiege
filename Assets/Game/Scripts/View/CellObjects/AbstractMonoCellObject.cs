@@ -8,6 +8,6 @@ namespace Game.Scripts.View.CellObjects
     public abstract class AbstractMonoCellObject: MonoBehaviour, IActable<FlexibleData>
     {
         protected abstract CellObjectType GetCellObjectType();
-        public abstract void CommitAction(FlexibleData cellObjectFuncResult);
+        public abstract void CommitAction(object sender, PerformanceParams performanceParams);
     }
 }

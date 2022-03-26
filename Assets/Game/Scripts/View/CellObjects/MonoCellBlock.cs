@@ -21,10 +21,10 @@ namespace Game.Scripts.View.CellObjects
         
         protected override CellObjectType GetCellObjectType() => CellObjectType.Block;
 
-        public override void CommitAction(FlexibleData cellObjectFuncResult)
+        public override void CommitAction(object sender, PerformanceParams performanceParams)
         {
-            if (!(cellObjectFuncResult is ActionPerformanceData<CellBlockViewAction> performanceData)) return;
-            switch (performanceData.ActionType)
+            if (!(performanceParams.RawActionType is CellBlockViewAction cellBlockViewAction)) return;
+            switch (cellBlockViewAction)
             {
                 case CellBlockViewAction.Select:
                     var materialsWithSelect = _meshMaterials.ToList();
@@ -41,7 +41,7 @@ namespace Game.Scripts.View.CellObjects
                     _mesh.material.color = Color.red;
                     return;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(performanceData.ActionType), performanceData.ActionType, null);
+                    throw new ArgumentOutOfRangeException(nameof(cellBlockViewAction), cellBlockViewAction, null);
             }
         }
     }

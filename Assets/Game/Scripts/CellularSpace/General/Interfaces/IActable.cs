@@ -1,7 +1,9 @@
-﻿namespace Game.Scripts.CellularSpace.General.Interfaces
+﻿using Game.Scripts.General.FlexibleDataApi;
+
+namespace Game.Scripts.CellularSpace.General.Interfaces
 {
     public interface IActable<in TParam>
     {
-        void CommitAction(TParam param);
+        void CommitAction(object sender, PerformanceParams performanceParams);
     }
 }

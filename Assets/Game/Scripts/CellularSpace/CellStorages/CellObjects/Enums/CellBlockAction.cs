@@ -1,8 +1,8 @@
 ﻿namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums
 {
-    public enum CellObjectBaseAction
+    public enum CellBlockAction
     {
-        ApplyGravity,
-        Dispose
+        Select,
+        Unselect,
     }
 }

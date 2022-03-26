@@ -13,7 +13,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
 {
     public class CellGrid : ICellGrid
     {
-        private readonly IIdRepository<AbstractCellObject> _cellObjectsRepository = new IdRepository<AbstractCellObject>();
+        private readonly IdRepositoryWithFactory<AbstractCellObject> _cellObjectsRepository = new IdRepositoryWithFactory<AbstractCellObject>();
         private List<List<List<ICell>>> _cells;
         private Vector3Int _minFormingPoint;
         private Vector3Int _maxFormingPoint;
@@ -53,15 +53,13 @@ namespace Game.Scripts.CellularSpace.CellStorages
                         Cell cell;
                         if (monoCellObjects.TryGetValue(coords, out var monoCellObject))
                         {
-                            cell = new Cell(this, coords);
-                            var id = _cellObjectsRepository.PeekId();
-                            var cellBlock = new CellBlock(id, monoCellObject.CommitAction, () =>
-                                {
-                                    _cellObjectsRepository.Remove(id);
-                                    cell.Clear();
-                                });
-                            _cellObjectsRepository.Add(cellBlock);
-                            cell.CellObject = cellBlock;
+                            cell = new Cell(this, coords, id => _cellObjectsRepository.Remove(id));
+                            
+                            var cellBlock = _cellObjectsRepository.MakeAndAdd(id =>
+                                new CellBlock(id, (sender, actParams) =>
+                                    monoCellObject.CommitAction(sender, actParams)));
+                            
+                            cell.SetCellObject(cellBlock);
                         }
                         else
                         {

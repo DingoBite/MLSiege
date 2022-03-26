@@ -5,6 +5,7 @@
         Select,
         Unselect,
         Dispose,
+        ApplyGravity,
         Error
     }
 }

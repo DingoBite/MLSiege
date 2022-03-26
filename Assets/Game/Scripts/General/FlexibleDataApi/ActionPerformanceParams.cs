@@ -2,11 +2,11 @@
 
 namespace Game.Scripts.General.FlexibleDataApi
 {
-    public class ActionPerformanceData<TActionType> : FlexibleData where TActionType : Enum
+    public class ActionPerformanceParams<TActionType> : PerformanceParams where TActionType : Enum
     {
         public readonly TActionType ActionType;
-        
-        public ActionPerformanceData(TActionType actionType)
+
+        public ActionPerformanceParams(TActionType actionType) : base(actionType)
         {
             ActionType = actionType;
         }

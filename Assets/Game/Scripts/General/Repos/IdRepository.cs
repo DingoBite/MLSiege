@@ -8,11 +8,11 @@ namespace Game.Scripts.General.Repos
     {
         private int _endId;
         private readonly Stack<int> _availableIds = new Stack<int>();
-        private readonly Dictionary<int, TValue> _values = new Dictionary<int, TValue>();
+        protected readonly Dictionary<int, TValue> _values = new Dictionary<int, TValue>();
 
         public int PeekId() => _availableIds.Count > 0 ? _availableIds.Peek() : _endId;
-        
-        private int PopId() => _availableIds.Count > 0 ? _availableIds.Pop() : _endId++;
+
+        protected int PopId() => _availableIds.Count > 0 ? _availableIds.Pop() : _endId++;
         
         public bool Contains(int id) => _values.ContainsKey(id);
 

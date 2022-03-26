@@ -7,7 +7,9 @@ namespace Game.Scripts.CellularSpace.CellStorages.Interfaces
     {
         bool IsEmpty { get; }
         Vector3Int Coords { get; }
-        AbstractCellObject CellObject { get; set; }
+        AbstractCellObject CellObject { get; }
+        ICellGridContext CellGridContext { get; }
+        void SetCellObject(AbstractChildCellObject childCellObject);
         void Clear();
     }
 }

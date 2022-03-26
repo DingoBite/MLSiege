@@ -23,9 +23,9 @@ namespace Game.Scripts
         private void LoadDependencies()
         {
             _inputHandlersStartPoint.CellObjectMousePickEvent += 
-                tr => _gridLogicStartPoint.GridFacade.CommitAction(tr.position);
+                tr => _gridLogicStartPoint.GridFacade.CommitSelectAction(tr.position);
             _inputHandlersStartPoint.SpaceDownEvent += () => 
-                _gridLogicStartPoint.GridFacade.CommitAction(new ActionPerformanceData<CellObjectBaseAction>(CellObjectBaseAction.Dispose));
+                _gridLogicStartPoint.GridFacade.CommitAction(new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Dispose));
         }
     }
 }

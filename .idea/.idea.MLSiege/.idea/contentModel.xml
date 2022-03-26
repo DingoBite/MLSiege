@@ -15,6 +15,9 @@
                 <e p="CellGrid.cs" t="Include" />
                 <e p="CellObjects" t="Include">
                   <e p="AbstractCellObject.cs" t="Include" />
+                  <e p="AbstractChildCellObject.cs" t="Include" />
+                  <e p="CellAgentBody.cs" t="Include" />
+                  <e p="CellAgentHead.cs" t="Include" />
                   <e p="CellBlock.cs" t="Include" />
                   <e p="CellObjectCharacteristics" t="Include">
                     <e p="Interfaces" t="Include">
@@ -22,15 +25,21 @@
                     </e>
                   </e>
                   <e p="Enums" t="Include">
-                    <e p="CellBlockLogicAction.cs" t="Include" />
+                    <e p="CellAgentAction.cs" t="Include" />
+                    <e p="CellBlockAction.cs" t="Include" />
                     <e p="CellBlockViewAction.cs" t="Include" />
                     <e p="CellObjectBaseAction.cs" t="Include" />
                     <e p="CellObjectType.cs" t="Include" />
+                  </e>
+                  <e p="MultiCellObject" t="Include">
+                    <e p="AbstractCellObjectMainPart.cs" t="Include" />
+                    <e p="AbstractCellObjectPart.cs" t="Include" />
                   </e>
                 </e>
                 <e p="Interfaces" t="Include">
                   <e p="ICell.cs" t="Include" />
                   <e p="ICellGrid.cs" t="Include" />
+                  <e p="ICellGridContext.cs" t="Include" />
                 </e>
               </e>
               <e p="General" t="Include">
@@ -73,11 +82,14 @@
                 <e p="Vector3IntExtension.cs" t="Include" />
               </e>
               <e p="FlexibleDataApi" t="Include">
-                <e p="ActionPerformanceData.cs" t="Include" />
+                <e p="ActionPerformanceParams.cs" t="Include" />
                 <e p="FlexibleData.cs" t="Include" />
+                <e p="FlexibleDataContainer.cs" t="Include" />
+                <e p="PerformanceParams.cs" t="Include" />
               </e>
               <e p="Repos" t="Include">
                 <e p="IdRepository.cs" t="Include" />
+                <e p="IdRepositoryWithFactory.cs" t="Include" />
                 <e p="IIdRepository.cs" t="Include" />
               </e>
               <e p="StaticUtils" t="Include">
@@ -94,10 +106,12 @@
             </e>
             <e p="StartPoint.cs" t="Include" />
             <e p="Time" t="Include">
+              <e p="AbstractUpdateTicker.cs" t="Include" />
               <e p="Interfaces" t="Include">
                 <e p="IUpdatable.cs" t="Include" />
                 <e p="IUpdateTicker.cs" t="Include" />
               </e>
+              <e p="TimePeriodTicker.cs" t="Include" />
               <e p="UpdateTicker.cs" t="Include" />
             </e>
             <e p="View" t="Include">

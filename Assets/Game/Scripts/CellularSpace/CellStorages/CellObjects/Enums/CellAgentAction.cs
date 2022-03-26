@@ -1,6 +1,6 @@
 ﻿namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums
 {
-    public enum CellBlockLogicAction
+    public enum CellAgentAction
     {
         Select,
         Unselect,
