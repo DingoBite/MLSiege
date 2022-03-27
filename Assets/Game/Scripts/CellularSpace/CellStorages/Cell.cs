@@ -1,26 +1,26 @@
 ﻿using System;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages
 {
-    public class Cell : ICell
+    public class Cell : ICellMutable
     {
-        private ICellGrid _parentCellGrid;
         private readonly Action<int> _onClearAction;
-        public Vector3Int Coords { get; }
 
         public Cell(ICellGrid parentCellGrid, Vector3Int coords, Action<int> onClearAction = null)
         {
-            _parentCellGrid = parentCellGrid;
+            CellGridContext = parentCellGrid;
             _onClearAction = onClearAction;
             Coords = coords;
         }
 
+        public Vector3Int Coords { get; }
+
         public AbstractCellObject CellObject { get; private set; }
-        public ICellGridContext CellGridContext => _parentCellGrid;
+
+        public ICellGrid CellGridContext { get; }
 
         public bool IsEmpty => CellObject == null;
 

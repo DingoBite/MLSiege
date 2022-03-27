@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
 using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.Time;
 using Game.Scripts.Time.Interfaces;
 using UnityEngine;
 using Zenject;
@@ -20,8 +18,6 @@ namespace Game.Scripts.CellularSpace
         private readonly ICellGrid _cellGrid;
         private int _selectedCellObjectId = -1;
 
-        [Inject] private TimePeriodTicker _timePeriodTicker;
-        
         [Inject]
         public GridFacade(
             IGridLevelsManager gridLevelsManager,
@@ -38,41 +34,46 @@ namespace Game.Scripts.CellularSpace
             _gridLevelsManager.Init(grid);
             _gridCoordsConverter.Init(_gridLevelsManager.CellSize);
             _cellGrid.Init(_gridLevelsManager, _gridCoordsConverter);
-            _timePeriodTicker.SecondsTimePeriod = 1;
-            _timePeriodTicker.AddUpdatable(this);
         }
 
-        public void CommitSelectAction(Vector3 position)
+        public void CommitSelectAction(int id)
         {
-            if (!_cellGrid.TryGetCell(_gridCoordsConverter.Convert(position), out var cell)) 
+            if (!_cellGrid.TryGetCellObject(id, out var cellObject)) 
                 return;
-            if (_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCell))
-                selectedCell.CommitAction(this, new ActionPerformanceParams<CellBlockAction>(CellBlockAction.Unselect));
+            if (!cellObject.IsExternallyModifiable) 
+                return;
+            if (_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCellObject))
+                selectedCellObject.CommitAction(this, new ActionPerformanceParams<CellBlockAction>(CellBlockAction.Unselect));
             
-            cell.CellObject.CommitAction(this, new ActionPerformanceParams<CellBlockAction>(CellBlockAction.Select));
-            _selectedCellObjectId = cell.CellObject.Id;
+            cellObject.CommitAction(this, new ActionPerformanceParams<CellBlockAction>(CellBlockAction.Select));
+            _selectedCellObjectId = cellObject.Id;
         }
         
-        public void CommitAction(Vector3 position, PerformanceParams performanceData)
+        public void CommitAction(int id, PerformanceParams performanceData)
         {
             if (performanceData == null) 
                 throw new ArgumentNullException(nameof(performanceData));
-            if (!_cellGrid.TryGetCell(_gridCoordsConverter.Convert(position), out var cell)) 
+            if (!_cellGrid.TryGetCellObject(id, out var cellObject)) 
+                return;
+            if (!cellObject.IsExternallyModifiable) 
                 return;
             
-            cell.CellObject.CommitAction(this, performanceData);
+            cellObject.CommitAction(this, performanceData);
         }
 
         public void CommitAction(PerformanceParams performanceData)
         {
-            if (_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCell))
-                selectedCell.CommitAction(this, performanceData);
+            if (!_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCellObject))
+                return;
+            if (!selectedCellObject.IsExternallyModifiable) 
+                return;
+            selectedCellObject.CommitAction(this, performanceData);
         }
 
         public void OnUpdate()
         {
             var gravityAct = new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity);
-            foreach (var cell in _cellGrid.GetCells().Where(c => !c.IsEmpty && c.CellObject.IsIndependent))
+            foreach (var cell in _cellGrid.GetCells().Where(c => !c.IsEmpty && c.CellObject.IsExternallyModifiable))
             {
                 cell.CellObject.CommitAction(this, gravityAct);
             }

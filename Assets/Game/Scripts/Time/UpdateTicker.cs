@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Game.Scripts.Time
+﻿namespace Game.Scripts.Time
 {
     public class UpdateTicker : AbstractUpdateTicker
     {

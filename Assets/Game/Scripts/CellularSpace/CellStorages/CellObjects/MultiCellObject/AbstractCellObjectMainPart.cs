@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
+namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
 {
     public abstract class AbstractCellObjectMainPart : AbstractChildCellObject
     {
         private readonly int[] _partsId;
 
-        public AbstractCellObjectMainPart(int id, int[] partsId, Action<object, PerformanceParams> commitReaction) : base(id, commitReaction)
+        public AbstractCellObjectMainPart(int id, int[] partsId,
+            Action<object, PerformanceParams> commitReaction,
+            bool isExternallyModifiable) : base(id, commitReaction, isExternallyModifiable)
         {
             _partsId = partsId;
         }

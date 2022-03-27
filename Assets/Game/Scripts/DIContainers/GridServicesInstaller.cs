@@ -4,7 +4,6 @@ using Game.Scripts.CellularSpace.GridShape;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
-using Game.Scripts.View.GridLevels;
 using UnityEngine;
 using Zenject;
 

@@ -1,7 +1,6 @@
-﻿using Game.Scripts.CellularSpace.CellStorages.CellObjects;
-using Game.Scripts.General.FlexibleDataApi;
+﻿using Game.Scripts.General.FlexibleDataApi;
 
-namespace Game.Scripts.View.InputControllers
+namespace Game.Scripts.View.InputControllers.MousePicker
 {
     public class CellObjectMousePicker : ActableMousePicker<FlexibleData>
     {

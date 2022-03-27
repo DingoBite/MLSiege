@@ -2,12 +2,13 @@
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
+namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
 {
     public class CellAgentBody : AbstractCellObjectPart
     {
-        public CellAgentBody(int id, int mainId, Action<object, PerformanceParams> commitReaction) 
-            : base(id, mainId, commitReaction)
+        public CellAgentBody(int id, int mainId,
+            Action<object, PerformanceParams> commitReaction,
+            bool isExternallyModifiable) : base(id, mainId, commitReaction, isExternallyModifiable)
         {
         }
 
@@ -20,17 +21,17 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
                 
                 return;
             }
-            ActionPerformanceParams<CellAgentAction> actionResult;
+            ActionPerformanceParams<CellAgentAction> viewActionPerformanceParams;
 
             switch (cellAgentAction)
             {
                 case CellAgentAction.Select:
-                    actionResult = new ActionPerformanceParams<CellAgentAction>(CellAgentAction.Select);
-                    _commitReaction?.Invoke(this, actionResult);
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellAgentAction>(CellAgentAction.Select);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     break;
                 case CellAgentAction.Unselect:
-                    actionResult = new ActionPerformanceParams<CellAgentAction>(CellAgentAction.Unselect);
-                    _commitReaction?.Invoke(this, actionResult);
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellAgentAction>(CellAgentAction.Unselect);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -39,13 +40,17 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 
         protected override void CommitBaseAction(object sender, CellObjectBaseAction baseActionType)
         {
-            ActionPerformanceParams<CellBlockViewAction> actionResult;
+            ActionPerformanceParams<CellBlockViewAction> viewActionPerformanceParams;
             switch (baseActionType)
             {
                 case CellObjectBaseAction.Dispose:
-                    actionResult = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Dispose);
-                    _commitReaction?.Invoke(this, actionResult);
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Dispose);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     ParentCell?.Clear();
+                    return;
+                case CellObjectBaseAction.ApplyGravity:
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.ApplyGravity);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     return;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);

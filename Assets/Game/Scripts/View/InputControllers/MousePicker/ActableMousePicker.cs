@@ -1,14 +1,14 @@
 using System;
-using Game.Scripts.CellularSpace.General.Interfaces;
 using Game.Scripts.Time.Interfaces;
+using Game.Scripts.View.CellObjects;
 using UnityEngine;
 
-namespace Game.Scripts.View.InputControllers
+namespace Game.Scripts.View.InputControllers.MousePicker
 {
     public class ActableMousePicker<TActParam> : IUpdatable
     {
         private Camera _camera;
-        public event Action<Transform> CommitFuncEvent;
+        public event Action<int> CommitFuncEvent;
         
         public void Init(Camera camera)
         {
@@ -22,11 +22,13 @@ namespace Game.Scripts.View.InputControllers
             var raycast = _camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(raycast, out var hit))
             {
-                if (!hit.transform.TryGetComponent<IActable<TActParam>>(out var interactable))
+                if (!hit.transform.TryGetComponent<AbstractMonoCellObject>(out var monoCellObject))
                     return;
-                if (CommitFuncEvent == null) return;
-                CommitFuncEvent.Invoke(hit.transform);
+
+                CommitFuncEvent?.Invoke(monoCellObject.Id);
             }
+            else
+                CommitFuncEvent?.Invoke(-1);
         }
     }
 }

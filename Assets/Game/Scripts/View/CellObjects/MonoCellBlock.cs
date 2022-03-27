@@ -8,8 +8,9 @@ namespace Game.Scripts.View.CellObjects
 {
     public class MonoCellBlock : AbstractMonoCellObject
     {
+        [SerializeField] private bool _isExternallyModifiable;
         [SerializeField] private Material _selectedMaterial;
-
+        
         private MeshRenderer _mesh;
         private Material[] _meshMaterials;
 
@@ -18,7 +19,8 @@ namespace Game.Scripts.View.CellObjects
             _mesh = GetComponent<MeshRenderer>();
             _meshMaterials = _mesh.materials;
         }
-        
+
+        public override bool IsExternallyModifiable => _isExternallyModifiable;
         protected override CellObjectType GetCellObjectType() => CellObjectType.Block;
 
         public override void CommitAction(object sender, PerformanceParams performanceParams)
@@ -39,6 +41,14 @@ namespace Game.Scripts.View.CellObjects
                     return;
                 case CellBlockViewAction.Error:
                     _mesh.material.color = Color.red;
+                    return;
+                case CellBlockViewAction.ApplyGravity:
+                    var newCoords = performanceParams.FlexibleData.Vector3IntParams.GetParam("NewCoords");
+                    if (!newCoords.HasValue)
+                        throw new ArgumentException("Performance params doesn't contains new coords");
+                    _mesh.material.color = Color.green;
+                    var newPosition = _coordsToPositionConvert(newCoords.Value);
+                    transform.position = newPosition;
                     return;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellBlockViewAction), cellBlockViewAction, null);

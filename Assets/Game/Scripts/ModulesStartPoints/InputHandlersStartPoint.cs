@@ -1,6 +1,8 @@
 ﻿using System;
 using Game.Scripts.Time.Interfaces;
 using Game.Scripts.View.InputControllers;
+using Game.Scripts.View.InputControllers.KeyHandler;
+using Game.Scripts.View.InputControllers.MousePicker;
 using UnityEngine;
 using Zenject;
 
@@ -12,44 +14,58 @@ namespace Game.Scripts.ModulesStartPoints
 
         [Inject] private IUpdateTicker _updateTicker;
         
-        private readonly CellObjectMousePicker _cellObjectMousePicker = new CellObjectMousePicker();
+        private readonly CellObjectMousePicker _mousePicker = new CellObjectMousePicker();
         private int _mousePickerId;
         
-        private readonly KeyInputHandler _spaceInputHandler = new KeyInputHandler(KeyCode.Space);
-        private int _spaceHandlerId;
+        private readonly KeyInputHandler _deleteInputHandler = new KeyInputHandler(KeyCode.Delete);
+        private int _deleteHandlerId;
         
-        public event Action<Transform> CellObjectMousePickEvent
+        private readonly KeyInputHandler _gKeyInputHandler = new KeyInputHandler(KeyCode.G);
+        private int _gKeyInputHandlerId;
+        
+        public event Action<int> CellObjectMousePickEvent
         {
-            add => _cellObjectMousePicker.CommitFuncEvent += value;
-            remove => _cellObjectMousePicker.CommitFuncEvent -= value;
+            add => _mousePicker.CommitFuncEvent += value;
+            remove => _mousePicker.CommitFuncEvent -= value;
         }
         
-        public event Action SpaceDownEvent
+        public event Action DeleteDownEvent
         {
-            add => _spaceInputHandler.OnGetKeyDownEvent += value;
-            remove => _spaceInputHandler.OnGetKeyDownEvent -= value;
+            add => _deleteInputHandler.OnGetKeyDownEvent += value;
+            remove => _deleteInputHandler.OnGetKeyDownEvent -= value;
+        }
+        
+        public event Action GKeyDownEvent
+        {
+            add => _gKeyInputHandler.OnGetKeyDownEvent += value;
+            remove => _gKeyInputHandler.OnGetKeyDownEvent -= value;
         }
         
         public void Init()
         {
-            _cellObjectMousePicker.Init(_camera);
-            _mousePickerId = _updateTicker.AddUpdatable(_cellObjectMousePicker);
-            _spaceHandlerId = _updateTicker.AddUpdatable(_spaceInputHandler);
+            _mousePicker.Init(_camera);
+            _mousePickerId = _updateTicker.AddUpdatable(_mousePicker);
+            _deleteHandlerId = _updateTicker.AddUpdatable(_deleteInputHandler);
+            _gKeyInputHandlerId = _updateTicker.AddUpdatable(_gKeyInputHandler);
         }
 
         private void Subscribe()
         {
-            if (_cellObjectMousePicker != null && !_updateTicker.Contains(_mousePickerId)) 
-                _updateTicker.AddUpdatable(_cellObjectMousePicker);
+            if (_mousePicker != null && !_updateTicker.Contains(_mousePickerId)) 
+                _updateTicker.AddUpdatable(_mousePicker);
             
-            if (_spaceInputHandler != null && !_updateTicker.Contains(_spaceInputHandler)) 
-                _updateTicker.AddUpdatable(_spaceInputHandler);
+            if (_deleteInputHandler != null && !_updateTicker.Contains(_deleteHandlerId)) 
+                _updateTicker.AddUpdatable(_deleteInputHandler);
+            
+            if (_gKeyInputHandler != null && !_updateTicker.Contains(_gKeyInputHandlerId)) 
+                _updateTicker.AddUpdatable(_gKeyInputHandler);
         }
 
         private void Unsubscribe()
         {
-            _updateTicker.RemoveUpdatable(_cellObjectMousePicker);
-            _updateTicker.RemoveUpdatable(_spaceInputHandler);
+            _updateTicker.RemoveUpdatable(_mousePickerId);
+            _updateTicker.RemoveUpdatable(_deleteHandlerId);
+            _updateTicker.RemoveUpdatable(_gKeyInputHandlerId);
         }
 
         private void OnEnable()

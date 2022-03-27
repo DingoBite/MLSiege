@@ -1,15 +1,17 @@
 ﻿using System;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
+using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
+namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
 {
     public abstract class AbstractCellObjectPart : AbstractChildCellObject
     {
         private readonly int _mainPartId;
 
-        protected AbstractCellObjectPart(int id, 
-            int mainPartId, Action<object, PerformanceParams> commitReaction) : base(id, commitReaction, false)
+        protected AbstractCellObjectPart(int id, int mainPartId,
+            Action<object, PerformanceParams> commitReaction,
+            bool isExternallyModifiable) : base(id, commitReaction, isExternallyModifiable)
         {
             _mainPartId = mainPartId;
         }
@@ -21,7 +23,12 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
                 CommitBaseAction(sender, CellObjectBaseAction.Dispose);
                 return;
             }
-            if (sender != mainPart) return;
+
+            if (sender != mainPart)
+            {
+                Debug.Log("Try to commit action not from main part");
+                return;
+            }
 
             OnCommit(sender, performanceParams);
         }

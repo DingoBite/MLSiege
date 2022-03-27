@@ -3,7 +3,7 @@ using Game.Scripts.View.CellObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Game.Scripts.View.GridLevels
+namespace Game.Scripts.CellularSpace.GridShape
 {
     [RequireComponent(typeof(Tilemap))]
     public class GridLevel : MonoBehaviour

@@ -8,6 +8,8 @@ namespace Game.Scripts.CellularSpace.CellStorages.Interfaces
     {
         bool TryGetCellObject(int id, out AbstractCellObject cellObject);
         bool TryGetCell(Vector3Int coords, out ICell cell);
+        AbstractCellObject GetCellObject(int id);
+        ICell GetCell(Vector3Int coords);
         IEnumerable<ICell> GetCells();
     }
 }

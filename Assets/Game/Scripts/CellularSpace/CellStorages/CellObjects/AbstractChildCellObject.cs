@@ -1,5 +1,4 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
@@ -15,11 +14,12 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
         }
         private ICell _parentCell;
         
-        protected AbstractChildCellObject(int id, Action<object, PerformanceParams> commitReaction, bool isIndependent = true)
-            : base(id, commitReaction, isIndependent)
+        protected AbstractChildCellObject(int id, Action<object, PerformanceParams> commitReaction, bool isExternallyModifiable)
+            : base(id, commitReaction, isExternallyModifiable)
         {
         }
 
         public override Vector3Int Coords => ParentCell.Coords;
+        public override ICellGrid ParentCellGrid => ParentCell.CellGridContext;
     }
 }

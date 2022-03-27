@@ -10,19 +10,19 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 {
     public abstract class AbstractCellObject : IActable<FlexibleData>, IActable<CellObjectBaseAction>
     {
-        public int Id { get; }
-        public bool IsIndependent { get; }
         protected readonly Action<object, PerformanceParams> _commitReaction;
         protected ICharacteristics _characteristics;
 
-        protected AbstractCellObject(int id, Action<object, PerformanceParams> commitReaction, bool isIndependent = true)
+        protected AbstractCellObject(int id, Action<object, PerformanceParams> commitReaction, bool isExternallyModifiable)
         {
             Id = id;
             _commitReaction = commitReaction;
-            IsIndependent = isIndependent;
+            IsExternallyModifiable = isExternallyModifiable;
         }
-        
+        public int Id { get; }
+        public bool IsExternallyModifiable { get; }
         public abstract Vector3Int Coords { get; }
+        public abstract ICellGrid ParentCellGrid { get; }
         public CellObjectType CellObjectType => _characteristics.CellObjectType;
         public abstract void CommitAction(object sender, PerformanceParams performanceParams);
     }

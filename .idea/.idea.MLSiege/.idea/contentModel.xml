@@ -16,8 +16,6 @@
                 <e p="CellObjects" t="Include">
                   <e p="AbstractCellObject.cs" t="Include" />
                   <e p="AbstractChildCellObject.cs" t="Include" />
-                  <e p="CellAgentBody.cs" t="Include" />
-                  <e p="CellAgentHead.cs" t="Include" />
                   <e p="CellBlock.cs" t="Include" />
                   <e p="CellObjectCharacteristics" t="Include">
                     <e p="Interfaces" t="Include">
@@ -34,12 +32,16 @@
                   <e p="MultiCellObject" t="Include">
                     <e p="AbstractCellObjectMainPart.cs" t="Include" />
                     <e p="AbstractCellObjectPart.cs" t="Include" />
+                    <e p="CellAgentBody.cs" t="Include" />
+                    <e p="CellAgentHead.cs" t="Include" />
                   </e>
                 </e>
                 <e p="Interfaces" t="Include">
                   <e p="ICell.cs" t="Include" />
                   <e p="ICellGrid.cs" t="Include" />
                   <e p="ICellGridContext.cs" t="Include" />
+                  <e p="ICellGridEditor.cs" t="Include" />
+                  <e p="ICellMuttable.cs" t="Include" />
                 </e>
               </e>
               <e p="General" t="Include">

@@ -2,7 +2,7 @@
 using Game.Scripts.Time.Interfaces;
 using UnityEngine;
 
-namespace Game.Scripts.View.InputControllers
+namespace Game.Scripts.View.InputControllers.KeyHandler
 {
     public class KeyInputHandler : IUpdatable
     {

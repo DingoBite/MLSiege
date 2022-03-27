@@ -1,14 +1,14 @@
 ﻿using System;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.General.StaticUtils.Enums;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 {
     public class CellBlock : AbstractChildCellObject
     {
-        public CellBlock(int id, Action<object, PerformanceParams> commitReaction) : base(id, commitReaction)
+        public CellBlock(int id, Action<object, PerformanceParams> commitReaction, bool isExternallyModifiable)
+            : base(id, commitReaction, isExternallyModifiable)
         {
         }
 
@@ -21,42 +21,55 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
                 return;
             }
 
-            ActionPerformanceParams<CellBlockViewAction> actionResult;
+            ActionPerformanceParams<CellBlockViewAction> viewActionPerformanceParams;
 
             switch (cellBlockAction)
             {
                 case CellBlockAction.Select:
-                    actionResult = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Select);
-                    _commitReaction?.Invoke(this, actionResult);
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Select);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     return;
                 case CellBlockAction.Unselect:
-                    actionResult = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Unselect);
-                    _commitReaction?.Invoke(this, actionResult);
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Unselect);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     return;
                 default:
-                    actionResult = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Error);
-                    _commitReaction?.Invoke(this, actionResult);
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Error);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     throw new ArgumentOutOfRangeException(nameof(cellBlockAction), cellBlockAction, null);
             }
         }
 
         private void CommitBaseAction(object sender, CellObjectBaseAction baseActionType)
         {
-            ActionPerformanceParams<CellBlockViewAction> actionResult;
+            ActionPerformanceParams<CellBlockViewAction> viewActionPerformanceParams;
             switch (baseActionType)
             {
                 case CellObjectBaseAction.Dispose:
-                    actionResult = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Dispose);
-                    _commitReaction?.Invoke(this, actionResult);
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Dispose);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
                     ParentCell?.Clear();
                     return;
                 case CellObjectBaseAction.ApplyGravity:
-                    actionResult = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.ApplyGravity);
-                    _commitReaction?.Invoke(this, actionResult);
+                    ApplyGravity();
                     return;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);
             }
+        }
+        
+        private void ApplyGravity()
+        {
+            var targetCoords = Coords + Vector3Int.down;
+            if (!ParentCellGrid.TryGetCell(targetCoords, out var cell))
+                throw new Exception($"CellGrid does not contains cell ont {targetCoords}");
+            if (!cell.IsEmpty) return;
+
+            var viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.ApplyGravity);
+            viewActionPerformanceParams.FlexibleData.Vector3IntParams.SetParam("NewCoords", targetCoords);
+            if (!ParentCellGrid.TrySetCellObjectTo(targetCoords, Id)) return;
+            
+            _commitReaction?.Invoke(this, viewActionPerformanceParams);
         }
     }
 }
