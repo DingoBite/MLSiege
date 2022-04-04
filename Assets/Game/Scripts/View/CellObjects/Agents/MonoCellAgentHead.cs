@@ -1,19 +1,32 @@
 ﻿using System;
 using System.Linq;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations;
 using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.General.Repos;
 using UnityEngine;
 
-namespace Game.Scripts.View.CellObjects
+namespace Game.Scripts.View.CellObjects.Agents
 {
-    public class MonoCellBlock : AbstractMonoCellObject
+    public class MonoCellAgentHead : AbstractMonoCellObject
     {
+        [SerializeField] private MonoCellAgentLegs _monoCellAgentLegs;
         [SerializeField] private bool _isExternallyModifiable;
         [SerializeField] private Material _selectedMaterial;
-        
+
         private MeshRenderer _mesh;
         private Material[] _meshMaterials;
-
+    
+        public override AbstractChildCellObject Init(IdRepoWithFactory<AbstractChildCellObject> cellObjectRepo, 
+            Func<Vector3Int, Vector3> coordsToPositionConvert)
+        {
+            if (_isInit) return null;
+            _isInit = true;
+            _coordsToPositionConvert = coordsToPositionConvert;
+            return MakeCellObject(cellObjectRepo);
+        }
+        
         private void OnEnable()
         {
             _mesh = GetComponent<MeshRenderer>();
@@ -21,7 +34,7 @@ namespace Game.Scripts.View.CellObjects
         }
 
         public override bool IsExternallyModifiable => _isExternallyModifiable;
-        protected override CellObjectType GetCellObjectType() => CellObjectType.Block;
+        public override CellObjectType CellObjectType => CellObjectType.Agent;
 
         public override void CommitAction(object sender, PerformanceParams performanceParams)
         {
@@ -53,6 +66,18 @@ namespace Game.Scripts.View.CellObjects
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellBlockViewAction), cellBlockViewAction, null);
             }
+        }
+
+        private AbstractChildCellObject MakeCellObject(IdRepoWithFactory<AbstractChildCellObject> cellObjectRepo)
+        {
+            var (cellAgentHead, cellAgentLegs) = cellObjectRepo
+                .MakeAndAdd((id1, id2) => (
+                    new CellAgentHead(id1, id2, CommitAction, _isExternallyModifiable),
+                    new CellAgentLegs(id2, id1, CommitAction, _isExternallyModifiable)));
+            
+            Id = cellAgentHead.Id;
+            _monoCellAgentLegs.CellObject = cellAgentLegs;
+            return new CellAgentHead(Id, _monoCellAgentLegs.Id, CommitAction, _isExternallyModifiable);
         }
     }
 }

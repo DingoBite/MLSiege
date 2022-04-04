@@ -4,9 +4,9 @@ using Game.Scripts.General.FlexibleDataApi;
 
 namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
 {
-    public class CellAgentBody : AbstractCellObjectPart
+    public class CellObjectPart : AbstractCellObjectPart
     {
-        public CellAgentBody(int id, int mainId,
+        public CellObjectPart(int id, int mainId,
             Action<object, PerformanceParams> commitReaction,
             bool isExternallyModifiable) : base(id, mainId, commitReaction, isExternallyModifiable)
         {

@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
 {
-    public class CellAgentHead : AbstractCellObjectMainPart
+    public class CellObjectMainPart : AbstractCellObjectMainPart
     {
-        public CellAgentHead(int id, int[] partsIds,
+        public CellObjectMainPart(int id, int[] partsIds,
             Action<object, PerformanceParams> commitReaction,
             bool isExternallyModifiable) : base(id, partsIds, commitReaction, isExternallyModifiable)
         {
@@ -17,11 +17,15 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
 
         protected override void OnCommit(object sender, PerformanceParams performanceParams, List<AbstractCellObject> parts)
         {
+            foreach (var part in parts)
+            {
+                part.CommitAction(this, performanceParams);
+            }
+            
             if (!(performanceParams.RawActionType is CellAgentAction cellAgentAction))
             {
                 if (performanceParams.RawActionType is CellObjectBaseAction cellAgentBaseAction)
                     CommitBaseAction(sender, cellAgentBaseAction, parts);
-                
                 return;
             }
             ActionPerformanceParams<CellAgentAction> actionResult;
@@ -39,6 +43,10 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        protected override void OnCommitFromPart(int partId, PerformanceParams performanceParams, List<AbstractCellObject> parts)
+        {
         }
 
         protected override void CommitBaseAction(object sender, CellObjectBaseAction baseActionType, List<AbstractCellObject> parts)

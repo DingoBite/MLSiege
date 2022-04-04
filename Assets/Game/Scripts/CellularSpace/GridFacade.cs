@@ -61,7 +61,7 @@ namespace Game.Scripts.CellularSpace
             cellObject.CommitAction(this, performanceData);
         }
 
-        public void CommitAction(PerformanceParams performanceData)
+        public void CommitActionToSelected(PerformanceParams performanceData)
         {
             if (!_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCellObject))
                 return;

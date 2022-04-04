@@ -30,9 +30,9 @@ namespace Game.Scripts
         private void OnMousePick(int id) => _gridLogicStartPoint.GridFacade.CommitSelectAction(id);
         
         private void OnDeleteDown() => 
-            _gridLogicStartPoint.GridFacade.CommitAction(new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Dispose));
+            _gridLogicStartPoint.GridFacade.CommitActionToSelected(new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Dispose));
         
         private void OnGDown() => 
-            _gridLogicStartPoint.GridFacade.CommitAction(new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity));
+            _gridLogicStartPoint.GridFacade.CommitActionToSelected(new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity));
     }
 }

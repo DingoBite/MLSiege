@@ -1,6 +1,5 @@
 ﻿using System;
 using Game.Scripts.Time.Interfaces;
-using Game.Scripts.View.InputControllers;
 using Game.Scripts.View.InputControllers.KeyHandler;
 using Game.Scripts.View.InputControllers.MousePicker;
 using UnityEngine;

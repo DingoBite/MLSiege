@@ -16,7 +16,6 @@
                 <e p="CellObjects" t="Include">
                   <e p="AbstractCellObject.cs" t="Include" />
                   <e p="AbstractChildCellObject.cs" t="Include" />
-                  <e p="CellBlock.cs" t="Include" />
                   <e p="CellObjectCharacteristics" t="Include">
                     <e p="Interfaces" t="Include">
                       <e p="ICharacteristics.cs" t="Include" />
@@ -24,18 +23,25 @@
                   </e>
                   <e p="Enums" t="Include">
                     <e p="CellAgentAction.cs" t="Include" />
+                    <e p="CellAgentViewAction.cs" t="Include" />
                     <e p="CellBlockAction.cs" t="Include" />
                     <e p="CellBlockViewAction.cs" t="Include" />
                     <e p="CellObjectBaseAction.cs" t="Include" />
                     <e p="CellObjectType.cs" t="Include" />
                   </e>
-                  <e p="MultiCellObject" t="Include">
-                    <e p="AbstractCellObjectMainPart.cs" t="Include" />
-                    <e p="AbstractCellObjectPart.cs" t="Include" />
-                    <e p="CellAgentBody.cs" t="Include" />
+                  <e p="Realizations" t="Include">
                     <e p="CellAgentHead.cs" t="Include" />
+                    <e p="CellAgentLegs.cs" t="Include" />
+                    <e p="CellBlock.cs" t="Include" />
+                    <e p="CellObjectMainPart.cs" t="Include" />
+                    <e p="CellObjectPart.cs" t="Include" />
+                    <e p="MultiCellObject" t="Include">
+                      <e p="AbstractCellObjectMainPart.cs" t="Include" />
+                      <e p="AbstractCellObjectPart.cs" t="Include" />
+                    </e>
                   </e>
                 </e>
+                <e p="GridDeserializer.cs" t="Include" />
                 <e p="Interfaces" t="Include">
                   <e p="ICell.cs" t="Include" />
                   <e p="ICellGrid.cs" t="Include" />
@@ -43,19 +49,6 @@
                   <e p="ICellGridEditor.cs" t="Include" />
                   <e p="ICellMuttable.cs" t="Include" />
                 </e>
-              </e>
-              <e p="General" t="Include">
-                <e p="Enums" t="Include">
-                  <e p="Direction.cs" t="Include" />
-                </e>
-                <e p="Interfaces" t="Include">
-                  <e p="IActable.cs" t="Include" />
-                  <e p="IFunctionable.cs" t="Include" />
-                  <e p="IModifier.cs" t="Include" />
-                  <e p="IPrefabsByKey.cs" t="Include" />
-                </e>
-                <e p="PrefabsByKey.cs" t="Include" />
-                <e p="VectorIntDirection.cs" t="Include" />
               </e>
               <e p="GridFacade.cs" t="Include" />
               <e p="GridShape" t="Include">
@@ -80,6 +73,9 @@
               <e p="UpdateTickerInstaller.cs" t="Include" />
             </e>
             <e p="General" t="Include">
+              <e p="Enums" t="Include">
+                <e p="Direction.cs" t="Include" />
+              </e>
               <e p="Extensions" t="Include">
                 <e p="Vector3IntExtension.cs" t="Include" />
               </e>
@@ -89,16 +85,24 @@
                 <e p="FlexibleDataContainer.cs" t="Include" />
                 <e p="PerformanceParams.cs" t="Include" />
               </e>
+              <e p="Interfaces" t="Include">
+                <e p="IActable.cs" t="Include" />
+                <e p="IFunctionable.cs" t="Include" />
+                <e p="IIdRepository.cs" t="Include" />
+                <e p="IModifier.cs" t="Include" />
+                <e p="IPrefabsByKey.cs" t="Include" />
+              </e>
+              <e p="PrefabsByKey.cs" t="Include" />
               <e p="Repos" t="Include">
                 <e p="IdRepository.cs" t="Include" />
-                <e p="IdRepositoryWithFactory.cs" t="Include" />
-                <e p="IIdRepository.cs" t="Include" />
+                <e p="IdRepoWithFactory.cs" t="Include" />
               </e>
               <e p="StaticUtils" t="Include">
                 <e p="Enums" t="Include">
                   <e p="EnumInfo.cs" t="Include" />
                 </e>
                 <e p="Vector3IntUtils.cs" t="Include" />
+                <e p="VectorIntDirection.cs" t="Include" />
               </e>
             </e>
             <e p="ModulesStartPoints" t="Include">
@@ -119,7 +123,13 @@
             <e p="View" t="Include">
               <e p="CellObjects" t="Include">
                 <e p="AbstractMonoCellObject.cs" t="Include" />
-                <e p="MonoCellBlock.cs" t="Include" />
+                <e p="Agents" t="Include">
+                  <e p="MonoCellAgentHead.cs" t="Include" />
+                  <e p="MonoCellAgentLegs.cs" t="Include" />
+                </e>
+                <e p="Blocks" t="Include">
+                  <e p="MonoCellBlock.cs" t="Include" />
+                </e>
               </e>
               <e p="InputControllers" t="Include">
                 <e p="KeyHandler" t="Include">

@@ -11,7 +11,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         public Cell(ICellGrid parentCellGrid, Vector3Int coords, Action<int> onClearAction = null)
         {
-            CellGridContext = parentCellGrid;
+            CellGrid = parentCellGrid;
             _onClearAction = onClearAction;
             Coords = coords;
         }
@@ -20,7 +20,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         public AbstractCellObject CellObject { get; private set; }
 
-        public ICellGrid CellGridContext { get; }
+        public ICellGrid CellGrid { get; }
 
         public bool IsEmpty => CellObject == null;
 

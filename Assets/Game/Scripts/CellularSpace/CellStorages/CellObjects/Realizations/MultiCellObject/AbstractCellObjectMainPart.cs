@@ -9,7 +9,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
     {
         private readonly int[] _partsId;
 
-        public AbstractCellObjectMainPart(int id, int[] partsId,
+        protected AbstractCellObjectMainPart(int id, int[] partsId,
             Action<object, PerformanceParams> commitReaction,
             bool isExternallyModifiable) : base(id, commitReaction, isExternallyModifiable)
         {
@@ -18,30 +18,29 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
 
         public override void CommitAction(object sender, PerformanceParams performanceParams)
         {
-            var isSuccessfulState = true;
+            int? actionFromPartId = null;
             var partsToAct = new List<AbstractCellObject>();
             foreach (var partId in _partsId)
             {
-                if (!ParentCell.CellGridContext.TryGetCellObject(partId, out var part))
-                    isSuccessfulState = false;
+                if (!ParentCell.CellGrid.TryGetCellObject(partId, out var part))
+                {
+                    CommitBaseAction(sender, CellObjectBaseAction.Dispose, partsToAct);
+                    return;
+                }
+                if (sender == part)
+                    actionFromPartId = partId;
                 partsToAct.Add(part);
             }
-
-            if (!isSuccessfulState)
-            {
-                CommitBaseAction(sender, CellObjectBaseAction.Dispose, partsToAct);
-                return;
-            }
             
-            foreach (var part in partsToAct)
-            {
-                part.CommitAction(this, performanceParams);
-            }
-
-            OnCommit(sender, performanceParams, partsToAct);
+            if (actionFromPartId.HasValue)
+                OnCommitFromPart(actionFromPartId.Value, performanceParams, partsToAct);
+            else
+                OnCommit(sender, performanceParams, partsToAct);
         }
         
         protected abstract void OnCommit(object sender, PerformanceParams performanceParams, List<AbstractCellObject> parts);
+        
+        protected abstract void OnCommitFromPart(int partId, PerformanceParams performanceParams, List<AbstractCellObject> parts);
         
         protected abstract void CommitBaseAction(object sender, CellObjectBaseAction baseActionType, List<AbstractCellObject> parts);
     }

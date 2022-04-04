@@ -8,6 +8,6 @@ namespace Game.Scripts.CellularSpace
         void Init(Grid grid);
         void CommitSelectAction(int id);
         void CommitAction(int id, PerformanceParams performanceData);
-        void CommitAction(PerformanceParams performanceData);
+        void CommitActionToSelected(PerformanceParams performanceData);
     }
 }

@@ -13,7 +13,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
 {
     public class CellGrid : ICellGrid
     {
-        private readonly IdRepositoryWithFactory<AbstractChildCellObject> _cellObjectsRepository = new IdRepositoryWithFactory<AbstractChildCellObject>();
+        private readonly IdRepoWithFactory<AbstractChildCellObject> _cellObjectsRepo = new IdRepoWithFactory<AbstractChildCellObject>();
         private List<List<List<ICellMutable>>> _cells;
         private Vector3Int _minFormingPoint;
         private Vector3Int _maxFormingPoint;
@@ -46,9 +46,9 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         public bool TryGetCellObject(int id, out AbstractCellObject cellObject)
         {
-            if (_cellObjectsRepository.Contains(id))
+            if (_cellObjectsRepo.Contains(id))
             {
-                cellObject = _cellObjectsRepository.Get(id);
+                cellObject = _cellObjectsRepo.Get(id);
                 return true;
             }
             cellObject = null;
@@ -63,23 +63,23 @@ namespace Game.Scripts.CellularSpace.CellStorages
             return TryGetCell(coords.x, coords.y, coords.z, out cell);
         }
 
-        public AbstractCellObject GetCellObject(int id) => _cellObjectsRepository.Get(id);
+        public AbstractCellObject GetCellObject(int id) => _cellObjectsRepo.Get(id);
 
         public ICell GetCell(Vector3Int coords) => _cells[coords.x][coords.y][coords.z];
 
         public bool TrySetCellObjectTo(Vector3Int coords, int cellObjectId)
         {
             coords = CoordsToIndexCoords(coords);
-            if (!_cellObjectsRepository.Contains(cellObjectId)) return false;
+            if (!_cellObjectsRepo.Contains(cellObjectId)) return false;
             if (!IsAchievableCell(coords)) return false;
             
-            var cellObject = _cellObjectsRepository.Get(cellObjectId);
+            var cellObject = _cellObjectsRepo.Get(cellObjectId);
             _cells[coords.x][coords.y][coords.z].SetCellObject(cellObject);
             return true;
         }
 
         public void SetCell(Vector3Int coords, int cellObjectId) =>
-            _cells[coords.x][coords.y][coords.z].SetCellObject(_cellObjectsRepository.Get(cellObjectId));
+            _cells[coords.x][coords.y][coords.z].SetCellObject(_cellObjectsRepo.Get(cellObjectId));
 
         public IEnumerable<ICell> GetCells() => 
             from x in _cells from xy in x from xyz in xy select xyz;
@@ -107,14 +107,9 @@ namespace Game.Scripts.CellularSpace.CellStorages
             Cell cell;
             if (monoCellObjects.TryGetValue(coords, out var monoCellObject))
             {
-                var isExternallyModifiable = monoCellObject.IsExternallyModifiable;
-                cell = new Cell(this, coords, id => _cellObjectsRepository.Remove(id));
-                var cellBlock = _cellObjectsRepository.MakeAndAdd(id =>
-                    new CellBlock(id, (sender, actParams) =>
-                        monoCellObject.CommitAction(sender, actParams), isExternallyModifiable));
-                
-                cell.SetCellObject(cellBlock);
-                monoCellObject.Init(cellBlock.Id, _gridCoordsConverter.Convert);
+                cell = new Cell(this, coords, id => _cellObjectsRepo.Remove(id));
+                var cellObject = monoCellObject.Init(_cellObjectsRepo, _gridCoordsConverter.Convert);
+                cell.SetCellObject(cellObject);
             }
             else
             {

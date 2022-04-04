@@ -20,6 +20,6 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
         }
 
         public override Vector3Int Coords => ParentCell.Coords;
-        public override ICellGrid ParentCellGrid => ParentCell.CellGridContext;
+        public override ICellGrid ParentCellGrid => ParentCell.CellGrid;
     }
 }
