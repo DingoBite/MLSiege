@@ -2,6 +2,8 @@
 {
     public enum CellObjectBaseAction
     {
+        Select,
+        Unselect,
         ApplyGravity,
         Dispose
     }

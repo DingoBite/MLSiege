@@ -22,10 +22,14 @@
                     </e>
                   </e>
                   <e p="Enums" t="Include">
-                    <e p="CellAgentAction.cs" t="Include" />
-                    <e p="CellAgentViewAction.cs" t="Include" />
-                    <e p="CellBlockAction.cs" t="Include" />
-                    <e p="CellBlockViewAction.cs" t="Include" />
+                    <e p="Agent" t="Include">
+                      <e p="CellAgentAction.cs" t="Include" />
+                      <e p="CellAgentViewAction.cs" t="Include" />
+                    </e>
+                    <e p="Block" t="Include">
+                      <e p="CellBlockAction.cs" t="Include" />
+                      <e p="CellBlockViewAction.cs" t="Include" />
+                    </e>
                     <e p="CellObjectBaseAction.cs" t="Include" />
                     <e p="CellObjectType.cs" t="Include" />
                   </e>
@@ -33,9 +37,7 @@
                     <e p="CellAgentHead.cs" t="Include" />
                     <e p="CellAgentLegs.cs" t="Include" />
                     <e p="CellBlock.cs" t="Include" />
-                    <e p="CellObjectMainPart.cs" t="Include" />
-                    <e p="CellObjectPart.cs" t="Include" />
-                    <e p="MultiCellObject" t="Include">
+                    <e p="ComplexCellObject" t="Include">
                       <e p="AbstractCellObjectMainPart.cs" t="Include" />
                       <e p="AbstractCellObjectPart.cs" t="Include" />
                     </e>
@@ -129,6 +131,14 @@
                 </e>
                 <e p="Blocks" t="Include">
                   <e p="MonoCellBlock.cs" t="Include" />
+                </e>
+                <e p="Serialization" t="Include">
+                  <e p="Interfaces" t="Include">
+                    <e p="IMonoCellobject.cs" t="Include" />
+                  </e>
+                  <e p="MonoAgent.cs" t="Include" />
+                  <e p="MonoBlock.cs" t="Include" />
+                  <e p="MonoSoloCellObject.cs" t="Include" />
                 </e>
               </e>
               <e p="InputControllers" t="Include">

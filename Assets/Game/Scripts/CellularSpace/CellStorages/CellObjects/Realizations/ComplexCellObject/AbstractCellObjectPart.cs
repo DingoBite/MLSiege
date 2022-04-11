@@ -14,7 +14,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
         {
             _mainPartId = mainPartId;
         }
-        
+
         public override void CommitAction(object sender, PerformanceParams performanceParams)
         {
             if (!ParentCell.CellGrid.TryGetCellObject(_mainPartId, out var mainPart))

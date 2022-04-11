@@ -10,15 +10,19 @@ namespace Game.Scripts.View.CellObjects
 {
     public abstract class AbstractMonoCellObject: MonoBehaviour, IActable<FlexibleData>
     {
-        public int Id { get; protected set; }
+        public int Id { get; private set; }
         protected Func<Vector3Int, Vector3> _coordsToPositionConvert;
         protected bool _isInit;
 
-        public abstract AbstractChildCellObject Init(IdRepoWithFactory<AbstractChildCellObject> cellObjectRepo,
-            Func<Vector3Int, Vector3> coordsToPositionConvert);
+        public void Init(int id, Func<Vector3Int, Vector3> coordsToPositionConvert)
+        {
+            if (_isInit) return;
+            _isInit = true;
+            Id = id;
+            _coordsToPositionConvert = coordsToPositionConvert;
+        }
 
-        public abstract bool IsExternallyModifiable { get; } 
-        
+        public abstract bool IsExternallyModifiable { get; }
         public abstract CellObjectType CellObjectType { get; }
         public abstract void CommitAction(object sender, PerformanceParams performanceParams);
     }

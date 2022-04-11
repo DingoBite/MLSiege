@@ -22,15 +22,6 @@ namespace Game.Scripts.View.CellObjects
             _meshMaterials = _mesh.materials;
         }
 
-        public override AbstractChildCellObject Init(IdRepoWithFactory<AbstractChildCellObject> cellObjectRepo, 
-            Func<Vector3Int, Vector3> coordsToPositionConvert)
-        {
-            if (_isInit) return null;
-            _isInit = true;
-            _coordsToPositionConvert = coordsToPositionConvert;
-            return MakeCellObject(cellObjectRepo);
-        }
-        
         public override bool IsExternallyModifiable => _isExternallyModifiable;
         public override CellObjectType CellObjectType => CellObjectType.Block;
 
@@ -64,13 +55,6 @@ namespace Game.Scripts.View.CellObjects
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellBlockViewAction), cellBlockViewAction, null);
             }
-        }
-
-        protected AbstractChildCellObject MakeCellObject(IdRepoWithFactory<AbstractChildCellObject> cellObjectRepo)
-        {
-            var cellBlock = cellObjectRepo.MakeAndAdd(id => new CellBlock(Id, CommitAction, _isExternallyModifiable));
-            Id = cellBlock.Id;
-            return cellBlock;
         }
     }
 }

@@ -8,11 +8,11 @@ namespace Game.Scripts.DIContainers
 {
     public class UpdateTickerInstaller : MonoInstaller
     {
-        [FormerlySerializedAs("_updateTicker")] [SerializeField] private UpdateTicker abstractUpdateTicker;
+        [SerializeField] private UpdateTicker _updateTicker;
     
         public override void InstallBindings()
         {
-            Container.Bind<IUpdateTicker>().FromInstance(abstractUpdateTicker).AsSingle();
+            Container.Bind<UpdateTicker>().FromInstance(_updateTicker).AsSingle();
         }
     }
 }

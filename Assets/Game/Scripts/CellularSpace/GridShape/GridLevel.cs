@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Game.Scripts.View.CellObjects;
+using Game.Scripts.View.CellObjects.Serialization.Interfaces;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,14 +10,17 @@ namespace Game.Scripts.CellularSpace.GridShape
     public class GridLevel : MonoBehaviour
     {
         private Tilemap _tilemap;
-        private AbstractMonoCellObject[] _gameCellObjects;
+        private MonoSoloCellObject[] _monoBlocks;
+        private MonoAgent[] _monoAgents;
             
         private void Awake()
         {
             _tilemap = GetComponent<Tilemap>();
-            _gameCellObjects = _tilemap.GetComponentsInChildren<AbstractMonoCellObject>();
+            _monoBlocks = _tilemap.GetComponentsInChildren<MonoSoloCellObject>();
+            _monoAgents = _tilemap.GetComponentsInChildren<MonoAgent>();
         }
 
-        public IEnumerable<AbstractMonoCellObject> GetGameCellObjects() => _gameCellObjects;
+        public IEnumerable<MonoSoloCellObject> GetMonoSoloCellObject() => _monoBlocks;
+        public IEnumerable<MonoAgent> GetMonoAgents() => _monoAgents;
     }
 }

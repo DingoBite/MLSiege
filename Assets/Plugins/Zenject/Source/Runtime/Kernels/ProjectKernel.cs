@@ -21,7 +21,7 @@ namespace Zenject
         // will have thier OnDestroy called before child objects)
         // However, the order that OnDestroy is called for the root game objects themselves
         // is largely random
-        // Within an individual scene, this can be helped somewhat by placing all game objects
+        // Within an Solo scene, this can be helped somewhat by placing all game objects
         // underneath the SceneContext and then also checking the 'ParentNewObjectsUnderRoot'
         // property to ensure any new game objects will also be parented underneath SceneContext
         // By doing this, we can be guaranteed to have any bound IDisposable's have their

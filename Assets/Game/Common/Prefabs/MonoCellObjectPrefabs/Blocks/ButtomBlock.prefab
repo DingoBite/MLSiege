@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2991062421862094067}
   - component: {fileID: 4184540102804719041}
   - component: {fileID: 3652083601913278341}
-  - component: {fileID: 2297454128435253035}
+  - component: {fileID: 6652528448143690929}
   m_Layer: 0
   m_Name: ButtomBlock
   m_TagString: Untagged
@@ -96,7 +96,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2297454128435253035
+--- !u!114 &6652528448143690929
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,4 +109,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isExternallyModifiable: 0
-  _selectedMaterial: {fileID: 2100000, guid: d24a9e65443468f4b99ae937a5f67cb1, type: 2}
+  _selectedMaterial: {fileID: 0}

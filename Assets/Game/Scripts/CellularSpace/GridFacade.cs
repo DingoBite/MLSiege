@@ -29,11 +29,11 @@ namespace Game.Scripts.CellularSpace
             _cellGrid = cellGrid;
         }
 
-        public void Init(Grid grid)
+        public void Init(Grid grid, Grid gameGrid)
         {
             _gridLevelsManager.Init(grid);
             _gridCoordsConverter.Init(_gridLevelsManager.CellSize);
-            _cellGrid.Init(_gridLevelsManager, _gridCoordsConverter);
+            _cellGrid.Init(_gridLevelsManager, _gridCoordsConverter, gameGrid);
         }
 
         public void CommitSelectAction(int id)
@@ -43,9 +43,9 @@ namespace Game.Scripts.CellularSpace
             if (!cellObject.IsExternallyModifiable) 
                 return;
             if (_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCellObject))
-                selectedCellObject.CommitAction(this, new ActionPerformanceParams<CellBlockAction>(CellBlockAction.Unselect));
+                selectedCellObject.CommitAction(this, new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Unselect));
             
-            cellObject.CommitAction(this, new ActionPerformanceParams<CellBlockAction>(CellBlockAction.Select));
+            cellObject.CommitAction(this, new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Select));
             _selectedCellObjectId = cellObject.Id;
         }
         

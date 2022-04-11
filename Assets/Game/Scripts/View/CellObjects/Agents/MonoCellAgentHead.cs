@@ -11,21 +11,11 @@ namespace Game.Scripts.View.CellObjects.Agents
 {
     public class MonoCellAgentHead : AbstractMonoCellObject
     {
-        [SerializeField] private MonoCellAgentLegs _monoCellAgentLegs;
         [SerializeField] private bool _isExternallyModifiable;
         [SerializeField] private Material _selectedMaterial;
 
         private MeshRenderer _mesh;
         private Material[] _meshMaterials;
-    
-        public override AbstractChildCellObject Init(IdRepoWithFactory<AbstractChildCellObject> cellObjectRepo, 
-            Func<Vector3Int, Vector3> coordsToPositionConvert)
-        {
-            if (_isInit) return null;
-            _isInit = true;
-            _coordsToPositionConvert = coordsToPositionConvert;
-            return MakeCellObject(cellObjectRepo);
-        }
         
         private void OnEnable()
         {
@@ -38,46 +28,33 @@ namespace Game.Scripts.View.CellObjects.Agents
 
         public override void CommitAction(object sender, PerformanceParams performanceParams)
         {
-            if (!(performanceParams.RawActionType is CellBlockViewAction cellBlockViewAction)) return;
-            switch (cellBlockViewAction)
+            if (!(performanceParams.RawActionType is CellAgentViewAction cellAgentViewAction)) return;
+            switch (cellAgentViewAction)
             {
-                case CellBlockViewAction.Select:
+                case CellAgentViewAction.Select:
                     var materialsWithSelect = _meshMaterials.ToList();
                     materialsWithSelect.Add(_selectedMaterial);
                     _mesh.materials = materialsWithSelect.ToArray();
                     return;
-                case CellBlockViewAction.Unselect:
+                case CellAgentViewAction.Unselect:
                     _mesh.materials = _meshMaterials;
                     return;
-                case CellBlockViewAction.Dispose:
+                case CellAgentViewAction.Dispose:
                     Destroy(gameObject);
                     return;
-                case CellBlockViewAction.Error:
+                case CellAgentViewAction.Error:
                     _mesh.material.color = Color.red;
                     return;
-                case CellBlockViewAction.ApplyGravity:
+                case CellAgentViewAction.ApplyGravity:
                     var newCoords = performanceParams.FlexibleData.Vector3IntParams.GetParam("NewCoords");
                     if (!newCoords.HasValue)
                         throw new ArgumentException("Performance params doesn't contains new coords");
-                    _mesh.material.color = Color.green;
                     var newPosition = _coordsToPositionConvert(newCoords.Value);
                     transform.position = newPosition;
                     return;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(cellBlockViewAction), cellBlockViewAction, null);
+                    throw new ArgumentOutOfRangeException(nameof(cellAgentViewAction), cellAgentViewAction, null);
             }
-        }
-
-        private AbstractChildCellObject MakeCellObject(IdRepoWithFactory<AbstractChildCellObject> cellObjectRepo)
-        {
-            var (cellAgentHead, cellAgentLegs) = cellObjectRepo
-                .MakeAndAdd((id1, id2) => (
-                    new CellAgentHead(id1, id2, CommitAction, _isExternallyModifiable),
-                    new CellAgentLegs(id2, id1, CommitAction, _isExternallyModifiable)));
-            
-            Id = cellAgentHead.Id;
-            _monoCellAgentLegs.CellObject = cellAgentLegs;
-            return new CellAgentHead(Id, _monoCellAgentLegs.Id, CommitAction, _isExternallyModifiable);
         }
     }
 }

@@ -25,14 +25,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 
             switch (cellBlockAction)
             {
-                case CellBlockAction.Select:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Select);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
-                    return;
-                case CellBlockAction.Unselect:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Unselect);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
-                    return;
+                
                 default:
                     viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Error);
                     _commitReaction?.Invoke(this, viewActionPerformanceParams);
@@ -45,6 +38,14 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
             ActionPerformanceParams<CellBlockViewAction> viewActionPerformanceParams;
             switch (baseActionType)
             {
+                case CellObjectBaseAction.Select:
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Select);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
+                    return;
+                case CellObjectBaseAction.Unselect:
+                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Unselect);
+                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
+                    return;
                 case CellObjectBaseAction.Dispose:
                     viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Dispose);
                     _commitReaction?.Invoke(this, viewActionPerformanceParams);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Scripts.Time;
 using Game.Scripts.Time.Interfaces;
 using Game.Scripts.View.InputControllers.KeyHandler;
 using Game.Scripts.View.InputControllers.MousePicker;
@@ -11,7 +12,7 @@ namespace Game.Scripts.ModulesStartPoints
     {
         [SerializeField] private Camera _camera;
 
-        [Inject] private IUpdateTicker _updateTicker;
+        [Inject] private UpdateTicker _updateTicker;
         
         private readonly CellObjectMousePicker _mousePicker = new CellObjectMousePicker();
         private int _mousePickerId;
