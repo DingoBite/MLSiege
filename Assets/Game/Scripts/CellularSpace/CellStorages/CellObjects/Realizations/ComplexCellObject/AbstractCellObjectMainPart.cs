@@ -3,42 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
-using TMPro;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
+namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations.ComplexCellObject
 {
     public abstract class AbstractCellObjectMainPart : AbstractChildCellObject
     {
-        private int[] _partsId;
+        private readonly int[] _partsId;
 
         protected AbstractCellObjectMainPart(int id, IEnumerable<int> partsId,
-            Action<object, PerformanceParams> commitReaction,
-            bool isExternallyModifiable) : base(id, commitReaction, isExternallyModifiable)
+            Action<object, PerformanceParam> commitReaction,
+            bool isModifiable) : base(id, commitReaction, isModifiable)
         {
             _partsId = partsId.ToArray();
-        }
-        
-        protected AbstractCellObjectMainPart(int id, Action<object, PerformanceParams> commitReaction,
-            bool isExternallyModifiable) : base(id, commitReaction, isExternallyModifiable)
-        {
         }
 
-        public void PartsInit(IEnumerable<int> partsId)
-        {
-            if (_partsId != null)
-            {
-                var tempPartsId = _partsId.ToArray();
-                _partsId = null;
-                foreach (var partId in tempPartsId)
-                {
-                    if (!ParentCell.CellGrid.TryGetCellObject(partId, out var part)) continue;
-                    part.CommitAction(this, new ActionPerformanceParams<CellAgentViewAction>(CellAgentViewAction.Dispose));
-                }
-            }
-            _partsId = partsId.ToArray();
-        }
-        
-        public override void CommitAction(object sender, PerformanceParams performanceParams)
+        public override bool CommitAction(object sender, PerformanceParam performanceParam)
         {
             if (_partsId == null) 
                 throw new Exception("Parts are not initialized");
@@ -47,25 +26,22 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
             foreach (var partId in _partsId)
             {
                 if (!ParentCell.CellGrid.TryGetCellObject(partId, out var part))
-                {
-                    CommitBaseAction(sender, CellObjectBaseAction.Dispose, partsToAct);
-                    return;
-                }
+                    return CommitBaseAction(sender, performanceParam, CellObjectBaseAction.Dispose, partsToAct);
+                
                 if (sender == part)
                     actionFromPart = part;
                 partsToAct.Add(part);
             }
             
-            if (actionFromPart != null)
-                OnCommitFromPart(actionFromPart, performanceParams, partsToAct);
-            else
-                OnCommit(sender, performanceParams, partsToAct);
+            return actionFromPart != null ? OnCommitFromPart(actionFromPart, performanceParam, partsToAct) 
+                : OnCommit(sender, performanceParam, partsToAct);
         }
         
-        protected abstract void OnCommit(object sender, PerformanceParams performanceParams, List<AbstractCellObject> parts);
+        protected abstract bool OnCommit(object sender, PerformanceParam performanceParam, List<AbstractCellObject> parts);
         
-        protected abstract void OnCommitFromPart(AbstractCellObject part, PerformanceParams performanceParams, List<AbstractCellObject> parts);
+        protected abstract bool OnCommitFromPart(AbstractCellObject part, PerformanceParam performanceParam, List<AbstractCellObject> parts);
         
-        protected abstract void CommitBaseAction(object sender, CellObjectBaseAction baseActionType, List<AbstractCellObject> parts);
+        protected abstract bool CommitBaseAction(object sender, PerformanceParam performanceParam, 
+            CellObjectBaseAction baseActionType, List<AbstractCellObject> parts);
     }
 }

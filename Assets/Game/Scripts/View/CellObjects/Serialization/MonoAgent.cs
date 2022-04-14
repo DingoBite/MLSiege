@@ -1,11 +1,11 @@
-﻿using System;
+﻿﻿using System;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations;
 using Game.Scripts.General.FlexibleDataApi;
-using UnityEditor;
+using Game.Scripts.View.CellObjects.Serialization.Interfaces;
 using UnityEngine;
 
-namespace Game.Scripts.View.CellObjects.Serialization.Interfaces
+namespace Game.Scripts.View.CellObjects.Serialization
 {
     public class MonoAgent : MonoBehaviour, IMonoCellObject
     {
@@ -36,14 +36,14 @@ namespace Game.Scripts.View.CellObjects.Serialization.Interfaces
                 monoHead.Init(headId, coordsToPositionConvert);
                 monoLegs.Init(legsId, coordsToPositionConvert);
                 return MakeCellObject(headId, legsId,
-                    monoHead.CommitAction, monoHead.IsExternallyModifiable,
-                    monoLegs.CommitAction, monoLegs.IsExternallyModifiable);
+                    monoHead.CommitAction, monoHead.IsModifiable,
+                    monoLegs.CommitAction, monoLegs.IsModifiable);
             };
         }
         
-        private (AbstractChildCellObject, AbstractChildCellObject) MakeCellObject(int headId, int legsId,
-            Action<object, PerformanceParams> headCommitReaction, bool headIsExternallyModifiable,
-            Action<object, PerformanceParams> legsCommitReaction, bool legsIsExternallyModifiable)
+        private static (AbstractChildCellObject, AbstractChildCellObject) MakeCellObject(int headId, int legsId,
+            Action<object, PerformanceParam> headCommitReaction, bool headIsExternallyModifiable,
+            Action<object, PerformanceParam> legsCommitReaction, bool legsIsExternallyModifiable)
         {
             var head = new CellAgentHead(headId, legsId, headCommitReaction, headIsExternallyModifiable);
             var legs = new CellAgentLegs(legsId, headId, legsCommitReaction, legsIsExternallyModifiable);

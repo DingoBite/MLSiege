@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Game.Scripts.General.Repos
+namespace Game.Scripts.General.Interfaces
 {
     public interface IIdRepository<TValue>
     {

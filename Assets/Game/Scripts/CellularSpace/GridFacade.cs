@@ -40,43 +40,50 @@ namespace Game.Scripts.CellularSpace
         {
             if (!_cellGrid.TryGetCellObject(id, out var cellObject)) 
                 return;
-            if (!cellObject.IsExternallyModifiable) 
+            if (!cellObject.IsModifiable) 
                 return;
             if (_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCellObject))
-                selectedCellObject.CommitAction(this, new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Unselect));
+                selectedCellObject.CommitAction(this, CellObjectBaseActions.Unselect);
             
-            cellObject.CommitAction(this, new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Select));
+            cellObject.CommitAction(this, CellObjectBaseActions.Select);
             _selectedCellObjectId = cellObject.Id;
         }
         
-        public void CommitAction(int id, PerformanceParams performanceData)
+        public void CommitAction(int id, PerformanceParam performanceData)
         {
             if (performanceData == null) 
                 throw new ArgumentNullException(nameof(performanceData));
             if (!_cellGrid.TryGetCellObject(id, out var cellObject)) 
                 return;
-            if (!cellObject.IsExternallyModifiable) 
+            if (!cellObject.IsModifiable) 
                 return;
             
             cellObject.CommitAction(this, performanceData);
         }
 
-        public void CommitActionToSelected(PerformanceParams performanceData)
+        public void CommitActionToSelected(PerformanceParam performanceData)
         {
             if (!_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCellObject))
                 return;
-            if (!selectedCellObject.IsExternallyModifiable) 
+            if (!selectedCellObject.IsModifiable) 
                 return;
             selectedCellObject.CommitAction(this, performanceData);
+        }
+        
+        private readonly ActPerformanceParam<CellObjectBaseAction> _applyGravityAction 
+            = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity);
+        
+        public void ApplyGlobalAction()
+        {
+            foreach (var cell in _cellGrid.GetCells().Where(c => !c.IsEmpty && c.CellObject.IsModifiable))
+            {
+                cell.CellObject.CommitAction(this, _applyGravityAction);
+            }
         }
 
         public void OnUpdate()
         {
-            var gravityAct = new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity);
-            foreach (var cell in _cellGrid.GetCells().Where(c => !c.IsEmpty && c.CellObject.IsExternallyModifiable))
-            {
-                cell.CellObject.CommitAction(this, gravityAct);
-            }
+            ApplyGlobalAction();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using Game.Scripts.Time;
-using Game.Scripts.Time.Interfaces;
+using Game.Scripts.View.InputControllers;
 using Game.Scripts.View.InputControllers.KeyHandler;
 using Game.Scripts.View.InputControllers.MousePicker;
 using UnityEngine;
@@ -22,6 +22,9 @@ namespace Game.Scripts.ModulesStartPoints
         
         private readonly KeyInputHandler _gKeyInputHandler = new KeyInputHandler(KeyCode.G);
         private int _gKeyInputHandlerId;
+        
+        public readonly  WASDSSHandler _wasdssHandler = new WASDSSHandler();
+        private int _wasdssHandlerId;
         
         public event Action<int> CellObjectMousePickEvent
         {
@@ -47,18 +50,22 @@ namespace Game.Scripts.ModulesStartPoints
             _mousePickerId = _updateTicker.AddUpdatable(_mousePicker);
             _deleteHandlerId = _updateTicker.AddUpdatable(_deleteInputHandler);
             _gKeyInputHandlerId = _updateTicker.AddUpdatable(_gKeyInputHandler);
+            _wasdssHandlerId = _updateTicker.AddUpdatable(_wasdssHandler);
         }
 
         private void Subscribe()
         {
-            if (_mousePicker != null && !_updateTicker.Contains(_mousePickerId)) 
+            if (!_updateTicker.Contains(_mousePickerId)) 
                 _updateTicker.AddUpdatable(_mousePicker);
             
-            if (_deleteInputHandler != null && !_updateTicker.Contains(_deleteHandlerId)) 
+            if (!_updateTicker.Contains(_deleteHandlerId)) 
                 _updateTicker.AddUpdatable(_deleteInputHandler);
             
-            if (_gKeyInputHandler != null && !_updateTicker.Contains(_gKeyInputHandlerId)) 
+            if (!_updateTicker.Contains(_gKeyInputHandlerId)) 
                 _updateTicker.AddUpdatable(_gKeyInputHandler);
+            
+            if (!_updateTicker.Contains(_wasdssHandlerId)) 
+                _updateTicker.AddUpdatable(_wasdssHandler);
         }
 
         private void Unsubscribe()
@@ -66,6 +73,7 @@ namespace Game.Scripts.ModulesStartPoints
             _updateTicker.RemoveUpdatable(_mousePickerId);
             _updateTicker.RemoveUpdatable(_deleteHandlerId);
             _updateTicker.RemoveUpdatable(_gKeyInputHandlerId);
+            _updateTicker.RemoveUpdatable(_wasdssHandlerId);
         }
 
         private void OnEnable()

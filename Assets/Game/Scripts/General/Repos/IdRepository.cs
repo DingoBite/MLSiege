@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Game.Scripts.General.Interfaces;
 
 namespace Game.Scripts.General.Repos
 {

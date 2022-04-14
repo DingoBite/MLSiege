@@ -17,7 +17,7 @@ namespace Game.Scripts.View.InputControllers.KeyHandler
         
         public void OnUpdate()
         {
-            if (Input.GetKey(_keyCode))
+            if (Input.GetKeyDown(_keyCode))
             {
                 OnGetKeyDownEvent?.Invoke();
             }

@@ -1,6 +1,4 @@
-﻿using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
-using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.ModulesStartPoints;
+﻿using Game.Scripts.ModulesStartPoints;
 using UnityEngine;
 
 namespace Game.Scripts
@@ -10,29 +8,16 @@ namespace Game.Scripts
         [SerializeField] private GridLogicStartPoint _gridLogicStartPoint;
         [SerializeField] private InputHandlersStartPoint _inputHandlersStartPoint;
         [SerializeField] private UIStartPoint _uiStartPoint;
+
+        private HandlersLoader _handlersLoader;
         
         private void Start()
         {
             _gridLogicStartPoint.Init();
             _inputHandlersStartPoint.Init();
             _uiStartPoint.Init();
-
-            LoadDependencies();
+            _handlersLoader = new HandlersLoader(_gridLogicStartPoint);
+            _handlersLoader.LoadDependencies(_inputHandlersStartPoint);
         }
-
-        private void LoadDependencies()
-        {
-            _inputHandlersStartPoint.CellObjectMousePickEvent += OnMousePick;
-            _inputHandlersStartPoint.DeleteDownEvent += OnDeleteDown;
-            _inputHandlersStartPoint.GKeyDownEvent += OnGDown;
-        }
-
-        private void OnMousePick(int id) => _gridLogicStartPoint.GridFacade.CommitSelectAction(id);
-        
-        private void OnDeleteDown() => 
-            _gridLogicStartPoint.GridFacade.CommitActionToSelected(new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Dispose));
-        
-        private void OnGDown() => 
-            _gridLogicStartPoint.GridFacade.CommitActionToSelected(new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity));
     }
 }

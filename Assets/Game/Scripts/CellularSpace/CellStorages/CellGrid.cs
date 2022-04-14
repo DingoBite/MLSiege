@@ -6,7 +6,7 @@ using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
 using Game.Scripts.General.Repos;
-using Game.Scripts.View.CellObjects;
+using Game.Scripts.View.CellObjects.Serialization;
 using Game.Scripts.View.CellObjects.Serialization.Interfaces;
 using UnityEngine;
 
@@ -60,17 +60,38 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         public bool TryGetCellObject(int id, out AbstractCellObject cellObject)
         {
+            if (!TryGetChildCellObject(id, out var childCellObject))
+            {
+                cellObject = null;
+                return false;
+            }
+            cellObject = childCellObject;
+            return true;
+        }
+        
+        private bool TryGetChildCellObject(int id, out AbstractChildCellObject cellObject)
+        {
             if (_cellObjectsRepo.Contains(id))
             {
                 cellObject = _cellObjectsRepo.Get(id);
                 return true;
             }
-
             cellObject = null;
             return false;
         }
-
+        
         public bool TryGetCell(Vector3Int coords, out ICell cell)
+        {
+            if (!TryGetCellMutable(coords, out var cellMutable))
+            {
+                cell = null;
+                return false;
+            }
+            cell = cellMutable;
+            return true;
+        }
+        
+        private bool TryGetCellMutable(Vector3Int coords, out ICellMutable cell)
         {
             if (!IsAchievableCell(coords))
             {
@@ -82,8 +103,8 @@ namespace Game.Scripts.CellularSpace.CellStorages
             coords = CoordsToIndex(coords);
             return TryGetCellByIndex(coords.x, coords.y, coords.z, out cell);
         }
-
-        private bool TryGetCellByIndex(int x, int y, int z, out ICell cell)
+        
+        private bool TryGetCellByIndex(int x, int y, int z, out ICellMutable cell)
         {
             cell = null;
             if (y < 0) return false;
@@ -109,15 +130,37 @@ namespace Game.Scripts.CellularSpace.CellStorages
             return true;
         }
 
+        public bool TrySwapCellObject(Vector3Int coords1, Vector3Int coords2)
+        {
+            if (!TryGetCellMutable(coords1, out var cell1))
+                return false;
+            if (!TryGetCellMutable(coords2, out var cell2))
+                return false;
+            var cellObject = cell1.ChildCellObject;
+            cell1.SetCellObject(cell2.ChildCellObject);
+            cell2.SetCellObject(cellObject);
+            return true;
+        }
+
+        public bool TryMoveCellObjectTo(Vector3Int coords, int cellObjectId)
+        {
+            if (!TryGetCellMutable(coords, out var cell))
+                return false;
+            if (!cell.IsEmpty) return false;
+            if (!TryGetChildCellObject(cellObjectId, out var cellObject))
+                return false;
+            var cellObjectCell = cellObject.ParentCell;
+            cell.SetCellObject(cellObject);
+            cellObjectCell.SetCellObject(null);
+            return true;
+        }
+
         public void SetCellObjectToCoords(Vector3Int coords, int cellObjectId)
         {
             coords = CoordsToIndex(coords);
             _cells[coords.x][coords.y][coords.z].SetCellObject(_cellObjectsRepo.Get(cellObjectId));
         }
 
-        public void SetCellObjectToIndex(Vector3Int coords, int cellObjectId) =>
-            _cells[coords.x][coords.y][coords.z].SetCellObject(_cellObjectsRepo.Get(cellObjectId));
-        
         public IEnumerable<ICell> GetCells() =>
             from x in _cells from xy in x from xyz in xy select xyz;
         

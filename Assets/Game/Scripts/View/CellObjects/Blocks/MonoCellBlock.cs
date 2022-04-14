@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Block;
 using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.General.Repos;
 using UnityEngine;
 
-namespace Game.Scripts.View.CellObjects
+namespace Game.Scripts.View.CellObjects.Blocks
 {
     public class MonoCellBlock : AbstractMonoCellObject
     {
@@ -22,12 +21,12 @@ namespace Game.Scripts.View.CellObjects
             _meshMaterials = _mesh.materials;
         }
 
-        public override bool IsExternallyModifiable => _isExternallyModifiable;
+        public override bool IsModifiable => _isExternallyModifiable;
         public override CellObjectType CellObjectType => CellObjectType.Block;
 
-        public override void CommitAction(object sender, PerformanceParams performanceParams)
+        public override void CommitAction(object sender, PerformanceParam performanceParam)
         {
-            if (!(performanceParams.RawActionType is CellBlockViewAction cellBlockViewAction)) return;
+            if (!(performanceParam.EnumActionType is CellBlockViewAction cellBlockViewAction)) return;
             switch (cellBlockViewAction)
             {
                 case CellBlockViewAction.Select:
@@ -44,11 +43,10 @@ namespace Game.Scripts.View.CellObjects
                 case CellBlockViewAction.Error:
                     _mesh.material.color = Color.red;
                     return;
-                case CellBlockViewAction.ApplyGravity:
-                    var newCoords = performanceParams.FlexibleData.Vector3IntParams.GetParam("NewCoords");
-                    if (!newCoords.HasValue)
+                case CellBlockViewAction.MoveToCoords:
+                    if (!performanceParam.IsHaveVector3IntParam())
                         throw new ArgumentException("Performance params doesn't contains new coords");
-                    _mesh.material.color = Color.green;
+                    var newCoords = performanceParam.Vector3IntParam;
                     var newPosition = _coordsToPositionConvert(newCoords.Value);
                     transform.position = newPosition;
                     return;

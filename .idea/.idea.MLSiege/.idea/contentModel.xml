@@ -82,10 +82,10 @@
                 <e p="Vector3IntExtension.cs" t="Include" />
               </e>
               <e p="FlexibleDataApi" t="Include">
-                <e p="ActionPerformanceParams.cs" t="Include" />
+                <e p="ActPerformanceParam.cs" t="Include" />
                 <e p="FlexibleData.cs" t="Include" />
                 <e p="FlexibleDataContainer.cs" t="Include" />
-                <e p="PerformanceParams.cs" t="Include" />
+                <e p="PerformanceParam.cs" t="Include" />
               </e>
               <e p="Interfaces" t="Include">
                 <e p="IActable.cs" t="Include" />
@@ -107,6 +107,7 @@
                 <e p="VectorIntDirection.cs" t="Include" />
               </e>
             </e>
+            <e p="HandlersLoader.cs" t="Include" />
             <e p="ModulesStartPoints" t="Include">
               <e p="GridLogicStartPoint.cs" t="Include" />
               <e p="InputHandlersStartPoint.cs" t="Include" />
@@ -149,6 +150,7 @@
                   <e p="ActableMousePicker.cs" t="Include" />
                   <e p="CellObjectMousePicker.cs" t="Include" />
                 </e>
+                <e p="WASDSSHandler.cs" t="Include" />
               </e>
             </e>
           </e>

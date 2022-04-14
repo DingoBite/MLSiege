@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Game.Scripts.CellularSpace.General.Interfaces;
+using Game.Scripts.General.Interfaces;
 using Game.Scripts.View.CellObjects;
 
-namespace Game.Scripts.CellularSpace.General
+namespace Game.Scripts.General
 {
     public class PrefabsByKey<TKey, TPrefab> : IPrefabsByKey<TKey, TPrefab>
     where TKey : Enum

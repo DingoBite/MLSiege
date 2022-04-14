@@ -7,15 +7,15 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 {
     public abstract class AbstractChildCellObject : AbstractCellObject
     {
-        public ICell ParentCell
+        public ICellMutable ParentCell
         {
             get => _parentCell;
             set => _parentCell = value ?? throw new ArgumentNullException();
         }
-        private ICell _parentCell;
+        private ICellMutable _parentCell;
         
-        protected AbstractChildCellObject(int id, Action<object, PerformanceParams> commitReaction, bool isExternallyModifiable)
-            : base(id, commitReaction, isExternallyModifiable)
+        protected AbstractChildCellObject(int id, Action<object, PerformanceParam> commitReaction, bool isModifiable)
+            : base(id, commitReaction, isModifiable)
         {
         }
 

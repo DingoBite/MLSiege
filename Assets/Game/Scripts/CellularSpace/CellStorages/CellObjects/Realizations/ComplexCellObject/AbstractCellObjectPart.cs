@@ -2,35 +2,30 @@
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject
+namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations.ComplexCellObject
 {
     public abstract class AbstractCellObjectPart : AbstractChildCellObject
     {
         private readonly int _mainPartId;
 
         protected AbstractCellObjectPart(int id, int mainPartId,
-            Action<object, PerformanceParams> commitReaction,
-            bool isExternallyModifiable) : base(id, commitReaction, isExternallyModifiable)
+            Action<object, PerformanceParam> commitReaction,
+            bool isModifiable) : base(id, commitReaction, isModifiable)
         {
             _mainPartId = mainPartId;
         }
 
-        public override void CommitAction(object sender, PerformanceParams performanceParams)
+        public override bool CommitAction(object sender, PerformanceParam performanceParam)
         {
             if (!ParentCell.CellGrid.TryGetCellObject(_mainPartId, out var mainPart))
-            {
-                CommitBaseAction(sender, CellObjectBaseAction.Dispose);
-                return;
-            }
+                return CommitBaseAction(sender, performanceParam, CellObjectBaseAction.Dispose);
 
-            if (sender != mainPart)
-                mainPart.CommitAction(this, performanceParams);
-            else
-                OnCommit(sender, performanceParams);
+            return sender != mainPart ? mainPart.CommitAction(this, performanceParam) 
+                : OnCommit(sender, performanceParam);
         }
         
-        protected abstract void OnCommit(object sender, PerformanceParams performanceParams);
+        protected abstract bool OnCommit(object sender, PerformanceParam performanceParam);
         
-        protected abstract void CommitBaseAction(object sender, CellObjectBaseAction baseActionType);
+        protected abstract bool CommitBaseAction(object sender, PerformanceParam performanceParam, CellObjectBaseAction baseActionType);
     }
 }

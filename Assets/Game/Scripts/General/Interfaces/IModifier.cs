@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.CellularSpace.General.Interfaces
+﻿namespace Game.Scripts.General.Interfaces
 {
     public interface IModifier<TValue>
     {

@@ -1,10 +1,10 @@
-﻿using System;
+﻿﻿using System;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects;
 using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.View.CellObjects.Agents;
+using Game.Scripts.View.CellObjects.Serialization.Interfaces;
 using UnityEngine;
 
-namespace Game.Scripts.View.CellObjects.Serialization.Interfaces
+namespace Game.Scripts.View.CellObjects.Serialization
 {
     public abstract class MonoSoloCellObject : MonoBehaviour, IMonoCellObject
     {
@@ -24,10 +24,10 @@ namespace Game.Scripts.View.CellObjects.Serialization.Interfaces
             return id =>
             {
                 monoCellObject.Init(id, coordsToPositionConvert);
-                return MakeCellObject(id, monoCellObject.CommitAction, monoCellObject.IsExternallyModifiable);
+                return MakeCellObject(id, monoCellObject.CommitAction, monoCellObject.IsModifiable);
             };
         }
 
-        protected abstract AbstractChildCellObject MakeCellObject(int id, Action<object, PerformanceParams> commitReaction, bool isExternallyModifiable);
+        protected abstract AbstractChildCellObject MakeCellObject(int id, Action<object, PerformanceParam> commitReaction, bool isExternallyModifiable);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.CellularSpace.General.Enums
+﻿namespace Game.Scripts.General.Enums
 {
     public enum Direction
     {

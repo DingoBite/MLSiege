@@ -18,7 +18,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         public Vector3Int Coords { get; }
 
-        public AbstractCellObject CellObject { get; private set; }
+        public AbstractCellObject CellObject => ChildCellObject;
 
         public ICellGrid CellGrid { get; }
 
@@ -26,9 +26,14 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         public void SetCellObject(AbstractChildCellObject childCellObject)
         {
-            childCellObject.ParentCell = this;
-            CellObject = childCellObject;
+            if (childCellObject != null)
+            {
+                childCellObject.ParentCell = this;
+            }
+            ChildCellObject = childCellObject;
         }
+
+        public AbstractChildCellObject ChildCellObject { get; private set; }
 
         public void Clear()
         {
@@ -37,7 +42,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
                 var id = CellObject.Id;
                 _onClearAction.Invoke(id);
             }
-            CellObject = null;
+            ChildCellObject = null;
         }
     }
 }

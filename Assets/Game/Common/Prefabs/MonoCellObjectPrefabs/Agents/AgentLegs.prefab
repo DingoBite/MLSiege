@@ -108,5 +108,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f07b5d3ab424c4495016bfb9749dba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isExternallyModifiable: 1
+  _isModifiable: 1
   _selectedMaterial: {fileID: 2100000, guid: da9af108b8100a144bc8adf75e5b753f, type: 2}

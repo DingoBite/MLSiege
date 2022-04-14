@@ -4,6 +4,13 @@
     {
         Select,
         Unselect,
+        MoveUp,
+        MoveLeft,
+        MoveRight,
+        MoveForward,
+        MoveBack,
+        MoveDown,
+        MoveToCoords,
         ApplyGravity,
         Dispose
     }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.MultiCellObject;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Agent;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations.ComplexCellObject;
 using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.General.StaticUtils;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
@@ -10,90 +12,117 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
     public class CellAgentHead : AbstractCellObjectMainPart
     {
         public CellAgentHead(int id, int legsId, 
-            Action<object, PerformanceParams> commitReaction, bool isExternallyModifiable) 
-            : base(id, new []{legsId}, commitReaction, isExternallyModifiable)
+            Action<object, PerformanceParam> commitReaction, bool isModifiable) 
+            : base(id, new []{legsId}, commitReaction, isModifiable)
         {
         }
 
-        public CellAgentHead(int id, Action<object, PerformanceParams> commitReaction,
-            bool isExternallyModifiable) : base(id, commitReaction, isExternallyModifiable)
+        protected override bool OnCommit(object sender, PerformanceParam performanceParam, List<AbstractCellObject> parts)
         {
-        }
-        
-        protected override void OnCommit(object sender, PerformanceParams performanceParams, List<AbstractCellObject> parts)
-        {
-            if (!(performanceParams.RawActionType is CellAgentAction cellAgentAction))
+            if (!(performanceParam.EnumActionType is CellAgentAction cellAgentAction))
             {
-                if (performanceParams.RawActionType is CellObjectBaseAction cellAgentBaseAction)
-                    CommitBaseAction(sender, cellAgentBaseAction, parts);
-                return;
+                if (performanceParam.EnumActionType is CellObjectBaseAction cellAgentBaseAction)
+                    return CommitBaseAction(sender, performanceParam, cellAgentBaseAction, parts);
+                return false;
             }
-            ActionPerformanceParams<CellAgentViewAction> mainPartViewPerformanceParams;
-            ActionPerformanceParams<CellAgentAction> partPerformanceParams;
 
             switch (cellAgentAction)
             {
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    _commitReaction?.Invoke(this, CellAgentViewActions.Error);
+                    throw new ArgumentOutOfRangeException(nameof(cellAgentAction), cellAgentAction, null);
             }
         }
 
-        protected override void OnCommitFromPart(AbstractCellObject part, PerformanceParams performanceParams, List<AbstractCellObject> parts)
+        protected override bool OnCommitFromPart(AbstractCellObject part, PerformanceParam performanceParam, List<AbstractCellObject> parts)
         {
-            OnCommit(this, performanceParams, parts);
+            return OnCommit(this, performanceParam, parts);
         }
 
-        protected override void CommitBaseAction(object sender, CellObjectBaseAction baseActionType, List<AbstractCellObject> parts)
+        protected override bool CommitBaseAction(object sender, PerformanceParam performanceParam, 
+            CellObjectBaseAction baseActionType, List<AbstractCellObject> parts)
         {
-            ActionPerformanceParams<CellAgentViewAction> viewActionPerformanceParams;
-            ActionPerformanceParams<CellObjectBaseAction> partActionPerformanceParams;
             switch (baseActionType)
             {
                 case CellObjectBaseAction.Select:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellAgentViewAction>(CellAgentViewAction.Select);
-                    partActionPerformanceParams = new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Select);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
-                    parts[0].CommitAction(this, partActionPerformanceParams);
-                    return;
+                    if (!parts[0].CommitAction(this, CellObjectBaseActions.Select)) return false;
+                    _commitReaction?.Invoke(this, CellAgentViewActions.Select);
+                    break;
                 case CellObjectBaseAction.Unselect:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellAgentViewAction>(CellAgentViewAction.Unselect);
-                    partActionPerformanceParams = new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Unselect);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
-                    parts[0].CommitAction(this, partActionPerformanceParams);
-                    return;
+                    if (!parts[0].CommitAction(this, CellObjectBaseActions.Unselect)) return false;
+                    _commitReaction?.Invoke(this, CellAgentViewActions.Unselect);
+                    break;
                 case CellObjectBaseAction.Dispose:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellAgentViewAction>(CellAgentViewAction.Dispose);
-                    partActionPerformanceParams = new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.Dispose);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
-                    parts[0].CommitAction(this, partActionPerformanceParams);
+                    if (!parts[0].CommitAction(this, CellObjectBaseActions.Dispose)) return false;
+                    _commitReaction?.Invoke(this, CellAgentViewActions.Dispose);
                     ParentCell?.Clear();
-                    return;
+                    break;
                 case CellObjectBaseAction.ApplyGravity:
-                    ApplyGravity(parts);
-                    return;
+                    return ApplyGravity(parts);
+                case CellObjectBaseAction.MoveUp:
+                    return MoveOnDirection(parts, baseActionType);
+                case CellObjectBaseAction.MoveLeft:
+                    return MoveOnDirection(parts, baseActionType);
+                case CellObjectBaseAction.MoveRight:
+                    return MoveOnDirection(parts, baseActionType);
+                case CellObjectBaseAction.MoveForward:
+                    return MoveOnDirection(parts, baseActionType);
+                case CellObjectBaseAction.MoveBack:
+                    return MoveOnDirection(parts, baseActionType);
+                case CellObjectBaseAction.MoveDown:
+                    return ApplyGravity(parts);
+                case CellObjectBaseAction.MoveToCoords:
+                    if (!performanceParam.IsHaveVector3IntParam())
+                        throw new ArgumentException("Performance params doesn't contains coords");
+                    return MoveTo(parts, performanceParam.Vector3IntParam.Value);
                 default:
+                    _commitReaction?.Invoke(this, CellAgentViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);
             }
+            return true;
         }
-        
-        private void ApplyGravity(IReadOnlyList<AbstractCellObject> parts)
+
+        private bool MoveTo(IReadOnlyList<AbstractCellObject> parts, Vector3Int coords)
         {
             var legs = parts[0];
-            var newHeadCoords = legs.Coords;
-            var newLegsCoords = legs.Coords + Vector3Int.down;
-            if (!ParentCellGrid.TryGetCell(newLegsCoords, out var cell))
-                throw new Exception($"CellGrid does not contains cell ont {newLegsCoords}");
-            if (!cell.IsEmpty) return;
+            var newHeadCoords = coords;
+            var newLegsCoords = coords + Vector3Int.down;
+            if (!ParentCellGrid.TryMoveCellObjectTo(coords, Id)) return false;
             
-            ParentCellGrid.SetCellObjectToCoords(newLegsCoords, legs.Id);
-            ParentCellGrid.SetCellObjectToCoords(newHeadCoords, Id);
-            
-            var legsActionPerformanceParams = new ActionPerformanceParams<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity);
-            legs.CommitAction(this, legsActionPerformanceParams);
-                
-            var viewActionPerformanceParams = new ActionPerformanceParams<CellAgentViewAction>(CellAgentViewAction.ApplyGravity);
-            viewActionPerformanceParams.FlexibleData.Vector3IntParams.SetParam("NewCoords", newHeadCoords);
+            var legsApplyGravityParam = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveToCoords,
+                vector3IntParam: newLegsCoords);
+            if (!legs.CommitAction(this, legsApplyGravityParam))
+                return false;
+
+            var viewActionPerformanceParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.MoveToCoords,
+                vector3IntParam: newHeadCoords);
             _commitReaction?.Invoke(this, viewActionPerformanceParams);
+            return true;
+        }
+        
+        private bool MoveOnDirection(IReadOnlyList<AbstractCellObject> parts, CellObjectBaseAction direction)
+        {
+            var targetCoordsNullable = Coords + VectorIntDirection.VectorFromDirection(direction);
+            if (!targetCoordsNullable.HasValue) return false;
+            return MoveTo(parts, targetCoordsNullable.Value);
+        }
+
+        private bool ApplyGravity(IReadOnlyList<AbstractCellObject> parts)
+        {
+            var legs = parts[0];
+            var newHeadCoords = Coords + Vector3Int.down;
+            var newLegsCoords = newHeadCoords + Vector3Int.down;
+
+            var legsApplyGravityParam = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity,
+                vector3IntParam: newLegsCoords);
+            if (!legs.CommitAction(this, legsApplyGravityParam))
+                return false;
+            if (!ParentCellGrid.TryMoveCellObjectTo(newHeadCoords, Id)) 
+                throw new Exception("Head and legs error");
+            var viewActionPerformanceParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.MoveToCoords,
+                vector3IntParam: newHeadCoords);
+            _commitReaction?.Invoke(this, viewActionPerformanceParams);
+            return true;
         }
     }
 }

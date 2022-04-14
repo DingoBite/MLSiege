@@ -1,76 +1,96 @@
 ﻿using System;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Block;
 using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.General.StaticUtils;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
+namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
 {
     public class CellBlock : AbstractChildCellObject
     {
-        public CellBlock(int id, Action<object, PerformanceParams> commitReaction, bool isExternallyModifiable)
-            : base(id, commitReaction, isExternallyModifiable)
+        public CellBlock(int id, Action<object, PerformanceParam> commitReaction, bool isModifiable)
+            : base(id, commitReaction, isModifiable)
         {
         }
 
-        public override void CommitAction(object sender, PerformanceParams performanceParams)
+        public override bool CommitAction(object sender, PerformanceParam performanceParam)
         {
-            if (!(performanceParams.RawActionType is CellBlockAction cellBlockAction))
+            if (!(performanceParam.EnumActionType is CellBlockAction cellBlockAction))
             {
-                if (performanceParams.RawActionType is CellObjectBaseAction cellBlockBaseAction)
-                    CommitBaseAction(sender, cellBlockBaseAction);
-                return;
+                if (performanceParam.EnumActionType is CellObjectBaseAction cellBlockBaseAction)
+                    return CommitBaseAction(sender, performanceParam, cellBlockBaseAction);
+                return false;
             }
-
-            ActionPerformanceParams<CellBlockViewAction> viewActionPerformanceParams;
-
             switch (cellBlockAction)
             {
-                
                 default:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Error);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
+                    _commitReaction?.Invoke(this, CellBlockViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(cellBlockAction), cellBlockAction, null);
             }
         }
 
-        private void CommitBaseAction(object sender, CellObjectBaseAction baseActionType)
+        private bool CommitBaseAction(object sender, PerformanceParam performanceParam, CellObjectBaseAction baseActionType)
         {
-            ActionPerformanceParams<CellBlockViewAction> viewActionPerformanceParams;
             switch (baseActionType)
             {
                 case CellObjectBaseAction.Select:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Select);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
-                    return;
+                    _commitReaction?.Invoke(this, CellBlockViewActions.Select);
+                    break;
                 case CellObjectBaseAction.Unselect:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Unselect);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
-                    return;
+                    _commitReaction?.Invoke(this, CellBlockViewActions.Unselect);
+                    break;
                 case CellObjectBaseAction.Dispose:
-                    viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.Dispose);
-                    _commitReaction?.Invoke(this, viewActionPerformanceParams);
+                    _commitReaction?.Invoke(this, CellBlockViewActions.Dispose);
                     ParentCell?.Clear();
-                    return;
+                    break;
                 case CellObjectBaseAction.ApplyGravity:
-                    ApplyGravity();
-                    return;
+                    return ApplyGravity();
+                case CellObjectBaseAction.MoveUp:
+                    return MoveOnDirection(baseActionType);
+                case CellObjectBaseAction.MoveLeft:
+                    return MoveOnDirection(baseActionType);
+                case CellObjectBaseAction.MoveRight:
+                    return MoveOnDirection(baseActionType);
+                case CellObjectBaseAction.MoveForward:
+                    return MoveOnDirection(baseActionType);
+                case CellObjectBaseAction.MoveBack:
+                    return MoveOnDirection(baseActionType);
+                case CellObjectBaseAction.MoveDown:
+                    return MoveOnDirection(baseActionType);
+                case CellObjectBaseAction.MoveToCoords:
+                    if (!performanceParam.IsHaveVector3IntParam())
+                        throw new ArgumentException("Performance params doesn't contains coords");
+                    return MoveTo(performanceParam.Vector3IntParam.Value);
                 default:
+                    _commitReaction?.Invoke(this, CellBlockViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);
             }
+            return true;
+        }
+
+        private bool MoveTo(Vector3Int coords)
+        {
+            if (coords == Coords) return false;
+            if (!ParentCellGrid.TryMoveCellObjectTo(coords, Id)) return false;
+            
+            var viewActionPerformanceParams =
+                new ActPerformanceParam<CellBlockViewAction>(CellBlockViewAction.MoveToCoords, vector3IntParam: coords);
+            _commitReaction?.Invoke(this, viewActionPerformanceParams);
+            return true;
         }
         
-        private void ApplyGravity()
+        private bool MoveOnDirection(CellObjectBaseAction direction)
+        {
+            var targetCoordsNullable = Coords + VectorIntDirection.VectorFromDirection(direction);
+            if (!targetCoordsNullable.HasValue) return false;
+            return MoveTo(targetCoordsNullable.Value);
+        }
+        
+        private bool ApplyGravity()
         {
             var targetCoords = Coords + Vector3Int.down;
-            if (!ParentCellGrid.TryGetCell(targetCoords, out var cell))
-                throw new Exception($"CellGrid does not contains cell ont {targetCoords}");
-            if (!cell.IsEmpty) return;
-
-            var viewActionPerformanceParams = new ActionPerformanceParams<CellBlockViewAction>(CellBlockViewAction.ApplyGravity);
-            viewActionPerformanceParams.FlexibleData.Vector3IntParams.SetParam("NewCoords", targetCoords);
-            if (!ParentCellGrid.TrySetCellObjectTo(targetCoords, Id)) return;
-            
-            _commitReaction?.Invoke(this, viewActionPerformanceParams);
+            return MoveTo(targetCoords);
         }
     }
 }
