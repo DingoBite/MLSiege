@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Game.Scripts.View.CellObjects.Serialization;
-using Game.Scripts.View.CellObjects.Serialization.Interfaces;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 

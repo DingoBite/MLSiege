@@ -8,6 +8,23 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Game" t="Include">
+          <e p="Controls" t="Include">
+            <e p="GameControls.cs" t="Include" />
+            <e p="InputControllers" t="Include">
+              <e p="Interfaces" t="Include">
+                <e p="IRepeatableInputAction.cs" t="Include" />
+              </e>
+              <e p="KeyHandler" t="Include">
+                <e p="KeyInputHandler.cs" t="Include" />
+              </e>
+              <e p="MousePicker" t="Include">
+                <e p="ActableMousePicker.cs" t="Include" />
+                <e p="CellObjectMousePicker.cs" t="Include" />
+              </e>
+              <e p="RepeatableInputHandler.cs" t="Include" />
+              <e p="WASDSSHandler.cs" t="Include" />
+            </e>
+          </e>
           <e p="Scripts" t="Include">
             <e p="CellularSpace" t="Include">
               <e p="CellStorages" t="Include">
@@ -20,6 +37,10 @@
                     <e p="Interfaces" t="Include">
                       <e p="ICharacteristics.cs" t="Include" />
                     </e>
+                  </e>
+                  <e p="ComplexCellObject" t="Include">
+                    <e p="AbstractCellObjectMainPart.cs" t="Include" />
+                    <e p="AbstractCellObjectPart.cs" t="Include" />
                   </e>
                   <e p="Enums" t="Include">
                     <e p="Agent" t="Include">
@@ -37,10 +58,6 @@
                     <e p="CellAgentHead.cs" t="Include" />
                     <e p="CellAgentLegs.cs" t="Include" />
                     <e p="CellBlock.cs" t="Include" />
-                    <e p="ComplexCellObject" t="Include">
-                      <e p="AbstractCellObjectMainPart.cs" t="Include" />
-                      <e p="AbstractCellObjectPart.cs" t="Include" />
-                    </e>
                   </e>
                 </e>
                 <e p="GridDeserializer.cs" t="Include" />
@@ -120,6 +137,7 @@
                 <e p="IUpdatable.cs" t="Include" />
                 <e p="IUpdateTicker.cs" t="Include" />
               </e>
+              <e p="LambdaUpdatable.cs" t="Include" />
               <e p="TimePeriodTicker.cs" t="Include" />
               <e p="UpdateTicker.cs" t="Include" />
             </e>
@@ -141,16 +159,6 @@
                   <e p="MonoBlock.cs" t="Include" />
                   <e p="MonoSoloCellObject.cs" t="Include" />
                 </e>
-              </e>
-              <e p="InputControllers" t="Include">
-                <e p="KeyHandler" t="Include">
-                  <e p="KeyInputHandler.cs" t="Include" />
-                </e>
-                <e p="MousePicker" t="Include">
-                  <e p="ActableMousePicker.cs" t="Include" />
-                  <e p="CellObjectMousePicker.cs" t="Include" />
-                </e>
-                <e p="WASDSSHandler.cs" t="Include" />
               </e>
             </e>
           </e>

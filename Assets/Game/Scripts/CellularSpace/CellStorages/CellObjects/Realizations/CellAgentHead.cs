@@ -29,7 +29,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             switch (cellAgentAction)
             {
                 default:
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Error);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(cellAgentAction), cellAgentAction, null);
             }
         }
@@ -46,83 +46,100 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             {
                 case CellObjectBaseAction.Select:
                     if (!parts[0].CommitAction(this, CellObjectBaseActions.Select)) return false;
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Select);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Select);
                     break;
                 case CellObjectBaseAction.Unselect:
                     if (!parts[0].CommitAction(this, CellObjectBaseActions.Unselect)) return false;
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Unselect);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Unselect);
                     break;
                 case CellObjectBaseAction.Dispose:
                     if (!parts[0].CommitAction(this, CellObjectBaseActions.Dispose)) return false;
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Dispose);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Dispose);
                     ParentCell?.Clear();
                     break;
                 case CellObjectBaseAction.ApplyGravity:
-                    return ApplyGravity(parts);
+                    return MoveOnDirectionLegsHead(parts, CellObjectBaseAction.MoveDown);
                 case CellObjectBaseAction.MoveUp:
-                    return MoveOnDirection(parts, baseActionType);
+                    return MoveOnDirectionHeadLegs(parts, baseActionType);
                 case CellObjectBaseAction.MoveLeft:
-                    return MoveOnDirection(parts, baseActionType);
+                    return MoveOnDirectionWithJump(parts, baseActionType);
                 case CellObjectBaseAction.MoveRight:
-                    return MoveOnDirection(parts, baseActionType);
+                    return MoveOnDirectionWithJump(parts, baseActionType);
                 case CellObjectBaseAction.MoveForward:
-                    return MoveOnDirection(parts, baseActionType);
+                    return MoveOnDirectionWithJump(parts, baseActionType);
                 case CellObjectBaseAction.MoveBack:
-                    return MoveOnDirection(parts, baseActionType);
+                    return MoveOnDirectionWithJump(parts, baseActionType);
                 case CellObjectBaseAction.MoveDown:
-                    return ApplyGravity(parts);
+                    return MoveOnDirectionLegsHead(parts, baseActionType);
                 case CellObjectBaseAction.MoveToCoords:
                     if (!performanceParam.IsHaveVector3IntParam())
                         throw new ArgumentException("Performance params doesn't contains coords");
-                    return MoveTo(parts, performanceParam.Vector3IntParam.Value);
+                    return MoveToLegsHead(parts, performanceParam.Vector3IntParam.Value);
                 default:
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Error);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);
             }
             return true;
         }
 
-        private bool MoveTo(IReadOnlyList<AbstractCellObject> parts, Vector3Int coords)
+        private bool MoveToLegsHead(IReadOnlyList<AbstractCellObject> parts, Vector3Int coords)
+        {
+            var legs = parts[0];
+            var newHeadCoords = coords;
+            var newLegsCoords = coords + Vector3Int.down;
+
+            var legsApplyGravityParam = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveToCoords,
+                vector3IntParam: newLegsCoords);
+            if (!legs.CommitAction(this, legsApplyGravityParam))
+                return false;
+            
+            if (!ParentCellGrid.TryMoveCellObjectTo(coords, Id)) return false;
+
+            var viewActionPerformanceParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.MoveToCoords,
+                vector3IntParam: newHeadCoords);
+            _commitReaction.Invoke(this, viewActionPerformanceParams);
+            return true;
+        }
+        
+        private bool MoveToHeadLegs(IReadOnlyList<AbstractCellObject> parts, Vector3Int coords)
         {
             var legs = parts[0];
             var newHeadCoords = coords;
             var newLegsCoords = coords + Vector3Int.down;
             if (!ParentCellGrid.TryMoveCellObjectTo(coords, Id)) return false;
-            
+
             var legsApplyGravityParam = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveToCoords,
                 vector3IntParam: newLegsCoords);
             if (!legs.CommitAction(this, legsApplyGravityParam))
                 return false;
-
+            
             var viewActionPerformanceParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.MoveToCoords,
                 vector3IntParam: newHeadCoords);
-            _commitReaction?.Invoke(this, viewActionPerformanceParams);
+            _commitReaction.Invoke(this, viewActionPerformanceParams);
             return true;
         }
         
-        private bool MoveOnDirection(IReadOnlyList<AbstractCellObject> parts, CellObjectBaseAction direction)
+        private bool MoveOnDirectionLegsHead(IReadOnlyList<AbstractCellObject> parts, CellObjectBaseAction direction)
         {
             var targetCoordsNullable = Coords + VectorIntDirection.VectorFromDirection(direction);
             if (!targetCoordsNullable.HasValue) return false;
-            return MoveTo(parts, targetCoordsNullable.Value);
+            return MoveToLegsHead(parts, targetCoordsNullable.Value);
         }
-
-        private bool ApplyGravity(IReadOnlyList<AbstractCellObject> parts)
+        
+        private bool MoveOnDirectionHeadLegs(IReadOnlyList<AbstractCellObject> parts, CellObjectBaseAction direction)
         {
-            var legs = parts[0];
-            var newHeadCoords = Coords + Vector3Int.down;
-            var newLegsCoords = newHeadCoords + Vector3Int.down;
-
-            var legsApplyGravityParam = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity,
-                vector3IntParam: newLegsCoords);
-            if (!legs.CommitAction(this, legsApplyGravityParam))
-                return false;
-            if (!ParentCellGrid.TryMoveCellObjectTo(newHeadCoords, Id)) 
-                throw new Exception("Head and legs error");
-            var viewActionPerformanceParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.MoveToCoords,
-                vector3IntParam: newHeadCoords);
-            _commitReaction?.Invoke(this, viewActionPerformanceParams);
-            return true;
+            var targetCoordsNullable = Coords + VectorIntDirection.VectorFromDirection(direction);
+            if (!targetCoordsNullable.HasValue) return false;
+            return MoveToHeadLegs(parts, targetCoordsNullable.Value);
+        }
+        
+        private bool MoveOnDirectionWithJump(IReadOnlyList<AbstractCellObject> parts, CellObjectBaseAction direction)
+        {
+            var targetCoordsNullable = Coords + VectorIntDirection.VectorFromDirection(direction);
+            if (!targetCoordsNullable.HasValue) return false;
+            if (MoveToLegsHead(parts, targetCoordsNullable.Value)) return true;
+            var jumpCoords = targetCoordsNullable.Value + Vector3Int.up;
+            return MoveToLegsHead(parts, jumpCoords);
         }
     }
 }

@@ -4,6 +4,7 @@ using Game.Scripts.View.InputControllers;
 using Game.Scripts.View.InputControllers.KeyHandler;
 using Game.Scripts.View.InputControllers.MousePicker;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Game.Scripts.ModulesStartPoints
@@ -26,6 +27,9 @@ namespace Game.Scripts.ModulesStartPoints
         public readonly  WASDSSHandler _wasdssHandler = new WASDSSHandler();
         private int _wasdssHandlerId;
         
+        private GameControls _gameControls;
+        private int _gravityUpdatableId;
+
         public event Action<int> CellObjectMousePickEvent
         {
             add => _mousePicker.CommitFuncEvent += value;
@@ -44,13 +48,18 @@ namespace Game.Scripts.ModulesStartPoints
             remove => _gKeyInputHandler.OnGetKeyDownEvent -= value;
         }
         
-        public void Init()
+        public void Init(GridLogicStartPoint gridLogicStartPoint)
         {
-            _mousePicker.Init(_camera);
-            _mousePickerId = _updateTicker.AddUpdatable(_mousePicker);
-            _deleteHandlerId = _updateTicker.AddUpdatable(_deleteInputHandler);
-            _gKeyInputHandlerId = _updateTicker.AddUpdatable(_gKeyInputHandler);
-            _wasdssHandlerId = _updateTicker.AddUpdatable(_wasdssHandler);
+            _gameControls = new GameControls();
+            var kek = new RepeatableInputHandler();
+            kek.Init(() => _gameControls.Agent.Gravity, () => Debug.Log(1), 0.3);
+            _gravityUpdatableId = _updateTicker.AddUpdatable(kek);
+            _gameControls.Agent.Enable();
+            // _mousePicker.Init(_camera);
+            // _mousePickerId = _updateTicker.AddUpdatable(_mousePicker);
+            // _deleteHandlerId = _updateTicker.AddUpdatable(_deleteInputHandler);
+            // _gKeyInputHandlerId = _updateTicker.AddUpdatable(_gKeyInputHandler);
+            // _wasdssHandlerId = _updateTicker.AddUpdatable(_wasdssHandler);
         }
 
         private void Subscribe()
@@ -75,17 +84,18 @@ namespace Game.Scripts.ModulesStartPoints
             _updateTicker.RemoveUpdatable(_gKeyInputHandlerId);
             _updateTicker.RemoveUpdatable(_wasdssHandlerId);
         }
-
         private void OnEnable()
         {
+            _gameControls?.Agent.Enable();
             if (_updateTicker == null) return;
-            Subscribe();
+            //Subscribe();
         }
 
         private void OnDisable()
         {
+            _gameControls?.Agent.Disable();
             if (_updateTicker == null) return;
-            Unsubscribe();
+            //Unsubscribe();
         }
     }
 }

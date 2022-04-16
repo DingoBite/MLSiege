@@ -25,7 +25,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             switch (cellBlockAction)
             {
                 default:
-                    _commitReaction?.Invoke(this, CellBlockViewActions.Error);
+                    _commitReaction.Invoke(this, CellBlockViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(cellBlockAction), cellBlockAction, null);
             }
         }
@@ -35,13 +35,13 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             switch (baseActionType)
             {
                 case CellObjectBaseAction.Select:
-                    _commitReaction?.Invoke(this, CellBlockViewActions.Select);
+                    _commitReaction.Invoke(this, CellBlockViewActions.Select);
                     break;
                 case CellObjectBaseAction.Unselect:
-                    _commitReaction?.Invoke(this, CellBlockViewActions.Unselect);
+                    _commitReaction.Invoke(this, CellBlockViewActions.Unselect);
                     break;
                 case CellObjectBaseAction.Dispose:
-                    _commitReaction?.Invoke(this, CellBlockViewActions.Dispose);
+                    _commitReaction.Invoke(this, CellBlockViewActions.Dispose);
                     ParentCell?.Clear();
                     break;
                 case CellObjectBaseAction.ApplyGravity:
@@ -63,7 +63,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
                         throw new ArgumentException("Performance params doesn't contains coords");
                     return MoveTo(performanceParam.Vector3IntParam.Value);
                 default:
-                    _commitReaction?.Invoke(this, CellBlockViewActions.Error);
+                    _commitReaction.Invoke(this, CellBlockViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);
             }
             return true;
@@ -76,7 +76,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             
             var viewActionPerformanceParams =
                 new ActPerformanceParam<CellBlockViewAction>(CellBlockViewAction.MoveToCoords, vector3IntParam: coords);
-            _commitReaction?.Invoke(this, viewActionPerformanceParams);
+            _commitReaction.Invoke(this, viewActionPerformanceParams);
             return true;
         }
         

@@ -1,7 +1,6 @@
 ﻿using System;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Agent;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Block;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations.ComplexCellObject;
 using Game.Scripts.General.FlexibleDataApi;
 using Game.Scripts.General.StaticUtils;
@@ -29,7 +28,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             switch (cellAgentAction)
             {
                 default:
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Error);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(cellAgentAction), cellAgentAction, null);
             }
         }
@@ -39,13 +38,13 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             switch (baseActionType)
             {
                 case CellObjectBaseAction.Select:
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Select);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Select);
                     break;
                 case CellObjectBaseAction.Unselect:
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Unselect);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Unselect);
                     break;
                 case CellObjectBaseAction.Dispose:
-                    _commitReaction?.Invoke(this, CellAgentViewActions.Dispose);
+                    _commitReaction.Invoke(this, CellAgentViewActions.Dispose);
                     ParentCell?.Clear();
                     break;
                 case CellObjectBaseAction.ApplyGravity:
@@ -54,7 +53,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
                     if (!ParentCellGrid.TryMoveCellObjectTo(newCoords, Id)) return false;
                     var gravityActionParam = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.MoveToCoords,
                         vector3IntParam: newCoords);
-                    _commitReaction?.Invoke(this, gravityActionParam);
+                    _commitReaction.Invoke(this, gravityActionParam);
                     break;
                 case CellObjectBaseAction.MoveUp:
                     return MoveOnDirection(baseActionType);
@@ -85,7 +84,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
             
             var viewActionPerformanceParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.MoveToCoords,
                 vector3IntParam: coords);
-            _commitReaction?.Invoke(this, viewActionPerformanceParams);
+            _commitReaction.Invoke(this, viewActionPerformanceParams);
             return true;
         }
         

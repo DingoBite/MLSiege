@@ -1,4 +1,5 @@
-﻿using Game.Scripts.General.Repos;
+﻿using System;
+using Game.Scripts.General.Repos;
 using Game.Scripts.Time.Interfaces;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace Game.Scripts.Time
         public bool Contains(int id) => _updatableRepository.Contains(id);
         public bool Contains(IUpdatable updatable) => _updatableRepository.Contains(updatable);
         public int AddUpdatable(IUpdatable updatable) => _updatableRepository.Add(updatable);
+        public int AddUpdatable(Action updatable) => _updatableRepository.Add(new LambdaUpdatable(updatable));
+
         public void RemoveUpdatable(int id) => _updatableRepository.Remove(id);
         public void RemoveUpdatable(IUpdatable updatable) => _updatableRepository.Remove(updatable);
 

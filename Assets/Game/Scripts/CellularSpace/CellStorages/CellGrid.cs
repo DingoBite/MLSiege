@@ -7,7 +7,6 @@ using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
 using Game.Scripts.General.Repos;
 using Game.Scripts.View.CellObjects.Serialization;
-using Game.Scripts.View.CellObjects.Serialization.Interfaces;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages
@@ -116,14 +115,14 @@ namespace Game.Scripts.CellularSpace.CellStorages
         public AbstractCellObject GetCellObject(int id) => _cellObjectsRepo.Get(id);
         private AbstractChildCellObject GetChildCellObject(int id) => _cellObjectsRepo.Get(id);
 
-        public ICell GetCell(Vector3Int coords) => _cells[coords.x][coords.y][coords.z];
+        private ICell GetCell(Vector3Int coords) => _cells[coords.x][coords.y][coords.z];
         private ICellMutable GetMutableCell(Vector3Int coords) => _cells[coords.x][coords.y][coords.z];
 
         public bool TrySetCellObjectTo(Vector3Int coords, int cellObjectId)
         {
+            if (!IsAchievableCell(coords)) return false;
             coords = CoordsToIndex(coords);
             if (!_cellObjectsRepo.Contains(cellObjectId)) return false;
-            if (!IsAchievableCell(coords)) return false;
 
             var cellObject = _cellObjectsRepo.Get(cellObjectId);
             _cells[coords.x][coords.y][coords.z].SetCellObject(cellObject);
@@ -169,23 +168,23 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         private bool IsAchievableCell(Vector3Int coords)
         {
-            return !(coords.x < _minFormingPoint.x &&
-                     coords.x > _maxFormingPoint.x &&
-                     coords.y < _minFormingPoint.y &&
-                     coords.z < _minFormingPoint.z &&
+            return !(coords.x < _minFormingPoint.x ||
+                     coords.x > _maxFormingPoint.x ||
+                     coords.y < _minFormingPoint.y ||
+                     coords.z < _minFormingPoint.z ||
                      coords.z > _maxFormingPoint.z);
         }
 
         private void AllocateCellArrays()
         {
             _cells = new List<List<List<ICellMutable>>>();
-            for (var i = 0; i < _sizeVector.x; i++)
+            for (var i = 0; i <= _sizeVector.x; i++)
             {
                 _cells.Add(new List<List<ICellMutable>>());
-                for (var j = 0; j < _sizeVector.y; j++)
+                for (var j = 0; j <= _sizeVector.y; j++)
                 {
                     _cells[i].Add(new List<ICellMutable>());
-                    for (var k = 0; k < _sizeVector.z; k++)
+                    for (var k = 0; k <= _sizeVector.z; k++)
                     {
                         AllocateCell(i, j, k);
                     }
@@ -204,10 +203,10 @@ namespace Game.Scripts.CellularSpace.CellStorages
         {
             foreach (var monoCellObject in monoCellObjects)
             {
-                var coords = CoordsToIndex(monoCellObject.Key);
-                if (!IsAchievableCell(coords))
+                if (!IsAchievableCell(monoCellObject.Key))
                     throw new ArgumentOutOfRangeException(
                         $"Coords = {monoCellObject.Key} are not achievable in space");
+                var coords = CoordsToIndex(monoCellObject.Key);
                 AllocateSoloCellObject(coords, monoCellObject.Value, gameGrid);
             }
         }
@@ -247,18 +246,19 @@ namespace Game.Scripts.CellularSpace.CellStorages
         {
             if (y < _sizeVector.y) return;
 
-            for (var i = 0; i < _sizeVector.x; i++)
+            for (var i = 0; i <= _sizeVector.x; i++)
             {
-                for (var j = _sizeVector.y; j <= y; j++)
+                for (var j = _sizeVector.y + 1; j <= y; j++)
                 {
                     _cells[i].Add(new List<ICellMutable>());
-                    for (var k = 0; k < _sizeVector.z; k++)
+                    for (var k = 0; k <= _sizeVector.z; k++)
                     {
-                        var coords = new Vector3Int(i, j, k) + _minFormingPoint;
+                        var coords = IndexToCoords(new Vector3Int(i, j, k));
                         _cells[i][j].Add(new Cell(this, coords, id => _cellObjectsRepo.Remove(id)));
                     }
                 }
             }
+            _sizeVector.y = y;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Game.Scripts.ModulesStartPoints;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Game.Scripts
 {
@@ -9,15 +10,11 @@ namespace Game.Scripts
         [SerializeField] private InputHandlersStartPoint _inputHandlersStartPoint;
         [SerializeField] private UIStartPoint _uiStartPoint;
 
-        private HandlersLoader _handlersLoader;
-        
         private void Start()
         {
             _gridLogicStartPoint.Init();
-            _inputHandlersStartPoint.Init();
             _uiStartPoint.Init();
-            _handlersLoader = new HandlersLoader(_gridLogicStartPoint);
-            _handlersLoader.LoadDependencies(_inputHandlersStartPoint);
+            _inputHandlersStartPoint.Init(_gridLogicStartPoint);
         }
     }
 }
