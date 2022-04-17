@@ -1,7 +1,7 @@
 ﻿using System;
+using Game.Scripts.CellularSpace.CellStorages.CellObjects.ComplexCellObject;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Agent;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations.ComplexCellObject;
 using Game.Scripts.General.FlexibleDataApi;
 using Game.Scripts.General.StaticUtils;
 using UnityEngine;

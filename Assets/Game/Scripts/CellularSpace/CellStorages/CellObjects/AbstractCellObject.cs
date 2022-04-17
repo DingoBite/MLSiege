@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
 {
-    public abstract class AbstractCellObject : IActableReturnsBool<PerformanceParam>
+    public abstract class AbstractCellObject : IActableReturnsBool<PerformanceParam>, IIdentifiable
     {
         protected readonly Action<object, PerformanceParam> _commitReaction;
         private ICharacteristics _characteristics;

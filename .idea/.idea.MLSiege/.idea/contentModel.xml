@@ -8,23 +8,6 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Game" t="Include">
-          <e p="Controls" t="Include">
-            <e p="GameControls.cs" t="Include" />
-            <e p="InputControllers" t="Include">
-              <e p="Interfaces" t="Include">
-                <e p="IRepeatableInputAction.cs" t="Include" />
-              </e>
-              <e p="KeyHandler" t="Include">
-                <e p="KeyInputHandler.cs" t="Include" />
-              </e>
-              <e p="MousePicker" t="Include">
-                <e p="ActableMousePicker.cs" t="Include" />
-                <e p="CellObjectMousePicker.cs" t="Include" />
-              </e>
-              <e p="RepeatableInputHandler.cs" t="Include" />
-              <e p="WASDSSHandler.cs" t="Include" />
-            </e>
-          </e>
           <e p="Scripts" t="Include">
             <e p="CellularSpace" t="Include">
               <e p="CellStorages" t="Include">
@@ -85,6 +68,22 @@
               </e>
               <e p="IGridFacade.cs" t="Include" />
             </e>
+            <e p="Controls" t="Include">
+              <e p="GameControls.cs" t="Include" />
+              <e p="InputControllers" t="Include">
+                <e p="AbstractHoldingInputRepeatable.cs" t="Include" />
+                <e p="FloatBoolHoldingInputRepeatable.cs" t="Include" />
+                <e p="FloatTimeHoldingInputRepeatable.cs" t="Include" />
+                <e p="Interfaces" t="Include">
+                  <e p="IRepeatableInputAction.cs" t="Include" />
+                </e>
+                <e p="MousePicker" t="Include">
+                  <e p="AbstractActableMousePicker.cs" t="Include" />
+                  <e p="CellObjectMousePicker.cs" t="Include" />
+                </e>
+                <e p="VectorTimeHoldingInputRepeatable.cs" t="Include" />
+              </e>
+            </e>
             <e p="DIContainers" t="Include">
               <e p="GridFacadeInstaller.cs" t="Include" />
               <e p="GridServicesInstaller.cs" t="Include" />
@@ -107,6 +106,7 @@
               <e p="Interfaces" t="Include">
                 <e p="IActable.cs" t="Include" />
                 <e p="IFunctionable.cs" t="Include" />
+                <e p="IIdentifiable.cs" t="Include" />
                 <e p="IIdRepository.cs" t="Include" />
                 <e p="IModifier.cs" t="Include" />
                 <e p="IPrefabsByKey.cs" t="Include" />
@@ -124,7 +124,6 @@
                 <e p="VectorIntDirection.cs" t="Include" />
               </e>
             </e>
-            <e p="HandlersLoader.cs" t="Include" />
             <e p="ModulesStartPoints" t="Include">
               <e p="GridLogicStartPoint.cs" t="Include" />
               <e p="InputHandlersStartPoint.cs" t="Include" />

@@ -1,0 +1,198 @@
+{
+    "name": "GameControls",
+    "maps": [
+        {
+            "name": "World",
+            "id": "72dea70b-30ac-4137-8417-0341895ec824",
+            "actions": [
+                {
+                    "name": "GlobalAction",
+                    "type": "Button",
+                    "id": "d1e403d1-bff6-43d0-8727-cf1a68361906",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ec8911fc-5d06-4f9c-a5ec-dd4d6070968a",
+                    "path": "<Keyboard>/#(G)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GlobalAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Agent",
+            "id": "5aeab9f8-af92-4567-a89c-f0dca68ba7fb",
+            "actions": [],
+            "bindings": []
+        },
+        {
+            "name": "CellObject",
+            "id": "41ac191e-0d3f-4fe5-8d46-715dec3f6d5d",
+            "actions": [
+                {
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "c4b89487-4666-4a6d-a98f-a4ad312a21b5",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "WASD Keys",
+                    "id": "4c73b13c-d9a0-45c9-a2f9-47d1c158626e",
+                    "path": "2DVector(mode=1)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "c516f3dd-656d-4c25-a80e-18036214c341",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "a48852e5-3d15-4b1c-b256-c7aff98eee33",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "4115e6ca-3332-47d0-9d6a-4007a89c9c29",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "f2c99462-e57f-40f1-95a3-ef975ac7665a",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Arrows Keys",
+                    "id": "a63847ee-b436-4256-a4e5-f53d8b432417",
+                    "path": "2DVector(mode=1)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "54eee88f-eb1f-46de-8ec3-66a289475ca1",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "22ba91b7-e4b5-4e2a-8f1a-7a3054be2ced",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "e4fbe16d-3174-4ca2-aade-a22b26bd4aa6",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "bd085e38-012e-4b33-b5c3-6b6e8fdd94cd",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Block",
+            "id": "410bbb41-2919-43cb-9474-69c301140ba2",
+            "actions": [],
+            "bindings": []
+        },
+        {
+            "name": "ObjectPicker",
+            "id": "83f7867b-6c6f-48a2-89da-355f71da0f7c",
+            "actions": [
+                {
+                    "name": "SelectObject",
+                    "type": "Button",
+                    "id": "b37c15b9-7170-42c3-ac83-e229e4081eee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fb6817c8-8da7-46e3-85a6-f4b34ca3a6d0",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectObject",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

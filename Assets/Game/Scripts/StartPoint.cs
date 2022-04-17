@@ -1,6 +1,6 @@
-﻿using Game.Scripts.ModulesStartPoints;
+﻿using Game.Scripts.Controls;
+using Game.Scripts.ModulesStartPoints;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Game.Scripts
 {
@@ -9,6 +9,7 @@ namespace Game.Scripts
         [SerializeField] private GridLogicStartPoint _gridLogicStartPoint;
         [SerializeField] private InputHandlersStartPoint _inputHandlersStartPoint;
         [SerializeField] private UIStartPoint _uiStartPoint;
+        private GameControls _gameControls;
 
         private void Start()
         {

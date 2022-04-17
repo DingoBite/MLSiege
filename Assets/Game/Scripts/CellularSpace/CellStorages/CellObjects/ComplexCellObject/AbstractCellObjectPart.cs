@@ -2,7 +2,7 @@
 using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations.ComplexCellObject
+namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.ComplexCellObject
 {
     public abstract class AbstractCellObjectPart : AbstractChildCellObject
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Scripts.View.CellObjects
 {
-    public abstract class AbstractMonoCellObject: MonoBehaviour, IActable<PerformanceParam>
+    public abstract class AbstractMonoCellObject: MonoBehaviour, IActable<PerformanceParam>, IIdentifiable
     {
         public int Id { get; private set; }
         protected Func<Vector3Int, Vector3> _coordsToPositionConvert;

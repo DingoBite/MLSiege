@@ -1,10 +1,11 @@
 ﻿using System;
+using Game.Scripts.Controls;
+using Game.Scripts.Controls.InputControllers;
+using Game.Scripts.Controls.InputControllers.MousePicker;
+using Game.Scripts.General.Enums;
+using Game.Scripts.General.FlexibleDataApi;
 using Game.Scripts.Time;
-using Game.Scripts.View.InputControllers;
-using Game.Scripts.View.InputControllers.KeyHandler;
-using Game.Scripts.View.InputControllers.MousePicker;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Game.Scripts.ModulesStartPoints
@@ -14,88 +15,96 @@ namespace Game.Scripts.ModulesStartPoints
         [SerializeField] private Camera _camera;
 
         [Inject] private UpdateTicker _updateTicker;
-        
-        private readonly CellObjectMousePicker _mousePicker = new CellObjectMousePicker();
-        private int _mousePickerId;
-        
-        private readonly KeyInputHandler _deleteInputHandler = new KeyInputHandler(KeyCode.Delete);
-        private int _deleteHandlerId;
-        
-        private readonly KeyInputHandler _gKeyInputHandler = new KeyInputHandler(KeyCode.G);
-        private int _gKeyInputHandlerId;
-        
-        public readonly  WASDSSHandler _wasdssHandler = new WASDSSHandler();
-        private int _wasdssHandlerId;
-        
-        private GameControls _gameControls;
-        private int _gravityUpdatableId;
 
-        public event Action<int> CellObjectMousePickEvent
-        {
-            add => _mousePicker.CommitFuncEvent += value;
-            remove => _mousePicker.CommitFuncEvent -= value;
-        }
+        private bool _isInit;
+        private GameControls _gameControls;
+
         
-        public event Action DeleteDownEvent
-        {
-            add => _deleteInputHandler.OnGetKeyDownEvent += value;
-            remove => _deleteInputHandler.OnGetKeyDownEvent -= value;
-        }
         
-        public event Action GKeyDownEvent
-        {
-            add => _gKeyInputHandler.OnGetKeyDownEvent += value;
-            remove => _gKeyInputHandler.OnGetKeyDownEvent -= value;
-        }
+        private FloatTimeHoldingInputRepeatable _globalActionRepeatable;
+        private int _globalActionRepeatableId = -1;
+
+        private VectorTimeHoldingInputRepeatable _movementInputRepeatable;
+        private int _movementInputRepeatableId = -1;
         
         public void Init(GridLogicStartPoint gridLogicStartPoint)
         {
+            if (_isInit)
+                throw new Exception($"Try to reinit {typeof(InputHandlersStartPoint)}");
+            
+            if (_camera == null) 
+                _camera = Camera.main;
             _gameControls = new GameControls();
-            var kek = new RepeatableInputHandler();
-            kek.Init(() => _gameControls.Agent.Gravity, () => Debug.Log(1), 0.3);
-            _gravityUpdatableId = _updateTicker.AddUpdatable(kek);
-            _gameControls.Agent.Enable();
-            // _mousePicker.Init(_camera);
-            // _mousePickerId = _updateTicker.AddUpdatable(_mousePicker);
-            // _deleteHandlerId = _updateTicker.AddUpdatable(_deleteInputHandler);
-            // _gKeyInputHandlerId = _updateTicker.AddUpdatable(_gKeyInputHandler);
-            // _wasdssHandlerId = _updateTicker.AddUpdatable(_wasdssHandler);
+
+            _globalActionRepeatable = new FloatTimeHoldingInputRepeatable(
+                () => _gameControls.World.GlobalAction.ReadValue<float>() >= float.Epsilon,
+                gridLogicStartPoint.GridFacade.ApplyGlobalAction,
+                0.2
+                );
+            
+            _movementInputRepeatable = new VectorTimeHoldingInputRepeatable(
+                () => _gameControls.CellObject.Movement.ReadValue<Vector2>(),
+                direction => MoveBlockAction(gridLogicStartPoint, direction),
+                0.2
+                );
+
+            var mousePicker = new CellObjectMousePicker(gridLogicStartPoint.GridFacade.CommitSelectAction);
+            _gameControls.ObjectPicker.SelectObject.started += c => mousePicker.Pick(_camera);
+            
+            _isInit = true;
+            Subscribe();
         }
 
+        private void MoveBlockAction(GridLogicStartPoint gridLogicStartPoint, Direction direction)
+        {
+            if (direction == Direction.Stop) return;
+            gridLogicStartPoint.GridFacade.CommitActionToSelected(PerformanceParamFromDirection(direction));
+        }
+
+        private PerformanceParam PerformanceParamFromDirection(Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Up => CellObjectBaseActions.MoveForward,
+                Direction.Left => CellObjectBaseActions.MoveLeft,
+                Direction.Down => CellObjectBaseActions.MoveBack,
+                Direction.Right => CellObjectBaseActions.MoveRight,
+                Direction.Stop => null,
+                _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
+            };
+        }
+        
         private void Subscribe()
         {
-            if (!_updateTicker.Contains(_mousePickerId)) 
-                _updateTicker.AddUpdatable(_mousePicker);
+            if (!_updateTicker.Contains(_globalActionRepeatableId)) 
+                _updateTicker.AddUpdatable(_globalActionRepeatable);
             
-            if (!_updateTicker.Contains(_deleteHandlerId)) 
-                _updateTicker.AddUpdatable(_deleteInputHandler);
-            
-            if (!_updateTicker.Contains(_gKeyInputHandlerId)) 
-                _updateTicker.AddUpdatable(_gKeyInputHandler);
-            
-            if (!_updateTicker.Contains(_wasdssHandlerId)) 
-                _updateTicker.AddUpdatable(_wasdssHandler);
+            if (!_updateTicker.Contains(_movementInputRepeatableId)) 
+                _updateTicker.AddUpdatable(_movementInputRepeatable);
+
+            _gameControls?.Enable();
         }
 
         private void Unsubscribe()
         {
-            _updateTicker.RemoveUpdatable(_mousePickerId);
-            _updateTicker.RemoveUpdatable(_deleteHandlerId);
-            _updateTicker.RemoveUpdatable(_gKeyInputHandlerId);
-            _updateTicker.RemoveUpdatable(_wasdssHandlerId);
+            _updateTicker.RemoveUpdatable(_globalActionRepeatableId);
+            _updateTicker.RemoveUpdatable(_movementInputRepeatableId);
+            
+            _gameControls?.Disable();
         }
+
         private void OnEnable()
         {
-            _gameControls?.Agent.Enable();
-            if (_updateTicker == null) return;
-            //Subscribe();
+            if (!_isInit) return;
+            if (_updateTicker == null) throw new NullReferenceException();
+            Subscribe();
         }
 
         private void OnDisable()
         {
-            _gameControls?.Agent.Disable();
+            if (!_isInit) return;
             if (_updateTicker == null) return;
-            //Unsubscribe();
+            Unsubscribe();
         }
     }
 }

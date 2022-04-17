@@ -13,10 +13,10 @@ namespace Game.Scripts.General.StaticUtils
         {
             Directions = new Dictionary<Direction, Vector3Int>
             {
-                {Direction.North, Vector3Int.forward},
-                {Direction.West, Vector3Int.left},
-                {Direction.South, Vector3Int.back},
-                {Direction.East, Vector3Int.right},
+                {Direction.Up, Vector3Int.forward},
+                {Direction.Left, Vector3Int.left},
+                {Direction.Down, Vector3Int.back},
+                {Direction.Right, Vector3Int.right},
                 {Direction.Stop, Vector3Int.zero}
             };
         }
