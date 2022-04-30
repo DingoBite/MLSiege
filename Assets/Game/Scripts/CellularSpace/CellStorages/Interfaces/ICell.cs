@@ -1,9 +1,10 @@
-﻿using Game.Scripts.CellularSpace.CellStorages.CellObjects;
+﻿using Game.Scripts.CellularSpace.CellObjects;
+using Game.Scripts.General.Interfaces;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages.Interfaces
 {
-    public interface ICell
+    public interface ICell : ICoordsLocated
     {
         bool IsEmpty { get; }
         Vector3Int Coords { get; }

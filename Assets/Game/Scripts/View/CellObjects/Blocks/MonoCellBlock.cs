@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Block;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
@@ -33,26 +33,35 @@ namespace Game.Scripts.View.CellObjects.Blocks
                     var materialsWithSelect = _meshMaterials.ToList();
                     materialsWithSelect.Add(_selectedMaterial);
                     _mesh.materials = materialsWithSelect.ToArray();
-                    return;
+                    break;
                 case CellBlockViewAction.Unselect:
                     _mesh.materials = _meshMaterials;
-                    return;
+                    break;
                 case CellBlockViewAction.Dispose:
                     Destroy(gameObject);
-                    return;
+                    break;
                 case CellBlockViewAction.Error:
                     _mesh.material.color = Color.red;
-                    return;
+                    break;
+                case CellBlockViewAction.StepMove:
+                    MoveTo(performanceParam.Vector3IntParam);
+                    break;
                 case CellBlockViewAction.MoveToCoords:
-                    if (!performanceParam.IsHaveVector3IntParam())
-                        throw new ArgumentException("Performance params doesn't contains new coords");
-                    var newCoords = performanceParam.Vector3IntParam;
-                    var newPosition = _coordsToPositionConvert(newCoords.Value);
-                    transform.position = newPosition;
-                    return;
+                    MoveTo(performanceParam.Vector3IntParam);
+                    break;
+                case CellBlockViewAction.ApplyGravity:
+                    MoveTo(performanceParam.Vector3IntParam);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellBlockViewAction), cellBlockViewAction, null);
             }
+        }
+        
+        private void MoveTo(Vector3Int? coords)
+        {
+            if (coords == null)
+                throw new ArgumentException("Performance params doesn't contains new coords");
+            transform.position = _coordsToPositionConvert(coords.Value);
         }
     }
 }

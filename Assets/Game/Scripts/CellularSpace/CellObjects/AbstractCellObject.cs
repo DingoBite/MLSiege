@@ -1,12 +1,12 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.General.FlexibleDataApi;
 using Game.Scripts.General.Interfaces;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects
+namespace Game.Scripts.CellularSpace.CellObjects
 {
     public abstract class AbstractCellObject : IActableReturnsBool<PerformanceParam>, IIdentifiable
     {

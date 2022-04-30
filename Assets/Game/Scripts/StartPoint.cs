@@ -15,7 +15,7 @@ namespace Game.Scripts
         {
             _gridLogicStartPoint.Init();
             _uiStartPoint.Init();
-            _inputHandlersStartPoint.Init(_gridLogicStartPoint);
+            _inputHandlersStartPoint.Init(_gridLogicStartPoint.GridFacade);
         }
     }
 }

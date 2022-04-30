@@ -1,7 +1,7 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Agent;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Block;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
+using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
 using UnityEngine;
 
 namespace Game.Scripts.General.FlexibleDataApi
@@ -32,17 +32,17 @@ namespace Game.Scripts.General.FlexibleDataApi
         public static readonly ActPerformanceParam<CellObjectBaseAction> Unselect = 
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.Unselect);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveUp = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveUp);
+            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.up);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveLeft = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveLeft);
+            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.left);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveRight = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveRight);
+            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.right);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveForward = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveForward);
+            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.forward);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveBack = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveBack);
+            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.back);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveDown = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.MoveDown);
+            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.down);
         public static readonly ActPerformanceParam<CellObjectBaseAction> Dispose = 
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.Dispose);
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects;
+using Game.Scripts.CellularSpace.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
@@ -89,10 +89,12 @@ namespace Game.Scripts.CellularSpace.CellStorages
             cell = cellMutable;
             return true;
         }
-        
+
+        public bool IsEmpty(Vector3Int coords) => GetCell(CoordsToIndex(coords)).IsEmpty;
+
         private bool TryGetCellMutable(Vector3Int coords, out ICellMutable cell)
         {
-            if (!IsAchievableCell(coords))
+            if (!IsInGrid(coords))
             {
                 Debug.LogError($"Coords = {coords} are not achievable");
                 cell = null;
@@ -115,12 +117,12 @@ namespace Game.Scripts.CellularSpace.CellStorages
         public AbstractCellObject GetCellObject(int id) => _cellObjectsRepo.Get(id);
         private AbstractChildCellObject GetChildCellObject(int id) => _cellObjectsRepo.Get(id);
 
-        private ICell GetCell(Vector3Int coords) => _cells[coords.x][coords.y][coords.z];
+        private ICell GetCell(Vector3Int index) => _cells[index.x][index.y][index.z];
         private ICellMutable GetMutableCell(Vector3Int coords) => _cells[coords.x][coords.y][coords.z];
 
         public bool TrySetCellObjectTo(Vector3Int coords, int cellObjectId)
         {
-            if (!IsAchievableCell(coords)) return false;
+            if (!IsInGrid(coords)) return false;
             coords = CoordsToIndex(coords);
             if (!_cellObjectsRepo.Contains(cellObjectId)) return false;
 
@@ -166,7 +168,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
         private Vector3Int CoordsToIndex(Vector3Int coords) => coords - _minFormingPoint;
         private Vector3Int IndexToCoords(Vector3Int coords) => coords + _minFormingPoint;
 
-        private bool IsAchievableCell(Vector3Int coords)
+        public bool IsInGrid(Vector3Int coords)
         {
             return !(coords.x < _minFormingPoint.x ||
                      coords.x > _maxFormingPoint.x ||
@@ -203,7 +205,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
         {
             foreach (var monoCellObject in monoCellObjects)
             {
-                if (!IsAchievableCell(monoCellObject.Key))
+                if (!IsInGrid(monoCellObject.Key))
                     throw new ArgumentOutOfRangeException(
                         $"Coords = {monoCellObject.Key} are not achievable in space");
                 var coords = CoordsToIndex(monoCellObject.Key);

@@ -1,5 +1,5 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.General.FlexibleDataApi;
 using Game.Scripts.General.Interfaces;
 using UnityEngine;

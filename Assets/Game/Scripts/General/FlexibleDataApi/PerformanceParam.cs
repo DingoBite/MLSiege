@@ -23,10 +23,5 @@ namespace Game.Scripts.General.FlexibleDataApi
             Vector3IntParam = vector3IntParam;
             FlexibleData = flexibleData;
         }
-
-        public bool IsHaveIntParam() => IntParam != null;
-        public bool IsHaveFlag() => Flag != null;
-        public bool IsHaveVector3IntParam() => Vector3IntParam != null;
-        public bool IsHaveFlexibleData() => FlexibleData != null;
     }
 }

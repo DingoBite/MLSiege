@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums
+﻿namespace Game.Scripts.CellularSpace.CellObjects.Enums
 {
     public enum CellObjectType
     {

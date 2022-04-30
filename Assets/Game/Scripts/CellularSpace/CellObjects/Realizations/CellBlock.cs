@@ -1,11 +1,10 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Block;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
 using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.General.StaticUtils;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
+namespace Game.Scripts.CellularSpace.CellObjects.Realizations
 {
     public class CellBlock : AbstractChildCellObject
     {
@@ -46,51 +45,40 @@ namespace Game.Scripts.CellularSpace.CellStorages.CellObjects.Realizations
                     break;
                 case CellObjectBaseAction.ApplyGravity:
                     return ApplyGravity();
-                case CellObjectBaseAction.MoveUp:
-                    return MoveOnDirection(baseActionType);
-                case CellObjectBaseAction.MoveLeft:
-                    return MoveOnDirection(baseActionType);
-                case CellObjectBaseAction.MoveRight:
-                    return MoveOnDirection(baseActionType);
-                case CellObjectBaseAction.MoveForward:
-                    return MoveOnDirection(baseActionType);
-                case CellObjectBaseAction.MoveBack:
-                    return MoveOnDirection(baseActionType);
-                case CellObjectBaseAction.MoveDown:
-                    return MoveOnDirection(baseActionType);
+                case CellObjectBaseAction.StepMove:
+                    return StepMove(performanceParam.Vector3IntParam);
                 case CellObjectBaseAction.MoveToCoords:
-                    if (!performanceParam.IsHaveVector3IntParam())
-                        throw new ArgumentException("Performance params doesn't contains coords");
-                    return MoveTo(performanceParam.Vector3IntParam.Value);
+                    return MoveTo(performanceParam.Vector3IntParam);
                 default:
                     _commitReaction.Invoke(this, CellBlockViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(baseActionType), baseActionType, null);
             }
             return true;
         }
-
-        private bool MoveTo(Vector3Int coords)
+        
+        private bool MoveTo(Vector3Int? coords, CellBlockViewAction viewAction = CellBlockViewAction.MoveToCoords)
         {
-            if (coords == Coords) return false;
-            if (!ParentCellGrid.TryMoveCellObjectTo(coords, Id)) return false;
+            if (coords == null)
+                throw new ArgumentException("Performance params doesn't contains coords");
             
-            var viewActionPerformanceParams =
-                new ActPerformanceParam<CellBlockViewAction>(CellBlockViewAction.MoveToCoords, vector3IntParam: coords);
+            if (!ParentCellGrid.TryMoveCellObjectTo(coords.Value, Id)) return false;
+            
+            var viewActionPerformanceParams = new ActPerformanceParam<CellBlockViewAction>(viewAction,
+                vector3IntParam: coords.Value);
             _commitReaction.Invoke(this, viewActionPerformanceParams);
             return true;
         }
-        
-        private bool MoveOnDirection(CellObjectBaseAction direction)
+
+        private bool StepMove(Vector3Int? direction)
         {
-            var targetCoordsNullable = Coords + VectorIntDirection.VectorFromDirection(direction);
-            if (!targetCoordsNullable.HasValue) return false;
-            return MoveTo(targetCoordsNullable.Value);
+            var targetCoords = Coords + direction;
+            return MoveTo(targetCoords, CellBlockViewAction.StepMove);
         }
         
         private bool ApplyGravity()
         {
             var targetCoords = Coords + Vector3Int.down;
-            return MoveTo(targetCoords);
+            return MoveTo(targetCoords, CellBlockViewAction.ApplyGravity);
         }
     }
 }

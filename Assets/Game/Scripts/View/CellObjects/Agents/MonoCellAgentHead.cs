@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellStorages.CellObjects.Enums.Agent;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
@@ -33,26 +33,38 @@ namespace Game.Scripts.View.CellObjects.Agents
                     var materialsWithSelect = _meshMaterials.ToList();
                     materialsWithSelect.Add(_selectedMaterial);
                     _mesh.materials = materialsWithSelect.ToArray();
-                    return;
+                    break;
                 case CellAgentViewAction.Unselect:
                     _mesh.materials = _meshMaterials;
-                    return;
+                    break;
                 case CellAgentViewAction.Dispose:
                     Destroy(gameObject);
-                    return;
+                    break;
                 case CellAgentViewAction.Error:
                     _mesh.material.color = Color.red;
-                    return;
+                    break;
                 case CellAgentViewAction.MoveToCoords:
-                    if (!performanceParam.IsHaveVector3IntParam())
-                        throw new ArgumentException("Performance params doesn't contains new coords");
-                    var newCoords = performanceParam.Vector3IntParam;
-                    var newPosition = _coordsToPositionConvert(newCoords.Value);
-                    transform.position = newPosition;
-                    return;
+                    MoveTo(performanceParam.Vector3IntParam);
+                    break;
+                case CellAgentViewAction.StepMove:
+                    MoveTo(performanceParam.Vector3IntParam);
+                    break;
+                case CellAgentViewAction.JumpMove:
+                    MoveTo(performanceParam.Vector3IntParam);
+                    break;
+                case CellAgentViewAction.ApplyGravity:
+                    MoveTo(performanceParam.Vector3IntParam);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellAgentViewAction), cellAgentViewAction, null);
             }
+        }
+
+        private void MoveTo(Vector3Int? coords)
+        {
+            if (coords == null)
+                throw new ArgumentException("Performance params doesn't contains new coords");
+            transform.position = _coordsToPositionConvert(coords.Value);
         }
     }
 }

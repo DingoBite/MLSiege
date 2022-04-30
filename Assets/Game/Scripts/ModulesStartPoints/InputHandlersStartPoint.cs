@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Scripts.CellularSpace;
 using Game.Scripts.Controls;
 using Game.Scripts.Controls.InputControllers;
 using Game.Scripts.Controls.InputControllers.MousePicker;
@@ -27,7 +28,7 @@ namespace Game.Scripts.ModulesStartPoints
         private VectorTimeHoldingInputRepeatable _movementInputRepeatable;
         private int _movementInputRepeatableId = -1;
         
-        public void Init(GridLogicStartPoint gridLogicStartPoint)
+        public void Init(IGridFacade gridFacade)
         {
             if (_isInit)
                 throw new Exception($"Try to reinit {typeof(InputHandlersStartPoint)}");
@@ -38,27 +39,27 @@ namespace Game.Scripts.ModulesStartPoints
 
             _globalActionRepeatable = new FloatTimeHoldingInputRepeatable(
                 () => _gameControls.World.GlobalAction.ReadValue<float>() >= float.Epsilon,
-                gridLogicStartPoint.GridFacade.ApplyGlobalAction,
+                gridFacade.ApplyGlobalAction,
                 0.2
                 );
             
             _movementInputRepeatable = new VectorTimeHoldingInputRepeatable(
                 () => _gameControls.CellObject.Movement.ReadValue<Vector2>(),
-                direction => MoveBlockAction(gridLogicStartPoint, direction),
+                direction => MoveBlockAction(gridFacade, direction),
                 0.2
                 );
 
-            var mousePicker = new CellObjectMousePicker(gridLogicStartPoint.GridFacade.CommitSelectAction);
+            var mousePicker = new CellObjectMousePicker(gridFacade.CommitSelectAction);
             _gameControls.ObjectPicker.SelectObject.started += c => mousePicker.Pick(_camera);
             
             _isInit = true;
             Subscribe();
         }
 
-        private void MoveBlockAction(GridLogicStartPoint gridLogicStartPoint, Direction direction)
+        private void MoveBlockAction(IGridFacade gridFacade, Direction direction)
         {
             if (direction == Direction.Stop) return;
-            gridLogicStartPoint.GridFacade.CommitActionToSelected(PerformanceParamFromDirection(direction));
+            gridFacade.CommitActionToSelected(PerformanceParamFromDirection(direction));
         }
 
         private PerformanceParam PerformanceParamFromDirection(Direction direction)
@@ -77,10 +78,10 @@ namespace Game.Scripts.ModulesStartPoints
         private void Subscribe()
         {
             if (!_updateTicker.Contains(_globalActionRepeatableId)) 
-                _updateTicker.AddUpdatable(_globalActionRepeatable);
+                _globalActionRepeatableId = _updateTicker.AddUpdatable(_globalActionRepeatable);
             
             if (!_updateTicker.Contains(_movementInputRepeatableId)) 
-                _updateTicker.AddUpdatable(_movementInputRepeatable);
+                _movementInputRepeatableId = _updateTicker.AddUpdatable(_movementInputRepeatable);
 
             _gameControls?.Enable();
         }
