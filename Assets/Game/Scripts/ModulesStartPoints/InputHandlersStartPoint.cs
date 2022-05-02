@@ -1,6 +1,5 @@
 ﻿using System;
 using Game.Scripts.CellularSpace;
-using Game.Scripts.Controls;
 using Game.Scripts.Controls.InputControllers;
 using Game.Scripts.Controls.InputControllers.MousePicker;
 using Game.Scripts.General.Enums;
@@ -19,8 +18,6 @@ namespace Game.Scripts.ModulesStartPoints
 
         private bool _isInit;
         private GameControls _gameControls;
-
-        
         
         private FloatTimeHoldingInputRepeatable _globalActionRepeatable;
         private int _globalActionRepeatableId = -1;
@@ -49,8 +46,10 @@ namespace Game.Scripts.ModulesStartPoints
                 0.2
                 );
 
-            var mousePicker = new CellObjectMousePicker(gridFacade.CommitSelectAction);
-            _gameControls.ObjectPicker.SelectObject.started += c => mousePicker.Pick(_camera);
+            var leftMousePicker = new CellObjectMousePicker(gridFacade.CommitSelectAction);
+            _gameControls.ObjectPicker.SelectObject.started += c => leftMousePicker.Pick(_camera);
+            var rightMousePicker = new CellObjectMousePicker(gridFacade.CommitSelectedPathFind);
+            _gameControls.ObjectPicker.PathFind.started += c => rightMousePicker.Pick(_camera);
             
             _isInit = true;
             Subscribe();

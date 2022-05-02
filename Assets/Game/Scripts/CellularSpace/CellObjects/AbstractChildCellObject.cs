@@ -7,19 +7,23 @@ namespace Game.Scripts.CellularSpace.CellObjects
 {
     public abstract class AbstractChildCellObject : AbstractCellObject
     {
-        public ICellMutable ParentCell
+        public ICellMutable ParentCellMutable
         {
-            get => _parentCell;
-            set => _parentCell = value ?? throw new ArgumentNullException();
+            get => _parentCellMutable;
+            set => _parentCellMutable = value ?? throw new ArgumentNullException();
         }
-        private ICellMutable _parentCell;
-        
-        protected AbstractChildCellObject(int id, Action<object, PerformanceParam> commitReaction, bool isModifiable)
+        private ICellMutable _parentCellMutable;
+
+        protected AbstractChildCellObject(int id, 
+            Action<object, PerformanceParam> commitReaction, bool isModifiable) 
             : base(id, commitReaction, isModifiable)
         {
         }
+        
+        public override ICell ParentCell => ParentCellMutable;
 
-        public override Vector3Int Coords => ParentCell.Coords;
-        public override ICellGrid ParentCellGrid => ParentCell.CellGrid;
+        public override Vector3Int Coords => ParentCellMutable.Coords;
+
+        public override ICellGrid ParentCellGrid => ParentCellMutable.CellGrid;
     }
 }

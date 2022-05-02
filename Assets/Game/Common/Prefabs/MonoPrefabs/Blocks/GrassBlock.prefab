@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2991062421862094067}
   - component: {fileID: 4184540102804719041}
   - component: {fileID: 3652083601913278341}
-  - component: {fileID: 904680059855094914}
+  - component: {fileID: 2450991700294481754}
   m_Layer: 0
   m_Name: GrassBlock
   m_TagString: Untagged
@@ -96,7 +96,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &904680059855094914
+--- !u!114 &2450991700294481754
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2814407368956137870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05915db666164275ae38dfab48fa72e0, type: 3}
+  m_Script: {fileID: 11500000, guid: 13e435d1f4aa459daddc5dca1577f09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _monoCellObjectPrefab: {fileID: 2297454128435253035, guid: 4c15116d70bcbb94ca35e084a419bc2b, type: 3}
+  _isModifiable: 1

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
 using Game.Scripts.CellularSpace.CellObjects.ComplexCellObject;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
@@ -10,12 +12,16 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
 {
     public class CellAgentHead : AbstractCellObjectMainPart
     {
-        public CellAgentHead(int id, int legsId, 
+        public CellAgentHead(int id, int legsId, AgentCharacteristic characteristics,
             Action<object, PerformanceParam> commitReaction, bool isModifiable) 
             : base(id, new []{legsId}, commitReaction, isModifiable)
         {
+            _characteristic = characteristics;
         }
-
+        
+        private readonly AgentCharacteristic _characteristic;
+        public override ICharacteristics Characteristics => _characteristic;
+        
         protected override bool OnCommit(object sender, PerformanceParam performanceParam, List<AbstractCellObject> parts)
         {
             if (!(performanceParam.EnumActionType is CellAgentAction cellAgentAction))
@@ -54,7 +60,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
                 case CellObjectBaseAction.Dispose:
                     if (!parts[0].CommitAction(this, CellObjectBaseActions.Dispose)) return false;
                     _commitReaction.Invoke(this, CellAgentViewActions.Dispose);
-                    ParentCell?.Clear();
+                    ParentCellMutable?.Clear();
                     break;
                 case CellObjectBaseAction.ApplyGravity:
                     return ApplyGravity(parts);

@@ -1,4 +1,6 @@
 ﻿using System;
+using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
 using Game.Scripts.General.FlexibleDataApi;
@@ -8,10 +10,15 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
 {
     public class CellBlock : AbstractChildCellObject
     {
-        public CellBlock(int id, Action<object, PerformanceParam> commitReaction, bool isModifiable)
+        public CellBlock(int id, BlockCharacteristic characteristics,
+            Action<object, PerformanceParam> commitReaction, bool isModifiable)
             : base(id, commitReaction, isModifiable)
         {
+            _characteristic = characteristics;
         }
+
+        private readonly BlockCharacteristic _characteristic;
+        public override ICharacteristics Characteristics => _characteristic;
 
         public override bool CommitAction(object sender, PerformanceParam performanceParam)
         {
@@ -41,7 +48,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
                     break;
                 case CellObjectBaseAction.Dispose:
                     _commitReaction.Invoke(this, CellBlockViewActions.Dispose);
-                    ParentCell?.Clear();
+                    ParentCellMutable?.Clear();
                     break;
                 case CellObjectBaseAction.ApplyGravity:
                     return ApplyGravity();
@@ -55,7 +62,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
             }
             return true;
         }
-        
+
         private bool MoveTo(Vector3Int? coords, CellBlockViewAction viewAction = CellBlockViewAction.MoveToCoords)
         {
             if (coords == null)
@@ -74,7 +81,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
             var targetCoords = Coords + direction;
             return MoveTo(targetCoords, CellBlockViewAction.StepMove);
         }
-        
+
         private bool ApplyGravity()
         {
             var targetCoords = Coords + Vector3Int.down;

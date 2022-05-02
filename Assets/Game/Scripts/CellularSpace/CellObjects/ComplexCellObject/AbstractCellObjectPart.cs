@@ -6,10 +6,9 @@ namespace Game.Scripts.CellularSpace.CellObjects.ComplexCellObject
 {
     public abstract class AbstractCellObjectPart : AbstractChildCellObject
     {
-        private readonly int _mainPartId;
+        protected readonly int _mainPartId;
 
-        protected AbstractCellObjectPart(int id, int mainPartId,
-            Action<object, PerformanceParam> commitReaction,
+        protected AbstractCellObjectPart(int id, int mainPartId, Action<object, PerformanceParam> commitReaction,
             bool isModifiable) : base(id, commitReaction, isModifiable)
         {
             _mainPartId = mainPartId;
@@ -17,7 +16,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.ComplexCellObject
 
         public override bool CommitAction(object sender, PerformanceParam performanceParam)
         {
-            if (!ParentCell.CellGrid.TryGetCellObject(_mainPartId, out var mainPart))
+            if (!ParentCellMutable.CellGrid.TryGetCellObject(_mainPartId, out var mainPart))
                 return CommitBaseAction(sender, performanceParam, CellObjectBaseAction.Dispose);
 
             return sender != mainPart ? mainPart.CommitAction(this, performanceParam) 

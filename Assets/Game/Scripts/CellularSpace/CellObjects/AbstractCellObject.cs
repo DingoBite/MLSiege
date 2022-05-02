@@ -11,7 +11,6 @@ namespace Game.Scripts.CellularSpace.CellObjects
     public abstract class AbstractCellObject : IActableReturnsBool<PerformanceParam>, IIdentifiable
     {
         protected readonly Action<object, PerformanceParam> _commitReaction;
-        private ICharacteristics _characteristics;
 
         protected AbstractCellObject(int id, Action<object, PerformanceParam> commitReaction, bool isModifiable)
         {
@@ -19,11 +18,14 @@ namespace Game.Scripts.CellularSpace.CellObjects
             _commitReaction = commitReaction;
             IsModifiable = isModifiable;
         }
+
         public int Id { get; }
         public bool IsModifiable { get; }
+        public abstract ICharacteristics Characteristics { get; }
         public abstract Vector3Int Coords { get; }
+        public abstract ICell ParentCell { get; }
         public abstract ICellGrid ParentCellGrid { get; }
-        public CellObjectType CellObjectType => _characteristics.CellObjectType;
+        public CellObjectType CellObjectType => Characteristics.CellObjectType;
         public abstract bool CommitAction(object sender, PerformanceParam performanceParam);
     }
 }

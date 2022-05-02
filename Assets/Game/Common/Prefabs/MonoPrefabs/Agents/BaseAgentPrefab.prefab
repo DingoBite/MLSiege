@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7344659225461005626}
   - component: {fileID: 8538089077784136712}
   - component: {fileID: 9133816152071071308}
-  - component: {fileID: -7312504676722857969}
+  - component: {fileID: 3773273682316466575}
   m_Layer: 0
   m_Name: BaseAgentPrefab
   m_TagString: Untagged
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-7312504676722857969
+--- !u!114 &3773273682316466575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,13 +106,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7737698032025950279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dfbd0b3e92a4e5483773c3aee735e1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 62455677304d46d3b6220f7b6f93b413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _monoHeadPrefab: {fileID: 6539417278905541161, guid: b0a10113117f7ab4dad00e73e307bb91, type: 3}
   _monoLegsPrefab: {fileID: 7316320371910516444, guid: 82aef3c83c9e5a84084ac142960b4c3c, type: 3}
   _headTransform: {fileID: 4915074910384246593}
   _legsTransform: {fileID: 4840089131046345277}
+  _isModifiable: 1
 --- !u!1 &7818102307747859771
 GameObject:
   m_ObjectHideFlags: 0

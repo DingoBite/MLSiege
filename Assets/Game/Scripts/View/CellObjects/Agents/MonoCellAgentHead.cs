@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
@@ -9,7 +8,6 @@ namespace Game.Scripts.View.CellObjects.Agents
 {
     public class MonoCellAgentHead : AbstractMonoCellObject
     {
-        [SerializeField] private bool _isExternallyModifiable;
         [SerializeField] private Material _selectedMaterial;
 
         private MeshRenderer _mesh;
@@ -20,9 +18,6 @@ namespace Game.Scripts.View.CellObjects.Agents
             _mesh = GetComponent<MeshRenderer>();
             _meshMaterials = _mesh.materials;
         }
-
-        public override bool IsModifiable => _isExternallyModifiable;
-        public override CellObjectType CellObjectType => CellObjectType.Agent;
 
         public override void CommitAction(object sender, PerformanceParam performanceParam)
         {

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2991062421862094067}
   - component: {fileID: 4184540102804719041}
   - component: {fileID: 3652083601913278341}
-  - component: {fileID: -3366893001586082956}
+  - component: {fileID: 5363343587761918320}
   m_Layer: 0
   m_Name: StoneBlock
   m_TagString: Untagged
@@ -96,7 +96,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-3366893001586082956
+--- !u!114 &5363343587761918320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2814407368956137870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05915db666164275ae38dfab48fa72e0, type: 3}
+  m_Script: {fileID: 11500000, guid: ce94b0ccbd7543e2931939e07b95ea70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _monoCellObjectPrefab: {fileID: 2297454128435253035, guid: 2da4aad782aba0949833f286ae24a310, type: 3}
+  _isModifiable: 1

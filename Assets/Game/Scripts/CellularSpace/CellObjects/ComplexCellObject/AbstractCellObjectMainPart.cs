@@ -10,8 +10,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.ComplexCellObject
     {
         private readonly int[] _partsId;
 
-        protected AbstractCellObjectMainPart(int id, IEnumerable<int> partsId,
-            Action<object, PerformanceParam> commitReaction,
+        protected AbstractCellObjectMainPart(int id, IEnumerable<int> partsId, Action<object, PerformanceParam> commitReaction,
             bool isModifiable) : base(id, commitReaction, isModifiable)
         {
             _partsId = partsId.ToArray();
@@ -25,7 +24,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.ComplexCellObject
             var partsToAct = new List<AbstractCellObject>();
             foreach (var partId in _partsId)
             {
-                if (!ParentCell.CellGrid.TryGetCellObject(partId, out var part))
+                if (!ParentCellMutable.CellGrid.TryGetCellObject(partId, out var part))
                     return CommitBaseAction(sender, performanceParam, CellObjectBaseAction.Dispose, partsToAct);
                 
                 if (sender == part)

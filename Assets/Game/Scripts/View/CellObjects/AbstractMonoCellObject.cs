@@ -8,21 +8,22 @@ namespace Game.Scripts.View.CellObjects
 {
     public abstract class AbstractMonoCellObject: MonoBehaviour, IActable<PerformanceParam>, IIdentifiable
     {
-        public int Id { get; private set; }
         protected Func<Vector3Int, Vector3> _coordsToPositionConvert;
         private bool _isInit;
 
-        public void Init(int id, Func<Vector3Int, Vector3> coordsToPositionConvert)
+        public void Init(int id, bool isModifiable, CellObjectType cellObjectType, Func<Vector3Int, Vector3> coordsToPositionConvert)
         {
             if (_isInit) 
                 throw new Exception($"Try to reinit AbstractMonoCellObject {this}");
+            IsModifiable = isModifiable;
+            CellObjectType = cellObjectType;
             _isInit = true;
             Id = id;
             _coordsToPositionConvert = coordsToPositionConvert;
         }
-
-        public abstract bool IsModifiable { get; }
-        public abstract CellObjectType CellObjectType { get; }
+        public int Id { get; private set; }
+        public bool IsModifiable { get; private set; }
+        public CellObjectType CellObjectType { get; private set; }
         public abstract void CommitAction(object sender, PerformanceParam performanceParam);
     }
 }

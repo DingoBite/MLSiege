@@ -28,7 +28,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
         {
             if (childCellObject != null)
             {
-                childCellObject.ParentCell = this;
+                childCellObject.ParentCellMutable = this;
             }
             ChildCellObject = childCellObject;
         }
@@ -44,5 +44,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
             }
             ChildCellObject = null;
         }
+
+        public override string ToString() => $"{Coords} {CellObject?.Id}";
     }
 }

@@ -14,6 +14,8 @@
                 <e p="AbstractCellObject.cs" t="Include" />
                 <e p="AbstractChildCellObject.cs" t="Include" />
                 <e p="CellObjectCharacteristics" t="Include">
+                  <e p="AgentCharacteristic.cs" t="Include" />
+                  <e p="BlockCharacteristic.cs" t="Include" />
                   <e p="Interfaces" t="Include">
                     <e p="ICharacteristics.cs" t="Include" />
                   </e>
@@ -33,6 +35,9 @@
                   </e>
                   <e p="CellObjectBaseAction.cs" t="Include" />
                   <e p="CellObjectType.cs" t="Include" />
+                </e>
+                <e p="GridStep" t="Include">
+                  <e p="StepData.cs" t="Include" />
                 </e>
                 <e p="Realizations" t="Include">
                   <e p="CellAgentHead.cs" t="Include" />
@@ -132,6 +137,7 @@
             </e>
             <e p="PathFind" t="Include">
               <e p="AStarPathFind.cs" t="Include" />
+              <e p="Heuristics.cs" t="Include" />
             </e>
             <e p="StartPoint.cs" t="Include" />
             <e p="Time" t="Include">
@@ -154,13 +160,23 @@
                 <e p="Blocks" t="Include">
                   <e p="MonoCellBlock.cs" t="Include" />
                 </e>
-                <e p="Serialization" t="Include">
-                  <e p="Interfaces" t="Include">
-                    <e p="IMonoCellobject.cs" t="Include" />
-                  </e>
+                <e p="Enums" t="Include">
+                  <e p="BlockType.cs" t="Include" />
+                </e>
+                <e p="ViewEditor" t="Include">
                   <e p="MonoAgent.cs" t="Include" />
                   <e p="MonoBlock.cs" t="Include" />
-                  <e p="MonoSoloCellObject.cs" t="Include" />
+                  <e p="MonoCellObject.cs" t="Include" />
+                  <e p="Realizations" t="Include">
+                    <e p="Agents" t="Include">
+                      <e p="MonoBaseAgent.cs" t="Include" />
+                    </e>
+                    <e p="Blocks" t="Include">
+                      <e p="MonoBedrock.cs" t="Include" />
+                      <e p="MonoGrassBlock.cs" t="Include" />
+                      <e p="MonoStoneBlock.cs" t="Include" />
+                    </e>
+                  </e>
                 </e>
               </e>
             </e>

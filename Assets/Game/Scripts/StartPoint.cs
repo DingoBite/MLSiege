@@ -1,5 +1,4 @@
-﻿using Game.Scripts.Controls;
-using Game.Scripts.ModulesStartPoints;
+﻿using Game.Scripts.ModulesStartPoints;
 using UnityEngine;
 
 namespace Game.Scripts

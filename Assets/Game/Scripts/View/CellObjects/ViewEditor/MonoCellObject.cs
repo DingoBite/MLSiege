@@ -1,12 +1,12 @@
 ﻿﻿using System;
  using Game.Scripts.CellularSpace.CellObjects;
+ using Game.Scripts.CellularSpace.CellObjects.Enums;
  using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.View.CellObjects.Serialization.Interfaces;
-using UnityEngine;
+ using UnityEngine;
 
 namespace Game.Scripts.View.CellObjects.Serialization
 {
-    public abstract class MonoSoloCellObject : MonoBehaviour, IMonoCellObject
+    public abstract class MonoCellObject : MonoBehaviour
     {
         [SerializeField] private AbstractMonoCellObject _monoCellObjectPrefab;
 
@@ -23,11 +23,12 @@ namespace Game.Scripts.View.CellObjects.Serialization
             monoCellObject.transform.position = MainPosition;
             return id =>
             {
-                monoCellObject.Init(id, coordsToPositionConvert);
+                monoCellObject.Init(id, IsModifiable, CellObjectType, coordsToPositionConvert);
                 return MakeCellObject(id, monoCellObject.CommitAction, monoCellObject.IsModifiable);
             };
         }
-
+        protected abstract bool IsModifiable { get; }
+        protected abstract CellObjectType CellObjectType { get; }
         protected abstract AbstractChildCellObject MakeCellObject(int id, Action<object, PerformanceParam> commitReaction, bool isExternallyModifiable);
     }
 }

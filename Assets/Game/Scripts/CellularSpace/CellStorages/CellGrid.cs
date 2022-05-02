@@ -5,7 +5,9 @@ using Game.Scripts.CellularSpace.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
+using Game.Scripts.CellularSpace.GridStep;
 using Game.Scripts.General.Repos;
+using Game.Scripts.PathFind;
 using Game.Scripts.View.CellObjects.Serialization;
 using UnityEngine;
 
@@ -27,7 +29,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
             _gridCoordsConverter = gridCoordsConverter;
             _minFormingPoint = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
             _maxFormingPoint = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
-            var soloCellObjects = new Dictionary<Vector3Int, MonoSoloCellObject>();
+            var soloCellObjects = new Dictionary<Vector3Int, MonoCellObject>();
             var complexCellObjects = new List<MonoAgent>();
             foreach (var level in gridLevelsManager.GetLevels())
             {
@@ -53,7 +55,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
             _sizeVector = _maxFormingPoint - _minFormingPoint + Vector3Int.one;
             AllocateCellArrays();
-            AllocateSoloCellObjects(soloCellObjects, gameGrid);
+            AllocateCellObjects(soloCellObjects, gameGrid);
             AllocateComplexCellObjects(complexCellObjects, gameGrid);
         }
 
@@ -89,6 +91,20 @@ namespace Game.Scripts.CellularSpace.CellStorages
             cell = cellMutable;
             return true;
         }
+
+        public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, Vector3Int coords) =>
+            AStarPathFind.FindPath(startCellObject.Coords, coords,
+                startCellObject.Characteristics.Neighbors, 
+                (g1, g2) => g1 + g2, TryGetCell, 
+                startCellObject.Characteristics.StepFunc, Heuristics.ManhattanHeuristic, 
+                new StepData(startCellObject.ParentCell, startCellObject.ParentCell, 0));
+
+        public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, AbstractCellObject targetCellObject) => 
+            FindPath(startCellObject, targetCellObject.Coords);
+
+        public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, ICell targetCell) =>
+            FindPath(startCellObject, targetCell.Coords);
+
 
         public bool IsEmpty(Vector3Int coords) => GetCell(CoordsToIndex(coords)).IsEmpty;
 
@@ -150,7 +166,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
             if (!cell.IsEmpty) return false;
             if (!TryGetChildCellObject(cellObjectId, out var cellObject))
                 return false;
-            var cellObjectCell = cellObject.ParentCell;
+            var cellObjectCell = cellObject.ParentCellMutable;
             cell.SetCellObject(cellObject);
             cellObjectCell.SetCellObject(null);
             return true;
@@ -201,7 +217,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
             _cells[i][j].Add(cell);
         }
 
-        private void AllocateSoloCellObjects(IReadOnlyDictionary<Vector3Int, MonoSoloCellObject> monoCellObjects, Grid gameGrid)
+        private void AllocateCellObjects(IReadOnlyDictionary<Vector3Int, MonoCellObject> monoCellObjects, Grid gameGrid)
         {
             foreach (var monoCellObject in monoCellObjects)
             {
@@ -209,11 +225,11 @@ namespace Game.Scripts.CellularSpace.CellStorages
                     throw new ArgumentOutOfRangeException(
                         $"Coords = {monoCellObject.Key} are not achievable in space");
                 var coords = CoordsToIndex(monoCellObject.Key);
-                AllocateSoloCellObject(coords, monoCellObject.Value, gameGrid);
+                AllocateCellObject(coords, monoCellObject.Value, gameGrid);
             }
         }
 
-        private void AllocateSoloCellObject(Vector3Int coords, MonoSoloCellObject monoCellObject, Grid gameGrid)
+        private void AllocateCellObject(Vector3Int coords, MonoCellObject monoCellObject, Grid gameGrid)
         {
             var cell = GetMutableCell(coords);
             var cellObject = 

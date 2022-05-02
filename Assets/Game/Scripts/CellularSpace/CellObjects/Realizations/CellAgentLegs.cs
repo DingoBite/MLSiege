@@ -1,4 +1,6 @@
 ﻿using System;
+using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
 using Game.Scripts.CellularSpace.CellObjects.ComplexCellObject;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
@@ -9,11 +11,25 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
 {
     public class CellAgentLegs : AbstractCellObjectPart
     {
-        public CellAgentLegs(int id, int mainPartId, 
-            Action<object, PerformanceParam> commitReaction, bool isModifiable) 
+        public CellAgentLegs(int id, int mainPartId,
+            Action<object, PerformanceParam> commitReaction, bool isModifiable)
             : base(id, mainPartId, commitReaction, isModifiable)
         {
         }
+
+        private AbstractCellObject _parent
+        {
+            get
+            {
+                if (!ParentCellGrid.TryGetCellObject(_mainPartId, out var head))
+                    throw new Exception("Head agent");
+                return head;
+            }
+        }
+
+        public override Vector3Int Coords => _parent.Coords;
+
+        public override ICharacteristics Characteristics => _parent.Characteristics;
 
         protected override bool OnCommit(object sender, PerformanceParam performanceParam)
         {
@@ -44,7 +60,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
                     break;
                 case CellObjectBaseAction.Dispose:
                     _commitReaction.Invoke(this, CellAgentViewActions.Dispose);
-                    ParentCell?.Clear();
+                    ParentCellMutable?.Clear();
                     break;
                 case CellObjectBaseAction.ApplyGravity:
                     ApplyGravity(performanceParam.Vector3IntParam);

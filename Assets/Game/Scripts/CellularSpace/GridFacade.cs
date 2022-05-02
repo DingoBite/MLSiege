@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
@@ -69,7 +70,22 @@ namespace Game.Scripts.CellularSpace
                 return;
             selectedCellObject.CommitAction(this, performanceData);
         }
-        
+
+        public void CommitSelectedPathFind(int targetId)
+        {
+            if (!_cellGrid.TryGetCellObject(_selectedCellObjectId, out var selectedCellObject))
+                return;
+            if (selectedCellObject.CellObjectType != CellObjectType.Agent || !selectedCellObject.IsModifiable) 
+                return;
+            if (!_cellGrid.TryGetCellObject(targetId, out var targetCellObject))
+                return;
+            var str = new StringBuilder();
+            foreach (var (cell, cost) in _cellGrid.FindPath(selectedCellObject, targetCellObject.ParentCell))
+            {
+                str.Append($"{cell.Coords} : {cost}\n");
+            }
+        }
+
         private readonly ActPerformanceParam<CellObjectBaseAction> _applyGravityAction 
             = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity);
         

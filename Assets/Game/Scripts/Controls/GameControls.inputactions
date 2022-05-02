@@ -177,6 +177,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "PathFind",
+                    "type": "Button",
+                    "id": "6235d5dc-51e3-4895-a625-2deb0ecaa631",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -188,6 +196,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SelectObject",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbdc39f5-5b59-42bd-858b-f7aa883cbeaf",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PathFind",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -9,6 +9,7 @@ namespace Game.Scripts.CellularSpace
         void CommitSelectAction(int id);
         void CommitAction(int id, PerformanceParam performanceData);
         void CommitActionToSelected(PerformanceParam performanceData);
+        void CommitSelectedPathFind(int targetId);
         void ApplyGlobalAction();
     }
 }
