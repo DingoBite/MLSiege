@@ -7,6 +7,6 @@ namespace Game.Scripts.View.CellObjects.Serialization.Realizations
     {
         [SerializeField] private bool _isModifiable;
         protected override bool IsModifiable => _isModifiable;
-        protected override BlockCharacteristic Characteristics => new BlockCharacteristic(10, 10);
+        protected override BlockCharacteristic Characteristics => new BlockCharacteristic(5, 5);
     }
 }

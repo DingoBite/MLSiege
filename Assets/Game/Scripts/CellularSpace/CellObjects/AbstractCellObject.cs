@@ -25,6 +25,7 @@ namespace Game.Scripts.CellularSpace.CellObjects
         public abstract Vector3Int Coords { get; }
         public abstract ICell ParentCell { get; }
         public abstract ICellGrid ParentCellGrid { get; }
+        public virtual int? EvaluateCell(ICell cell) => null;
         public CellObjectType CellObjectType => Characteristics.CellObjectType;
         public abstract bool CommitAction(object sender, PerformanceParam performanceParam);
     }

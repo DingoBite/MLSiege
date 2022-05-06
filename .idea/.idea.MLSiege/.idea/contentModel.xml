@@ -4,11 +4,26 @@
     <e p="C:\Users\nuxka\.Rider2019.3\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\nuxka\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_MLSiege.2026325347.00" t="ExcludeRecursive" />
     <e p="H:\UnityProjects\MLSiege" t="IncludeRecursive">
-      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Game" t="Include">
           <e p="Scripts" t="Include">
+            <e p="Agents" t="Include">
+              <e p="ActionResolvers" t="Include">
+                <e p="ActionResolver.cs" t="Include" />
+                <e p="IActionResolver.cs" t="Include" />
+                <e p="MLAgentActions.cs" t="Include" />
+              </e>
+              <e p="AgentManager.cs" t="Include" />
+              <e p="IAgentManager.cs" t="Include" />
+              <e p="Learning" t="Include">
+                <e p="SiegeAgents.cs" t="Include" />
+              </e>
+              <e p="ObservationsCollectors" t="Include">
+                <e p="IObservationsCollecter.cs" t="Include" />
+                <e p="ObservationsCollector.cs" t="Include" />
+              </e>
+            </e>
             <e p="CellularSpace" t="Include">
               <e p="CellObjects" t="Include">
                 <e p="AbstractCellObject.cs" t="Include" />
@@ -16,6 +31,7 @@
                 <e p="CellObjectCharacteristics" t="Include">
                   <e p="AgentCharacteristic.cs" t="Include" />
                   <e p="BlockCharacteristic.cs" t="Include" />
+                  <e p="FlagCharacteristic.cs" t="Include" />
                   <e p="Interfaces" t="Include">
                     <e p="ICharacteristics.cs" t="Include" />
                   </e>
@@ -43,12 +59,12 @@
                   <e p="CellAgentHead.cs" t="Include" />
                   <e p="CellAgentLegs.cs" t="Include" />
                   <e p="CellBlock.cs" t="Include" />
+                  <e p="CellFlagBlock.cs" t="Include" />
                 </e>
               </e>
               <e p="CellStorages" t="Include">
                 <e p="Cell.cs" t="Include" />
                 <e p="CellGrid.cs" t="Include" />
-                <e p="GridDeserializer.cs" t="Include" />
                 <e p="Interfaces" t="Include">
                   <e p="ICell.cs" t="Include" />
                   <e p="ICellGrid.cs" t="Include" />
@@ -93,9 +109,12 @@
               <e p="GridFacadeInstaller.cs" t="Include" />
               <e p="GridServicesInstaller.cs" t="Include" />
               <e p="InputHandlersInstaller.cs" t="Include" />
+              <e p="MLBehaviorModulesInstaller.cs" t="Include" />
+              <e p="TurnManagerInstaller.cs" t="Include" />
               <e p="UpdateTickerInstaller.cs" t="Include" />
             </e>
             <e p="General" t="Include">
+              <e p="Delegates.cs" t="Include" />
               <e p="Enums" t="Include">
                 <e p="Direction.cs" t="Include" />
               </e>
@@ -123,6 +142,7 @@
                 <e p="IdRepository.cs" t="Include" />
                 <e p="IdRepoWithFactory.cs" t="Include" />
               </e>
+              <e p="RoundingInt.cs" t="Include" />
               <e p="StaticUtils" t="Include">
                 <e p="Enums" t="Include">
                   <e p="EnumInfo.cs" t="Include" />
@@ -150,6 +170,15 @@
               <e p="TimePeriodTicker.cs" t="Include" />
               <e p="UpdateTicker.cs" t="Include" />
             </e>
+            <e p="TurnManager" t="Include">
+              <e p="Enums" t="Include">
+                <e p="TurnState.cs" t="Include" />
+              </e>
+              <e p="Interfaces" t="Include">
+                <e p="ITurnManager.cs" t="Include" />
+              </e>
+              <e p="WrappedTurnManager.cs" t="Include" />
+            </e>
             <e p="View" t="Include">
               <e p="CellObjects" t="Include">
                 <e p="AbstractMonoCellObject.cs" t="Include" />
@@ -173,6 +202,7 @@
                     </e>
                     <e p="Blocks" t="Include">
                       <e p="MonoBedrock.cs" t="Include" />
+                      <e p="MonoFlagBlock.cs" t="Include" />
                       <e p="MonoGrassBlock.cs" t="Include" />
                       <e p="MonoStoneBlock.cs" t="Include" />
                     </e>
@@ -751,26 +781,6 @@
             </e>
             <e p="Version.txt" t="Include" />
             <e p="zenject.asmdef" t="Include" />
-          </e>
-        </e>
-        <e p="RTS_Camera" t="Include">
-          <e p="Demo" t="Include">
-            <e p="DemoScene.cs" t="Include" />
-            <e p="Projectors" t="Include">
-              <e p="Guidelines.txt" t="Include" />
-              <e p="Shaders" t="Include">
-                <e p="ProjectorLight.shader" t="Include" />
-                <e p="ProjectorMultiply.shader" t="Include" />
-              </e>
-            </e>
-            <e p="TargetSelector.cs" t="Include" />
-          </e>
-          <e p="Scripts" t="Include">
-            <e p="Editor" t="Include">
-              <e p="LayoutHelpers.cs" t="Include" />
-              <e p="RTS_CameraEditor.cs" t="Include" />
-            </e>
-            <e p="RTS_Camera.cs" t="Include" />
           </e>
         </e>
       </e>

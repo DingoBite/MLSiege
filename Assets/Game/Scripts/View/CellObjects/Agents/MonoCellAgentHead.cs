@@ -50,6 +50,9 @@ namespace Game.Scripts.View.CellObjects.Agents
                 case CellAgentViewAction.ApplyGravity:
                     MoveTo(performanceParam.Vector3IntParam);
                     break;
+                case CellAgentViewAction.Hit:
+                    Debug.Log("Hit block");
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellAgentViewAction), cellAgentViewAction, null);
             }

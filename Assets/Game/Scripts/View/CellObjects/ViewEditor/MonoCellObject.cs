@@ -11,12 +11,7 @@ namespace Game.Scripts.View.CellObjects.Serialization
         [SerializeField] private AbstractMonoCellObject _monoCellObjectPrefab;
 
         public Vector3 MainPosition => transform.position;
-        
-        public void Start()
-        {
-            gameObject.SetActive(false);
-        }
-        
+
         public Func<int, AbstractChildCellObject> MakeCellObjectFunc(Grid parentGrid, Func<Vector3Int, Vector3> coordsToPositionConvert)
         {
             var monoCellObject = Instantiate(_monoCellObjectPrefab, parentGrid.transform);

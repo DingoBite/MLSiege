@@ -1,4 +1,5 @@
 using Game.Scripts.CellularSpace;
+using Game.Scripts.TurnManager.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -9,11 +10,18 @@ namespace Game.Scripts.ModulesStartPoints
         [SerializeField] private Grid _grid;
         [SerializeField] private Grid _gameGrid;
 
-        [Inject] private IGridFacade _gridFacade;
-        public IGridFacade GridFacade => _gridFacade;
+        private IGridFacade _gridFacade;
+        private ITurnManager _turnManager;
         
-        public void Init()
+        public void Init(IGridFacade gridFacade, ITurnManager turnManager)
         {
+            foreach (Transform child in _gameGrid.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            _grid.gameObject.SetActive(false);
+            _gridFacade = gridFacade;
+            _turnManager = turnManager;
             _gridFacade.Init(_grid, _gameGrid);
         }
     }

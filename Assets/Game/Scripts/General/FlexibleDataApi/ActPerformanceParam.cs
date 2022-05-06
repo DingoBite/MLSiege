@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
@@ -23,6 +24,55 @@ namespace Game.Scripts.General.FlexibleDataApi
         {
             ActionType = actionType;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ActPerformanceParam<TActionType> actPerformanceParam &&
+                   ActionType.Equals(actPerformanceParam.ActionType) &&
+                   IntParam == actPerformanceParam.IntParam &&
+                   Flag == actPerformanceParam.Flag &&
+                   Vector3IntParam == actPerformanceParam.Vector3IntParam &&
+                   FlexibleData == actPerformanceParam.FlexibleData;
+        }
+
+        protected bool Equals(ActPerformanceParam<TActionType> other)
+        {
+            return EqualityComparer<TActionType>.Default.Equals(ActionType, other.ActionType);
+        }
+
+        public override int GetHashCode()
+        {
+            return EqualityComparer<TActionType>.Default.GetHashCode(ActionType);
+        }
+
+        public override string ToString()
+        {
+            return $"{ActionType}";
+        }
+    }
+
+    public static class CellAgentHitActions
+    {
+        public static readonly ActPerformanceParam<CellAgentAction> HitF = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.forward);
+        public static readonly ActPerformanceParam<CellAgentAction> HitL = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.left);
+        public static readonly ActPerformanceParam<CellAgentAction> HitR = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.right);
+        public static readonly ActPerformanceParam<CellAgentAction> HitB = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.back);
+        public static readonly ActPerformanceParam<CellAgentAction> HitU = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.up);
+        public static readonly ActPerformanceParam<CellAgentAction> HitD = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down);
+        public static readonly ActPerformanceParam<CellAgentAction> HitDF = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down + Vector3Int.forward);
+        public static readonly ActPerformanceParam<CellAgentAction> HitDL = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down + Vector3Int.left);
+        public static readonly ActPerformanceParam<CellAgentAction> HitDR = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down + Vector3Int.right);
+        public static readonly ActPerformanceParam<CellAgentAction> HitDB = 
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down + Vector3Int.back);
     }
     
     public static class CellObjectBaseActions
@@ -31,8 +81,6 @@ namespace Game.Scripts.General.FlexibleDataApi
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.Select);
         public static readonly ActPerformanceParam<CellObjectBaseAction> Unselect = 
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.Unselect);
-        public static readonly ActPerformanceParam<CellObjectBaseAction> MoveUp = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.up);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveLeft = 
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.left);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveRight = 
@@ -41,8 +89,6 @@ namespace Game.Scripts.General.FlexibleDataApi
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.forward);
         public static readonly ActPerformanceParam<CellObjectBaseAction> MoveBack = 
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.back);
-        public static readonly ActPerformanceParam<CellObjectBaseAction> MoveDown = 
-            new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.StepMove, vector3IntParam: Vector3Int.down);
         public static readonly ActPerformanceParam<CellObjectBaseAction> Dispose = 
             new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.Dispose);
     }
@@ -53,6 +99,8 @@ namespace Game.Scripts.General.FlexibleDataApi
             new ActPerformanceParam<CellBlockViewAction>(CellBlockViewAction.Select);
         public static readonly ActPerformanceParam<CellBlockViewAction> Unselect = 
             new ActPerformanceParam<CellBlockViewAction>(CellBlockViewAction.Unselect);
+        public static readonly ActPerformanceParam<CellBlockViewAction> Destroy = 
+            new ActPerformanceParam<CellBlockViewAction>(CellBlockViewAction.Destroy);
         public static readonly ActPerformanceParam<CellBlockViewAction> Dispose = 
             new ActPerformanceParam<CellBlockViewAction>(CellBlockViewAction.Dispose);
         public static readonly ActPerformanceParam<CellBlockViewAction> Error = 

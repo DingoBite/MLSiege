@@ -7,7 +7,7 @@ namespace Game.Scripts.CellularSpace.CellStorages.Interfaces
     public interface ICell : ICoordsLocated
     {
         bool IsEmpty { get; }
-        Vector3Int Coords { get; }
+        new Vector3Int Coords { get; }
         AbstractCellObject CellObject { get; }
         ICellGrid CellGrid { get; }
         void Clear();

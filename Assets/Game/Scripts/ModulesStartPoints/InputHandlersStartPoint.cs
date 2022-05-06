@@ -5,6 +5,7 @@ using Game.Scripts.Controls.InputControllers.MousePicker;
 using Game.Scripts.General.Enums;
 using Game.Scripts.General.FlexibleDataApi;
 using Game.Scripts.Time;
+using Game.Scripts.Time.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -14,9 +15,10 @@ namespace Game.Scripts.ModulesStartPoints
     {
         [SerializeField] private Camera _camera;
 
-        [Inject] private UpdateTicker _updateTicker;
-
         private bool _isInit;
+        
+        private IUpdateTicker _updateTicker;
+        
         private GameControls _gameControls;
         
         private FloatTimeHoldingInputRepeatable _globalActionRepeatable;
@@ -25,10 +27,12 @@ namespace Game.Scripts.ModulesStartPoints
         private VectorTimeHoldingInputRepeatable _movementInputRepeatable;
         private int _movementInputRepeatableId = -1;
         
-        public void Init(IGridFacade gridFacade)
+        public void Init(IGridFacade gridFacade, IUpdateTicker updateTicker)
         {
             if (_isInit)
                 throw new Exception($"Try to reinit {typeof(InputHandlersStartPoint)}");
+            
+            _updateTicker = updateTicker;
             
             if (_camera == null) 
                 _camera = Camera.main;
@@ -46,9 +50,9 @@ namespace Game.Scripts.ModulesStartPoints
                 0.2
                 );
 
-            var leftMousePicker = new CellObjectMousePicker(gridFacade.CommitSelectAction);
+            var leftMousePicker = new CellObjectMousePicker(id => gridFacade.CommitSelectAction(id));
             _gameControls.ObjectPicker.SelectObject.started += c => leftMousePicker.Pick(_camera);
-            var rightMousePicker = new CellObjectMousePicker(gridFacade.CommitSelectedPathFind);
+            var rightMousePicker = new CellObjectMousePicker(id => gridFacade.SelectedPathFind(id));
             _gameControls.ObjectPicker.PathFind.started += c => rightMousePicker.Pick(_camera);
             
             _isInit = true;

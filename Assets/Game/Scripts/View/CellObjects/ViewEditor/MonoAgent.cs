@@ -23,7 +23,6 @@ namespace Game.Scripts.View.CellObjects.Serialization
         
         public void Start()
         {
-            gameObject.SetActive(false);
             OnStart();
         }
 

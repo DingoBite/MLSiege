@@ -9,7 +9,7 @@ namespace Game.Scripts.View.CellObjects.Serialization
 {
     public abstract class MonoBlock : MonoCellObject
     {
-        protected abstract BlockCharacteristic Characteristics { get;}
+        protected abstract BlockCharacteristic Characteristics { get; }
         protected override CellObjectType CellObjectType => CellObjectType.Block;
         protected override AbstractChildCellObject MakeCellObject(int id, 
             Action<object, PerformanceParam> commitReaction, bool isExternallyModifiable)

@@ -7,6 +7,8 @@
         StepMove,
         MoveToCoords,
         ApplyGravity,
+        GetHit,
+        Destroy,
         Dispose,
         Error
     }

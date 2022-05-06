@@ -5,6 +5,8 @@ using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interface
 using Game.Scripts.CellularSpace.CellObjects.ComplexCellObject;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
+using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
+using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
@@ -21,7 +23,25 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
         
         private readonly AgentCharacteristic _characteristic;
         public override ICharacteristics Characteristics => _characteristic;
-        
+
+        public override int? EvaluateCell(ICell cell)
+        {
+            if (cell == null) return null;
+            if (cell.IsEmpty) return 0;
+            switch (cell.CellObject.CellObjectType)
+            {
+                case CellObjectType.Agent:
+                    return int.MaxValue;
+                case CellObjectType.Block:
+                    var blockCharacteristics = (BlockCharacteristic) cell.CellObject.Characteristics;
+                    return blockCharacteristics.Durability / _characteristic.Strength;
+                case CellObjectType.Flag:
+                    return int.MinValue;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         protected override bool OnCommit(object sender, PerformanceParam performanceParam, List<AbstractCellObject> parts)
         {
             if (!(performanceParam.EnumActionType is CellAgentAction cellAgentAction))
@@ -33,6 +53,8 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
 
             switch (cellAgentAction)
             {
+                case CellAgentAction.Hit:
+                    return Hit(performanceParam.Vector3IntParam);
                 default:
                     _commitReaction.Invoke(this, CellAgentViewActions.Error);
                     throw new ArgumentOutOfRangeException(nameof(cellAgentAction), cellAgentAction, null);
@@ -75,6 +97,28 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
             return true;
         }
 
+        private bool Hit(Vector3Int? coords)
+        {
+            if (coords == null)
+                throw new ArgumentException("Performance params doesn't contains coords");
+            var targetCoords = Coords + coords.Value;
+            if (!ParentCellGrid.TryGetCell(targetCoords, out var cell)) 
+                return false;
+            var agentHitParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.Hit,
+                vector3IntParam: targetCoords);
+            if (cell.IsEmpty)
+            {
+                _commitReaction?.Invoke(this, agentHitParams);
+                return true;
+            }
+            if (cell.CellObject.CellObjectType == CellObjectType.Agent)
+                return false;
+            
+            var blockHitParams = new ActPerformanceParam<CellBlockAction>(CellBlockAction.GetHit,
+                intParam: _characteristic.Strength);
+            return cell.CellObject.CommitAction(this, blockHitParams);
+        }
+        
         private bool MoveToCoords(IReadOnlyList<AbstractCellObject> parts, Vector3Int? coords)
         {
             if (coords == null)

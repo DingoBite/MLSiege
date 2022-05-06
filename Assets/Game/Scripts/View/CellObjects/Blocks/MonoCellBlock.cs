@@ -47,6 +47,12 @@ namespace Game.Scripts.View.CellObjects.Blocks
                 case CellBlockViewAction.ApplyGravity:
                     MoveTo(performanceParam.Vector3IntParam);
                     break;
+                case CellBlockViewAction.GetHit:
+                    Debug.Log(performanceParam.IntParam);
+                    break;
+                case CellBlockViewAction.Destroy:
+                    Destroy(gameObject);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellBlockViewAction), cellBlockViewAction, null);
             }

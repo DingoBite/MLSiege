@@ -10,7 +10,22 @@ namespace Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics
 {
     public class BlockCharacteristic : ICharacteristics
     {
-        public int Durability { get; private set; }
+        public bool IsCorrect { get; private set; }
+
+        public int Durability
+        {
+            get => _durability;
+            private set
+            {
+                if (!IsCorrect) return;
+                if (value <= 0) IsCorrect = false;
+                else if (value >= MaxDurability) _durability = MaxDurability;
+                else _durability = value;
+            }
+        }
+
+        private int _durability;
+        
         public int MaxDurability { get; private set; }
 
         public BlockCharacteristic(int durability, int maxDurability)
@@ -19,6 +34,11 @@ namespace Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics
             MaxDurability = maxDurability;
         }
 
+        public void DurabilityChange(int changeValue)
+        {
+            Durability += changeValue;
+        }
+        
         public IEnumerable<Vector3Int> Neighbors => null;
         public Func<ICell, ICell, StepData> StepFunc => null;
         public CellObjectType CellObjectType => CellObjectType.Block;

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Scripts.CellularSpace.CellObjects;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
@@ -96,8 +98,8 @@ namespace Game.Scripts.CellularSpace.CellStorages
             AStarPathFind.FindPath(startCellObject.Coords, coords,
                 startCellObject.Characteristics.Neighbors, 
                 (g1, g2) => g1 + g2, TryGetCell, 
-                startCellObject.Characteristics.StepFunc, Heuristics.ManhattanHeuristic, 
-                new StepData(startCellObject.ParentCell, startCellObject.ParentCell, 0));
+                startCellObject.Characteristics.StepFunc, Heuristics.EuclidHeuristic, 
+                new StepData(0, null));
 
         public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, AbstractCellObject targetCellObject) => 
             FindPath(startCellObject, targetCellObject.Coords);
@@ -112,7 +114,6 @@ namespace Game.Scripts.CellularSpace.CellStorages
         {
             if (!IsInGrid(coords))
             {
-                Debug.LogError($"Coords = {coords} are not achievable");
                 cell = null;
                 return false;
             }
@@ -276,6 +277,8 @@ namespace Game.Scripts.CellularSpace.CellStorages
                     }
                 }
             }
+
+            _maxFormingPoint = new Vector3Int(_maxFormingPoint.x, y - _minFormingPoint.y, _maxFormingPoint.z);
             _sizeVector.y = y;
         }
     }

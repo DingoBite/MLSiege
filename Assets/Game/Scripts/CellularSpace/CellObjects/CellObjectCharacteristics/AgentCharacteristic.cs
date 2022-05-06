@@ -23,7 +23,6 @@ namespace Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics
                     Vector3Int.back,
                     Vector3Int.left,
                     Vector3Int.right,
-                    Vector3Int.up,
                     Vector3Int.down + Vector3Int.forward,
                     Vector3Int.down + Vector3Int.back,
                     Vector3Int.down + Vector3Int.left,

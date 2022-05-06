@@ -1,26 +1,27 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
+using Game.Scripts.General.FlexibleDataApi;
 
 namespace Game.Scripts.CellularSpace.GridStep
 {
     public class StepData : IComparable
     {
-        public readonly ICell StartCell;
-        public readonly ICell EndCell;
         public readonly int Cost;
-        
-        public StepData(ICell startCell, ICell endCell, int cost)
+        public readonly IList<PerformanceParam> OrderedPerformanceParam;
+
+        public StepData(int cost, IList<PerformanceParam> orderedPerformanceParam)
         {
-            StartCell = startCell;
-            EndCell = endCell;
             Cost = cost;
+            OrderedPerformanceParam = orderedPerformanceParam;
         }
         
-        public StepData(ICell startCell, ICell endCell)
+        public StepData()
         {
-            StartCell = startCell;
-            EndCell = endCell;
-            Cost = Int32.MaxValue;
+            Cost = -1;
+            OrderedPerformanceParam = null;
         }
 
         public int CompareTo(object obj)
@@ -32,10 +33,12 @@ namespace Game.Scripts.CellularSpace.GridStep
 
         public override string ToString()
         {
-            return $"{StartCell.Coords} -> {EndCell.Coords} : {Cost}";
+            if (OrderedPerformanceParam != null && OrderedPerformanceParam.Count == 1)
+                return $"{OrderedPerformanceParam[0].EnumActionType} : {Cost}";
+            return $"{Cost}";
         }
 
         public static StepData operator +(StepData g1, StepData g2) => 
-            new StepData(g1.EndCell, g2.EndCell, g1.Cost + g2.Cost);
+            new StepData(g1.Cost + g2.Cost, g2.OrderedPerformanceParam);
     }
 }

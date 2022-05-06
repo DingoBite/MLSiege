@@ -4,6 +4,7 @@ using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interface
 using Game.Scripts.CellularSpace.CellObjects.ComplexCellObject;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
+using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
@@ -27,8 +28,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
             }
         }
 
-        public override Vector3Int Coords => _parent.Coords;
-
+        public override Vector3Int Coords => ParentCell.Coords;
         public override ICharacteristics Characteristics => _parent.Characteristics;
 
         protected override bool OnCommit(object sender, PerformanceParam performanceParam)

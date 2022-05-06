@@ -6,6 +6,7 @@
         Unselect,
         StepMove,
         JumpMove,
+        Hit,
         MoveToCoords,
         ApplyGravity,
         Dispose,
