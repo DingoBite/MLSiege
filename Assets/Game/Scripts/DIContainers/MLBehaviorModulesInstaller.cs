@@ -1,6 +1,5 @@
 using Game.Scripts.Agents;
 using Game.Scripts.Agents.Interfaces;
-using UnityEngine;
 using Zenject;
 
 public class MLBehaviorModulesInstaller : MonoInstaller

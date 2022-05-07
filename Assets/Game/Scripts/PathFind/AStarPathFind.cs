@@ -124,7 +124,7 @@ namespace Game.Scripts.PathFind
                     if (!unVisitedCells.Contains(neighborCell)) unVisitedCells.Add(neighborCell);
                 }
             }
-            return null;
+            return resultPath;
         }
     }
 }

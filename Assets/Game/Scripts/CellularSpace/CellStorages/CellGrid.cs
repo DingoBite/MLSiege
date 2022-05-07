@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Scripts.CellularSpace.CellObjects;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
@@ -95,11 +93,11 @@ namespace Game.Scripts.CellularSpace.CellStorages
         }
 
         public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, Vector3Int coords) =>
-            AStarPathFind.FindPath(startCellObject.Coords, coords,
+            AStarPathFind.FindPath(startCellObject.Coords + Vector3Int.down, coords,
                 startCellObject.Characteristics.Neighbors, 
                 (g1, g2) => g1 + g2, TryGetCell, 
                 startCellObject.Characteristics.StepFunc, Heuristics.EuclidHeuristic, 
-                new StepData(0, null));
+                new StepData(0, Vector3Int.zero));
 
         public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, AbstractCellObject targetCellObject) => 
             FindPath(startCellObject, targetCellObject.Coords);
@@ -180,7 +178,12 @@ namespace Game.Scripts.CellularSpace.CellStorages
         }
 
         public IEnumerable<ICell> GetCells() =>
-            from x in _cells from xy in x from xyz in xy select xyz;
+            _cells
+                .AsParallel()
+                .SelectMany(
+                    x => x,
+                    (x, xy) => new {x, xy})
+                .SelectMany(t => t.xy);
         
         private Vector3Int CoordsToIndex(Vector3Int coords) => coords - _minFormingPoint;
         private Vector3Int IndexToCoords(Vector3Int coords) => coords + _minFormingPoint;

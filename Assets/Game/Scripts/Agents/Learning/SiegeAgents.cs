@@ -1,4 +1,5 @@
-﻿using Game.Scripts.Agents.Interfaces;
+﻿using System.Threading.Tasks;
+using Game.Scripts.Agents.Interfaces;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -28,16 +29,14 @@ namespace Game.Scripts.Agents.Learning
             Debug.Log("New Episode");
         }
 
-        public override void CollectObservations(VectorSensor sensor)
+        public override async void CollectObservations(VectorSensor sensor)
         {
-            Debug.Log("CollectObservations");
-            _agentManager.CollectObservations(sensor);
+            await Task.Run(() => _agentManager.CollectObservations(sensor));
         }
 
-        public override void OnActionReceived(ActionBuffers actions)
+        public override async void OnActionReceived(ActionBuffers actions)
         {
-            Debug.Log(actions.DiscreteActions[0]);
-            _agentManager.ResolveAction(actions, this);
+            await Task.Run(() => _agentManager.ResolveAction(actions, this));
             if (StepCount == MaxStep)
             {
                 Lose();

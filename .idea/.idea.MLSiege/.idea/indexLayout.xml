@@ -64,10 +64,9 @@
       <Path>.vs</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
+      <Path>Temp</Path>
       <Path>UserSettings</Path>
       <Path>obj</Path>
-      <Path>results</Path>
-      <Path>venv</Path>
     </explicitExcludes>
   </component>
 </project>

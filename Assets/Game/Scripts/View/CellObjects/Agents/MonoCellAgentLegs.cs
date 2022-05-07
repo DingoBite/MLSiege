@@ -2,19 +2,24 @@
 using System.Linq;
 using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
 using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.Time.Interfaces;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Scripts.View.CellObjects.Agents
 {
     public class MonoCellAgentLegs : AbstractMonoCellObject
     {
         [SerializeField] private Material _selectedMaterial;
-
+        
+        private Transform _transform;
         private MeshRenderer _mesh;
         private Material[] _meshMaterials;
+        private IOneActUpdateTicker _oneActUpdateTicker;
 
         private void OnEnable()
         {
+            _transform = transform;
             _mesh = GetComponent<MeshRenderer>();
             _meshMaterials = _mesh.materials;
         }
@@ -61,7 +66,7 @@ namespace Game.Scripts.View.CellObjects.Agents
         {
             if (coords == null)
                 throw new ArgumentException("Performance params doesn't contains new coords");
-            transform.position = _coordsToPositionConvert(coords.Value);
+            MakeInMainThread(() => _transform.position = _coordsToPositionConvert(coords.Value));
         }
     }
 }

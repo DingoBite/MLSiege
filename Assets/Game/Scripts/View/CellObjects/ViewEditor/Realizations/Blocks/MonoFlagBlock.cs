@@ -5,7 +5,6 @@ using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellObjects.Realizations;
 using Game.Scripts.General.FlexibleDataApi;
-using Unity.MLAgents;
 using UnityEngine;
 
 namespace Game.Scripts.View.CellObjects.Serialization.Realizations

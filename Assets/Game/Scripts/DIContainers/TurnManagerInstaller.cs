@@ -1,6 +1,5 @@
 using Game.Scripts.TurnManager;
 using Game.Scripts.TurnManager.Interfaces;
-using UnityEngine;
 using Zenject;
 
 public class TurnManagerInstaller : MonoInstaller

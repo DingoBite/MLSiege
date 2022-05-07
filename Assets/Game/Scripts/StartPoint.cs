@@ -1,12 +1,9 @@
-﻿using System.Runtime.InteropServices;
-using Game.Scripts.Agents.Interfaces;
+﻿using Game.Scripts.Agents.Interfaces;
 using Game.Scripts.Agents.Learning;
 using Game.Scripts.CellularSpace;
 using Game.Scripts.ModulesStartPoints;
-using Game.Scripts.Time;
 using Game.Scripts.Time.Interfaces;
 using Game.Scripts.TurnManager.Interfaces;
-using Unity.MLAgents;
 using UnityEngine;
 using Zenject;
 
@@ -40,8 +37,8 @@ namespace Game.Scripts
         
         private void Restart()
         {
-            _gridLogicStartPoint.Init(_gridFacade, _turnManager);
-            _agentManager.Init(_gridFacade, _observationsCollector, _actionResolver, Win, Lose);
+            _gridLogicStartPoint.ReInit();
+            _agentManager.ReInit();
         }
 
         private void Win()

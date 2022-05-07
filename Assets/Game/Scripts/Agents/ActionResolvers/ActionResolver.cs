@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Scripts.CellularSpace;
+using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridStep;
 using Game.Scripts.General.FlexibleDataApi;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
-using Zenject.ReflectionBaking.Mono.Cecil;
+using UnityEngine;
 
 namespace Game.Scripts.Agents.Interfaces
 {
@@ -15,9 +16,9 @@ namespace Game.Scripts.Agents.Interfaces
     {
         private int _goalId;
 
-        public void Init(int goalId)
+        public void Init(IEnumerable<int> goalsIds)
         {
-            _goalId = goalId;
+            _goalId = goalsIds.First();
         }
 
         public void ResolveAction(ActionBuffers actions, int agentId, IGridFacade gridFacade, Agent mlAgent)
@@ -84,17 +85,28 @@ namespace Game.Scripts.Agents.Interfaces
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mlAgentAction), mlAgentAction, null);
             }
-
             return !gridFacade.CommitAction(agentId, performanceParam) ? null : performanceParam;
         }
 
-        private float RewardFromDoneAction(PerformanceParam performanceParam, IEnumerable<(ICell, StepData)> path)
+        private float _stayReward = -1e-4f;
+        private float _stepReward = -5e-5f;
+        private float _optimalStepReward = 0;
+        
+        private float RewardFromDoneAction(PerformanceParam doneParam, IEnumerable<(ICell, StepData)> path)
         {
-            if (performanceParam == null) return -1e-4f;
-            var optimalSteps = path.First().Item2.OrderedPerformanceParam;
-            if (optimalSteps != null && performanceParam.Equals(optimalSteps.First()))
-                return -1e-5f;
-            return -5e-5f;
+            if (doneParam == null) return _stayReward;
+            var pathArray = path.ToArray();
+            if (pathArray.Length == 0) return _stepReward;
+            
+            var optimalDirection = pathArray[0].Item2.Direction;
+            if (!CellObjectBaseAction.StepMove.Equals(doneParam.EnumActionType) &&
+                 optimalDirection != doneParam.Vector3IntParam)
+            {
+                return _stepReward;
+            }
+            
+            Debug.Log($"Optimal action on {optimalDirection}");
+            return _optimalStepReward;
         }
     }
 }

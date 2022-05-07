@@ -9,8 +9,7 @@ namespace Game.Scripts.CellularSpace
     public interface IGridFacade
     {
         void Init(Grid grid, Grid gameGrid);
-        Vector3Int MinCoords { get; }
-        Vector3Int MaxCoords { get; }
+        void ReInit(Grid gameGrid);
         bool CommitSelectAction(int id);
         bool CommitAction(int id, PerformanceParam performanceData);
         bool CommitActionToSelected(PerformanceParam performanceData);
@@ -20,7 +19,7 @@ namespace Game.Scripts.CellularSpace
         int GetIdFromCoords(Vector3Int coords);
         int? GetRelativeValue(Vector3Int senderCoords, Vector3Int targetCoords);
         IEnumerable<int> GetAgentIds();
+        IEnumerable<int> GetGoalIds();
         IEnumerable<int> GetBlockIds();
-        void ApplyGlobalAction();
     }
 }

@@ -25,16 +25,6 @@ namespace Game.Scripts.General.FlexibleDataApi
             ActionType = actionType;
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is ActPerformanceParam<TActionType> actPerformanceParam &&
-                   ActionType.Equals(actPerformanceParam.ActionType) &&
-                   IntParam == actPerformanceParam.IntParam &&
-                   Flag == actPerformanceParam.Flag &&
-                   Vector3IntParam == actPerformanceParam.Vector3IntParam &&
-                   FlexibleData == actPerformanceParam.FlexibleData;
-        }
-
         protected bool Equals(ActPerformanceParam<TActionType> other)
         {
             return EqualityComparer<TActionType>.Default.Equals(ActionType, other.ActionType);
@@ -64,7 +54,7 @@ namespace Game.Scripts.General.FlexibleDataApi
         public static readonly ActPerformanceParam<CellAgentAction> HitU = 
             new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.up);
         public static readonly ActPerformanceParam<CellAgentAction> HitD = 
-            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down);
+            new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down * 2);
         public static readonly ActPerformanceParam<CellAgentAction> HitDF = 
             new ActPerformanceParam<CellAgentAction>(CellAgentAction.Hit, vector3IntParam: Vector3Int.down + Vector3Int.forward);
         public static readonly ActPerformanceParam<CellAgentAction> HitDL = 

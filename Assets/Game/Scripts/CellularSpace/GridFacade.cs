@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Game.Scripts.CellularSpace.CellObjects;
 using Game.Scripts.CellularSpace.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
 using Game.Scripts.CellularSpace.GridStep;
 using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.Time.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -40,8 +37,10 @@ namespace Game.Scripts.CellularSpace
             _cellGrid.Init(_gridLevelsManager, _gridCoordsConverter, gameGrid);
         }
 
-        public Vector3Int MinCoords { get; }
-        public Vector3Int MaxCoords { get; }
+        public void ReInit(Grid gameGrid)
+        {
+            _cellGrid.Init(_gridLevelsManager, _gridCoordsConverter, gameGrid);
+        }
 
         public bool CommitSelectAction(int id)
         {
@@ -84,13 +83,13 @@ namespace Game.Scripts.CellularSpace
 
         public IEnumerable<(ICell, StepData)> PathFind(int id, int targetId)
         {
-            if (!_cellGrid.TryGetCellObject(id, out var cellObject))
+            if (!_cellGrid.TryGetCellObject(id, out var agent))
                 return null;
-            if (cellObject.CellObjectType != CellObjectType.Agent || !cellObject.IsModifiable) 
+            if (agent.CellObjectType != CellObjectType.Agent || !agent.IsModifiable) 
                 return null;
-            if (!_cellGrid.TryGetCellObject(targetId, out var targetCellObject))
+            if (!_cellGrid.TryGetCellObject(targetId, out var target))
                 return null;
-            return _cellGrid.FindPath(cellObject, targetCellObject.ParentCell);
+            return _cellGrid.FindPath(agent, target.ParentCell);
         }
 
         public bool TryGetCoordsFromId(int id, out Vector3Int coords)
@@ -125,38 +124,21 @@ namespace Game.Scripts.CellularSpace
 
         public IEnumerable<int> GetAgentIds() =>
             _cellGrid.GetCells()
+                .AsParallel()
                 .Where(c => !c.IsEmpty && c.CellObject.CellObjectType == CellObjectType.Agent)
                 .Select(c => c.CellObject.Id);
 
+        public IEnumerable<int> GetGoalIds() =>
+            _cellGrid.GetCells()
+                .AsParallel()
+                .Where(c => !c.IsEmpty && c.CellObject.CellObjectType == CellObjectType.Flag)
+                .Select(c => c.CellObject.Id);
+        
+
         public IEnumerable<int> GetBlockIds() =>
             _cellGrid.GetCells()
+                .AsParallel()
                 .Where(c => !c.IsEmpty && c.CellObject.CellObjectType == CellObjectType.Block)
                 .Select(c => c.CellObject.Id);
-
-        private readonly ActPerformanceParam<CellObjectBaseAction> _applyGravityAction 
-            = new ActPerformanceParam<CellObjectBaseAction>(CellObjectBaseAction.ApplyGravity);
-        
-        public void ApplyGlobalAction()
-        {
-            var cellsToApply = _cellGrid.GetCells().Where(c => !c.IsEmpty && c.CellObject.IsModifiable);
-            var gravityAppliedObjects = new List<AbstractCellObject>();
-            foreach (var cell in cellsToApply)
-            {
-                if (cell.CellObject.CommitAction(this, _applyGravityAction))
-                    gravityAppliedObjects.Add(cell.CellObject);
-            }
-            if (gravityAppliedObjects.Count == 0) 
-                return;
-            var addGravityAppliedObject= gravityAppliedObjects.ToList();
-            while (gravityAppliedObjects.Count != 0)
-            {
-                gravityAppliedObjects = new List<AbstractCellObject>(addGravityAppliedObject.Count);
-                foreach (var abstractCellObject in addGravityAppliedObject)
-                {
-                    if (abstractCellObject.CommitAction(this, _applyGravityAction))
-                        gravityAppliedObjects.Add(abstractCellObject);
-                }
-            }
-        }
     }
 }

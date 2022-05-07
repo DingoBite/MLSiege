@@ -1,7 +1,6 @@
 using Game.Scripts.CellularSpace;
 using Game.Scripts.TurnManager.Interfaces;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Scripts.ModulesStartPoints
 {
@@ -23,6 +22,16 @@ namespace Game.Scripts.ModulesStartPoints
             _gridFacade = gridFacade;
             _turnManager = turnManager;
             _gridFacade.Init(_grid, _gameGrid);
+        }
+
+        public void ReInit()
+        {
+            foreach (Transform child in _gameGrid.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            _grid.gameObject.SetActive(false);
+            _gridFacade.ReInit(_gameGrid);
         }
     }
 }

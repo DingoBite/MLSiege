@@ -4,10 +4,8 @@ using Game.Scripts.Controls.InputControllers;
 using Game.Scripts.Controls.InputControllers.MousePicker;
 using Game.Scripts.General.Enums;
 using Game.Scripts.General.FlexibleDataApi;
-using Game.Scripts.Time;
 using Game.Scripts.Time.Interfaces;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Scripts.ModulesStartPoints
 {
@@ -21,9 +19,6 @@ namespace Game.Scripts.ModulesStartPoints
         
         private GameControls _gameControls;
         
-        private FloatTimeHoldingInputRepeatable _globalActionRepeatable;
-        private int _globalActionRepeatableId = -1;
-
         private VectorTimeHoldingInputRepeatable _movementInputRepeatable;
         private int _movementInputRepeatableId = -1;
         
@@ -37,12 +32,6 @@ namespace Game.Scripts.ModulesStartPoints
             if (_camera == null) 
                 _camera = Camera.main;
             _gameControls = new GameControls();
-
-            _globalActionRepeatable = new FloatTimeHoldingInputRepeatable(
-                () => _gameControls.World.GlobalAction.ReadValue<float>() >= float.Epsilon,
-                gridFacade.ApplyGlobalAction,
-                0.2
-                );
             
             _movementInputRepeatable = new VectorTimeHoldingInputRepeatable(
                 () => _gameControls.CellObject.Movement.ReadValue<Vector2>(),
@@ -80,9 +69,6 @@ namespace Game.Scripts.ModulesStartPoints
         
         private void Subscribe()
         {
-            if (!_updateTicker.Contains(_globalActionRepeatableId)) 
-                _globalActionRepeatableId = _updateTicker.AddUpdatable(_globalActionRepeatable);
-            
             if (!_updateTicker.Contains(_movementInputRepeatableId)) 
                 _movementInputRepeatableId = _updateTicker.AddUpdatable(_movementInputRepeatable);
 
@@ -91,7 +77,6 @@ namespace Game.Scripts.ModulesStartPoints
 
         private void Unsubscribe()
         {
-            _updateTicker.RemoveUpdatable(_globalActionRepeatableId);
             _updateTicker.RemoveUpdatable(_movementInputRepeatableId);
             
             _gameControls?.Disable();

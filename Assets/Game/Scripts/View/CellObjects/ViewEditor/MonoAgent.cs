@@ -4,9 +4,11 @@
  using Game.Scripts.CellularSpace.CellObjects.Enums;
  using Game.Scripts.CellularSpace.CellObjects.Realizations;
  using Game.Scripts.General.FlexibleDataApi;
+ using Game.Scripts.Time.Interfaces;
  using UnityEngine;
+ using Zenject;
 
-namespace Game.Scripts.View.CellObjects.Serialization
+ namespace Game.Scripts.View.CellObjects.Serialization
 {
     public abstract class MonoAgent : MonoBehaviour
     {
@@ -16,15 +18,10 @@ namespace Game.Scripts.View.CellObjects.Serialization
         [SerializeField] private Transform _headTransform;
         [SerializeField] private Transform _legsTransform;
         
+        [Inject] private IOneActUpdateTicker _mainThreadUpdateTicker;
+        
         public Vector3 MainPosition => _headTransform.position;
         public Vector3 LegsPosition => _legsTransform.position;
-        
-        protected virtual void OnStart() {}
-        
-        public void Start()
-        {
-            OnStart();
-        }
 
         public Func<int, int, (AbstractChildCellObject, AbstractChildCellObject)> MakeCellAgentFunc(Grid parentGrid, 
             Func<Vector3Int, Vector3> coordsToPositionConvert)
@@ -36,8 +33,8 @@ namespace Game.Scripts.View.CellObjects.Serialization
             
             return (headId, legsId) =>
             {
-                monoHead.Init(headId, IsModifiable, CellObjectType.Agent, coordsToPositionConvert);
-                monoLegs.Init(legsId, IsModifiable, CellObjectType.Agent, coordsToPositionConvert);
+                monoHead.Init(headId, IsModifiable, CellObjectType.Agent, coordsToPositionConvert, _mainThreadUpdateTicker);
+                monoLegs.Init(legsId, IsModifiable, CellObjectType.Block, coordsToPositionConvert, _mainThreadUpdateTicker);
                 return MakeCellObject(headId, legsId,
                     monoHead.CommitAction, monoHead.IsModifiable,
                     monoLegs.CommitAction, monoLegs.IsModifiable);
@@ -45,13 +42,15 @@ namespace Game.Scripts.View.CellObjects.Serialization
         }
         protected abstract bool IsModifiable { get; }
         protected abstract AgentCharacteristic HeadCharacteristics { get; }
+        protected abstract AgentPartCharacteristic LegsCharacteristic { get; }
         private (AbstractChildCellObject, AbstractChildCellObject) MakeCellObject(int headId, int legsId,
             Action<object, PerformanceParam> headCommitReaction, bool headIsExternallyModifiable,
             Action<object, PerformanceParam> legsCommitReaction, bool legsIsExternallyModifiable)
         {
             var head = new CellAgentHead(headId, legsId, HeadCharacteristics,
                 headCommitReaction, headIsExternallyModifiable);
-            var legs = new CellAgentLegs(legsId, headId, legsCommitReaction, legsIsExternallyModifiable);
+            var legs = new CellAgentLegs(legsId, headId, LegsCharacteristic,
+                legsCommitReaction, legsIsExternallyModifiable);
             return (head, legs);
         }
     }

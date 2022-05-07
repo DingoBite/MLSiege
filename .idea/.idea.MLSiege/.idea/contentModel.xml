@@ -24,44 +24,42 @@
                 <e p="ObservationsCollector.cs" t="Include" />
               </e>
             </e>
-            <e p="CellularSpace" t="Include">
-              <e p="CellObjects" t="Include">
-                <e p="AbstractCellObject.cs" t="Include" />
-                <e p="AbstractChildCellObject.cs" t="Include" />
-                <e p="CellObjectCharacteristics" t="Include">
-                  <e p="AgentCharacteristic.cs" t="Include" />
-                  <e p="BlockCharacteristic.cs" t="Include" />
-                  <e p="FlagCharacteristic.cs" t="Include" />
-                  <e p="Interfaces" t="Include">
-                    <e p="ICharacteristics.cs" t="Include" />
-                  </e>
-                </e>
-                <e p="ComplexCellObject" t="Include">
-                  <e p="AbstractCellObjectMainPart.cs" t="Include" />
-                  <e p="AbstractCellObjectPart.cs" t="Include" />
-                </e>
-                <e p="Enums" t="Include">
-                  <e p="Agent" t="Include">
-                    <e p="CellAgentAction.cs" t="Include" />
-                    <e p="CellAgentViewAction.cs" t="Include" />
-                  </e>
-                  <e p="Block" t="Include">
-                    <e p="CellBlockAction.cs" t="Include" />
-                    <e p="CellBlockViewAction.cs" t="Include" />
-                  </e>
-                  <e p="CellObjectBaseAction.cs" t="Include" />
-                  <e p="CellObjectType.cs" t="Include" />
-                </e>
-                <e p="GridStep" t="Include">
-                  <e p="StepData.cs" t="Include" />
-                </e>
-                <e p="Realizations" t="Include">
-                  <e p="CellAgentHead.cs" t="Include" />
-                  <e p="CellAgentLegs.cs" t="Include" />
-                  <e p="CellBlock.cs" t="Include" />
-                  <e p="CellFlagBlock.cs" t="Include" />
+            <e p="CellObjects" t="Include">
+              <e p="AbstractCellObject.cs" t="Include" />
+              <e p="AbstractChildCellObject.cs" t="Include" />
+              <e p="CellObjectCharacteristics" t="Include">
+                <e p="AgentCharacteristic.cs" t="Include" />
+                <e p="AgentPartCharacteristic.cs" t="Include" />
+                <e p="BlockCharacteristic.cs" t="Include" />
+                <e p="FlagCharacteristic.cs" t="Include" />
+                <e p="Interfaces" t="Include">
+                  <e p="ICharacteristics.cs" t="Include" />
                 </e>
               </e>
+              <e p="ComplexCellObject" t="Include">
+                <e p="AbstractCellObjectMainPart.cs" t="Include" />
+                <e p="AbstractCellObjectPart.cs" t="Include" />
+              </e>
+              <e p="Enums" t="Include">
+                <e p="Agent" t="Include">
+                  <e p="CellAgentAction.cs" t="Include" />
+                  <e p="CellAgentViewAction.cs" t="Include" />
+                </e>
+                <e p="Block" t="Include">
+                  <e p="CellBlockAction.cs" t="Include" />
+                  <e p="CellBlockViewAction.cs" t="Include" />
+                </e>
+                <e p="CellObjectBaseAction.cs" t="Include" />
+                <e p="CellObjectType.cs" t="Include" />
+              </e>
+              <e p="Realizations" t="Include">
+                <e p="CellAgentHead.cs" t="Include" />
+                <e p="CellAgentLegs.cs" t="Include" />
+                <e p="CellBlock.cs" t="Include" />
+                <e p="CellFlagBlock.cs" t="Include" />
+              </e>
+            </e>
+            <e p="CellularSpace" t="Include">
               <e p="CellStorages" t="Include">
                 <e p="Cell.cs" t="Include" />
                 <e p="CellGrid.cs" t="Include" />
@@ -87,6 +85,7 @@
                   <e p="IGridLevelsManager.cs" t="Include" />
                 </e>
               </e>
+              <e p="GridWithLevels.cs" t="Include" />
               <e p="IGridFacade.cs" t="Include" />
             </e>
             <e p="Controls" t="Include">
@@ -158,15 +157,18 @@
             <e p="PathFind" t="Include">
               <e p="AStarPathFind.cs" t="Include" />
               <e p="Heuristics.cs" t="Include" />
+              <e p="StepData.cs" t="Include" />
             </e>
             <e p="StartPoint.cs" t="Include" />
             <e p="Time" t="Include">
               <e p="AbstractUpdateTicker.cs" t="Include" />
               <e p="Interfaces" t="Include">
+                <e p="IOneActUpdateTicker.cs" t="Include" />
                 <e p="IUpdatable.cs" t="Include" />
                 <e p="IUpdateTicker.cs" t="Include" />
               </e>
               <e p="LambdaUpdatable.cs" t="Include" />
+              <e p="OneActUpdateTicker.cs" t="Include" />
               <e p="TimePeriodTicker.cs" t="Include" />
               <e p="UpdateTicker.cs" t="Include" />
             </e>
