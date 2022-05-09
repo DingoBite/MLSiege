@@ -1,14 +1,13 @@
-﻿﻿using System;
- using System.Runtime.InteropServices;
- using Game.Scripts.CellularSpace.CellObjects;
- using Game.Scripts.CellularSpace.CellObjects.Enums;
- using Game.Scripts.General.FlexibleDataApi;
- using Game.Scripts.Time.Interfaces;
- using Game.Scripts.View.CellObjects.Blocks;
- using UnityEngine;
- using Zenject;
+﻿using System;
+using Game.Scripts.CellObjects;
+using Game.Scripts.CellObjects.Enums;
+using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.Time.Interfaces;
+using Game.Scripts.View.CellObjects.ViewMono;
+using UnityEngine;
+using Zenject;
 
- namespace Game.Scripts.View.CellObjects.Serialization
+namespace Game.Scripts.View.CellObjects.ViewEditor
 {
     public abstract class MonoCellObject : MonoBehaviour
     {

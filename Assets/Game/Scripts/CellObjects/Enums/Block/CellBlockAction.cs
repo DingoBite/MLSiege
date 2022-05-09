@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.CellularSpace.CellObjects.Enums.Block
+﻿namespace Game.Scripts.CellObjects.Enums.Block
 {
     public enum CellBlockAction
     {

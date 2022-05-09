@@ -8,22 +8,6 @@
       <e p="Assets" t="Include">
         <e p="Game" t="Include">
           <e p="Scripts" t="Include">
-            <e p="Agents" t="Include">
-              <e p="ActionResolvers" t="Include">
-                <e p="ActionResolver.cs" t="Include" />
-                <e p="IActionResolver.cs" t="Include" />
-                <e p="MLAgentActions.cs" t="Include" />
-              </e>
-              <e p="AgentManager.cs" t="Include" />
-              <e p="IAgentManager.cs" t="Include" />
-              <e p="Learning" t="Include">
-                <e p="SiegeAgents.cs" t="Include" />
-              </e>
-              <e p="ObservationsCollectors" t="Include">
-                <e p="IObservationsCollecter.cs" t="Include" />
-                <e p="ObservationsCollector.cs" t="Include" />
-              </e>
-            </e>
             <e p="CellObjects" t="Include">
               <e p="AbstractCellObject.cs" t="Include" />
               <e p="AbstractChildCellObject.cs" t="Include" />
@@ -118,6 +102,7 @@
                 <e p="Direction.cs" t="Include" />
               </e>
               <e p="Extensions" t="Include">
+                <e p="DictionaryExtension.cs" t="Include" />
                 <e p="LINQExtension.cs" t="Include" />
                 <e p="Vector3IntExtension.cs" t="Include" />
               </e>
@@ -157,7 +142,24 @@
             <e p="PathFind" t="Include">
               <e p="AStarPathFind.cs" t="Include" />
               <e p="Heuristics.cs" t="Include" />
+              <e p="ILimitedValue.cs" t="Include" />
               <e p="StepData.cs" t="Include" />
+            </e>
+            <e p="SiegeML" t="Include">
+              <e p="ActionResolvers" t="Include">
+                <e p="ActionResolver.cs" t="Include" />
+                <e p="IActionResolver.cs" t="Include" />
+                <e p="MLAgentActions.cs" t="Include" />
+              </e>
+              <e p="AgentManager.cs" t="Include" />
+              <e p="IAgentManager.cs" t="Include" />
+              <e p="Learning" t="Include">
+                <e p="SiegeAgents.cs" t="Include" />
+              </e>
+              <e p="ObservationsCollectors" t="Include">
+                <e p="IObservationsCollecter.cs" t="Include" />
+                <e p="ObservationsCollector.cs" t="Include" />
+              </e>
             </e>
             <e p="StartPoint.cs" t="Include" />
             <e p="Time" t="Include">
@@ -170,44 +172,41 @@
               <e p="LambdaUpdatable.cs" t="Include" />
               <e p="OneActUpdateTicker.cs" t="Include" />
               <e p="TimePeriodTicker.cs" t="Include" />
+              <e p="TurnManager" t="Include">
+                <e p="Enums" t="Include">
+                  <e p="TurnState.cs" t="Include" />
+                </e>
+                <e p="Interfaces" t="Include">
+                  <e p="ITurnManager.cs" t="Include" />
+                </e>
+                <e p="WrappedTurnManager.cs" t="Include" />
+              </e>
               <e p="UpdateTicker.cs" t="Include" />
-            </e>
-            <e p="TurnManager" t="Include">
-              <e p="Enums" t="Include">
-                <e p="TurnState.cs" t="Include" />
-              </e>
-              <e p="Interfaces" t="Include">
-                <e p="ITurnManager.cs" t="Include" />
-              </e>
-              <e p="WrappedTurnManager.cs" t="Include" />
             </e>
             <e p="View" t="Include">
               <e p="CellObjects" t="Include">
-                <e p="AbstractMonoCellObject.cs" t="Include" />
-                <e p="Agents" t="Include">
-                  <e p="MonoCellAgentHead.cs" t="Include" />
-                  <e p="MonoCellAgentLegs.cs" t="Include" />
-                </e>
-                <e p="Blocks" t="Include">
-                  <e p="MonoCellBlock.cs" t="Include" />
-                </e>
-                <e p="Enums" t="Include">
-                  <e p="BlockType.cs" t="Include" />
-                </e>
                 <e p="ViewEditor" t="Include">
+                  <e p="Agents" t="Include">
+                    <e p="MonoBaseAgent.cs" t="Include" />
+                  </e>
+                  <e p="Blocks" t="Include">
+                    <e p="MonoBedrock.cs" t="Include" />
+                    <e p="MonoFlagBlock.cs" t="Include" />
+                    <e p="MonoGrassBlock.cs" t="Include" />
+                    <e p="MonoStoneBlock.cs" t="Include" />
+                  </e>
                   <e p="MonoAgent.cs" t="Include" />
                   <e p="MonoBlock.cs" t="Include" />
                   <e p="MonoCellObject.cs" t="Include" />
-                  <e p="Realizations" t="Include">
-                    <e p="Agents" t="Include">
-                      <e p="MonoBaseAgent.cs" t="Include" />
-                    </e>
-                    <e p="Blocks" t="Include">
-                      <e p="MonoBedrock.cs" t="Include" />
-                      <e p="MonoFlagBlock.cs" t="Include" />
-                      <e p="MonoGrassBlock.cs" t="Include" />
-                      <e p="MonoStoneBlock.cs" t="Include" />
-                    </e>
+                </e>
+                <e p="ViewMono" t="Include">
+                  <e p="AbstractMonoCellObject.cs" t="Include" />
+                  <e p="Agents" t="Include">
+                    <e p="MonoCellAgentHead.cs" t="Include" />
+                    <e p="MonoCellAgentLegs.cs" t="Include" />
+                  </e>
+                  <e p="Blocks" t="Include">
+                    <e p="MonoCellBlock.cs" t="Include" />
                   </e>
                 </e>
               </e>

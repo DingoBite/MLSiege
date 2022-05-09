@@ -1,12 +1,12 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
+using Game.Scripts.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellObjects.Enums;
+using Game.Scripts.CellObjects.Enums.Block;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects.Realizations
+namespace Game.Scripts.CellObjects.Realizations
 {
     public class CellBlock : AbstractChildCellObject
     {
@@ -58,7 +58,7 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
         {
             if (hitValue == null)
                 throw new ArgumentException("Performance params doesn't contains hit param");
-            _characteristic.DurabilityChange(hitValue.Value);
+            _characteristic.DurabilityChange(-hitValue.Value);
             return _characteristic.IsCorrect;
         }
         

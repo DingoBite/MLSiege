@@ -12,5 +12,6 @@ namespace Game.Scripts.General.Interfaces
         void Remove(int id);
         void Remove(TValue value);
         IEnumerable<TValue> GetValues();
+        void Clear();
     }
 }

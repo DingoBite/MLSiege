@@ -1,16 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
-using Game.Scripts.CellularSpace.GridStep;
+using Game.Scripts.PathFind;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics
+namespace Game.Scripts.CellObjects.CellObjectCharacteristics
 {
     public class BlockCharacteristic : ICharacteristics
     {
+        private int _durability;
+
+        public BlockCharacteristic(int durability, int maxDurability)
+        {
+            IsCorrect = true;
+            MaxDurability = maxDurability;
+            Durability = durability;
+        }
+
         public bool IsCorrect { get; private set; }
+
+        public int MaxDurability { get; private set; }
 
         public int Durability
         {
@@ -24,21 +35,8 @@ namespace Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics
             }
         }
 
-        private int _durability;
-        
-        public int MaxDurability { get; private set; }
+        public void DurabilityChange(int changeValue) => Durability += changeValue;
 
-        public BlockCharacteristic(int durability, int maxDurability)
-        {
-            Durability = durability;
-            MaxDurability = maxDurability;
-        }
-
-        public void DurabilityChange(int changeValue)
-        {
-            Durability += changeValue;
-        }
-        
         public IEnumerable<Vector3Int> Neighbors => null;
         public Func<ICell, ICell, StepData> StepFunc => null;
         public CellObjectType CellObjectType => CellObjectType.Block;

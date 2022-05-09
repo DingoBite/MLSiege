@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
-using Game.Scripts.CellularSpace.GridStep;
 using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.PathFind;
 using UnityEngine;
 using Zenject;
 
@@ -110,14 +110,14 @@ namespace Game.Scripts.CellularSpace
             return cell.CellObject.Id;
         }
 
-        public int? GetRelativeValue(Vector3Int senderCoords, Vector3Int targetCoords)
+        public int GetRelativeValue(Vector3Int senderCoords, Vector3Int targetCoords)
         {
             if (!_cellGrid.TryGetCell(senderCoords, out var senderCell))
                 throw new ArgumentException($"Can't find cell with {nameof(senderCoords)}");
             if (senderCell.IsEmpty)
                 throw new ArgumentException($"Can't find sender on {nameof(senderCoords)}");
             if (!_cellGrid.TryGetCell(targetCoords, out var targetCell))
-                return null;
+                return senderCell.CellObject.EvaluateCell(null);
             return senderCell.CellObject.EvaluateCell(targetCell);
         }
 

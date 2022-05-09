@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.PathFind
+﻿namespace Game.Scripts.General
 {
     public static class Delegates
     {

@@ -1,5 +1,5 @@
 using Game.Scripts.CellularSpace;
-using Game.Scripts.TurnManager.Interfaces;
+using Game.Scripts.Time.TurnManager.Interfaces;
 using UnityEngine;
 
 namespace Game.Scripts.ModulesStartPoints

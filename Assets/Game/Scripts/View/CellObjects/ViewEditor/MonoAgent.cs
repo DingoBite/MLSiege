@@ -1,14 +1,15 @@
-﻿﻿using System;
- using Game.Scripts.CellularSpace.CellObjects;
- using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
- using Game.Scripts.CellularSpace.CellObjects.Enums;
- using Game.Scripts.CellularSpace.CellObjects.Realizations;
- using Game.Scripts.General.FlexibleDataApi;
- using Game.Scripts.Time.Interfaces;
- using UnityEngine;
- using Zenject;
+﻿using System;
+using Game.Scripts.CellObjects;
+using Game.Scripts.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellObjects.Enums;
+using Game.Scripts.CellObjects.Realizations;
+using Game.Scripts.General.FlexibleDataApi;
+using Game.Scripts.Time.Interfaces;
+using Game.Scripts.View.CellObjects.ViewMono;
+using UnityEngine;
+using Zenject;
 
- namespace Game.Scripts.View.CellObjects.Serialization
+namespace Game.Scripts.View.CellObjects.ViewEditor
 {
     public abstract class MonoAgent : MonoBehaviour
     {
@@ -34,7 +35,7 @@
             return (headId, legsId) =>
             {
                 monoHead.Init(headId, IsModifiable, CellObjectType.Agent, coordsToPositionConvert, _mainThreadUpdateTicker);
-                monoLegs.Init(legsId, IsModifiable, CellObjectType.Block, coordsToPositionConvert, _mainThreadUpdateTicker);
+                monoLegs.Init(legsId, IsModifiable, CellObjectType.AgentPart, coordsToPositionConvert, _mainThreadUpdateTicker);
                 return MakeCellObject(headId, legsId,
                     monoHead.CommitAction, monoHead.IsModifiable,
                     monoLegs.CommitAction, monoLegs.IsModifiable);

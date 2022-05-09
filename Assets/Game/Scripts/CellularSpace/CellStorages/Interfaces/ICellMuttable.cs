@@ -1,4 +1,4 @@
-﻿using Game.Scripts.CellularSpace.CellObjects;
+﻿using Game.Scripts.CellObjects;
 
 namespace Game.Scripts.CellularSpace.CellStorages.Interfaces
 {

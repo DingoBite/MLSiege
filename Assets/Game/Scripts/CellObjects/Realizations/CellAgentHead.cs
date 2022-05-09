@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellObjects.ComplexCellObject;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
+using Game.Scripts.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellObjects.ComplexCellObject;
+using Game.Scripts.CellObjects.Enums;
+using Game.Scripts.CellObjects.Enums.Agent;
+using Game.Scripts.CellObjects.Enums.Block;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects.Realizations
+namespace Game.Scripts.CellObjects.Realizations
 {
     public class CellAgentHead : AbstractCellObjectMainPart
     {
@@ -24,19 +24,21 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
         private readonly AgentCharacteristic _characteristic;
         public override ICharacteristics Characteristics => _characteristic;
 
-        public override int? EvaluateCell(ICell cell)
+        public override int EvaluateCell(ICell cell)
         {
-            if (cell == null) return null;
+            if (cell == null) return int.MaxValue;
             if (cell.IsEmpty) return 1;
             switch (cell.CellObject.CellObjectType)
             {
                 case CellObjectType.Agent:
-                    return int.MaxValue;
+                    return int.MaxValue - 1;
                 case CellObjectType.Block:
                     var blockCharacteristics = (BlockCharacteristic) cell.CellObject.Characteristics;
                     return blockCharacteristics.Durability / _characteristic.Strength;
                 case CellObjectType.Flag:
                     return 0;
+                case CellObjectType.AgentPart:
+                    return int.MaxValue - 1;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -121,15 +123,13 @@ namespace Game.Scripts.CellularSpace.CellObjects.Realizations
             var targetCoords = Coords + coords.Value;
             if (!ParentCellGrid.TryGetCell(targetCoords, out var cell)) 
                 return false;
-            var agentHitParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.Hit,
-                vector3IntParam: targetCoords);
             if (cell.IsEmpty)
-            {
-                _commitReaction?.Invoke(this, agentHitParams);
-                return true;
-            }
+                return false;
             if (cell.CellObject.CellObjectType == CellObjectType.Agent)
                 return false;
+            var agentHitParams = new ActPerformanceParam<CellAgentViewAction>(CellAgentViewAction.Hit,
+                vector3IntParam: targetCoords);
+            _commitReaction.Invoke(this, agentHitParams);
             
             var blockHitParams = new ActPerformanceParam<CellBlockAction>(CellBlockAction.GetHit,
                 intParam: _characteristic.Strength);

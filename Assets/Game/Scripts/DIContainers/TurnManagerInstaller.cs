@@ -1,11 +1,14 @@
-using Game.Scripts.TurnManager;
-using Game.Scripts.TurnManager.Interfaces;
+using Game.Scripts.Time.TurnManager;
+using Game.Scripts.Time.TurnManager.Interfaces;
 using Zenject;
 
-public class TurnManagerInstaller : MonoInstaller
+namespace Game.Scripts.DIContainers
 {
-    public override void InstallBindings()
+    public class TurnManagerInstaller : MonoInstaller
     {
-        Container.Bind<ITurnManager>().To<WrappedTurnManager>().AsTransient();
+        public override void InstallBindings()
+        {
+            Container.Bind<ITurnManager>().To<WrappedTurnManager>().AsTransient();
+        }
     }
 }

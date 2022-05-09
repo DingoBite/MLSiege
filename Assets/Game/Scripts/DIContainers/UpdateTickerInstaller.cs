@@ -7,8 +7,8 @@ namespace Game.Scripts.DIContainers
 {
     public class UpdateTickerInstaller : MonoInstaller
     {
-        [SerializeField] private IUpdateTicker _updateTicker;
-        [SerializeField] private IOneActUpdateTicker _oneActUpdateTicker;
+        [SerializeField] private UpdateTicker _updateTicker;
+        [SerializeField] private OneActUpdateTicker _oneActUpdateTicker;
         
         public override void InstallBindings()
         {

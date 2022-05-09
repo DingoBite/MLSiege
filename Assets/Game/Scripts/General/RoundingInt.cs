@@ -3,19 +3,31 @@
     public class RoundingInt
     {
         private readonly int _maxInt;
-        public int CurrentIndex { get; private set; }
+
+        private int _currentIndex;
 
         public RoundingInt(int maxInt)
         {
             _maxInt = maxInt;
         }
-
-        public void MoveNext()
+        
+        public RoundingInt(int startIndex, int maxInt)
         {
-            CurrentIndex++;
-            if (CurrentIndex >= _maxInt || CurrentIndex < 0)
+            _maxInt = maxInt;
+            CurrentIndex = startIndex;
+        }
+        
+        public void MoveNext() => CurrentIndex++;
+        
+        public int CurrentIndex
+        {
+            get => _currentIndex;
+            private set
             {
-                CurrentIndex = 0;
+                if (value >= _maxInt || value < 0)
+                    _currentIndex = 0;
+                else
+                    _currentIndex = value;
             }
         }
     }

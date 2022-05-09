@@ -113,6 +113,7 @@ MonoBehaviour:
   _monoLegsPrefab: {fileID: 7316320371910516444, guid: 82aef3c83c9e5a84084ac142960b4c3c, type: 3}
   _headTransform: {fileID: 4915074910384246593}
   _legsTransform: {fileID: 4840089131046345277}
+  _strength: 5
   _isModifiable: 1
 --- !u!1 &7818102307747859771
 GameObject:

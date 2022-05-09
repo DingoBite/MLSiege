@@ -3,7 +3,7 @@ using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects
+namespace Game.Scripts.CellObjects
 {
     public abstract class AbstractChildCellObject : AbstractCellObject
     {

@@ -1,13 +1,17 @@
-using Game.Scripts.Agents;
-using Game.Scripts.Agents.Interfaces;
+using Game.Scripts.SiegeML;
+using Game.Scripts.SiegeML.ActionResolvers;
+using Game.Scripts.SiegeML.ObservationsCollectors;
 using Zenject;
 
-public class MLBehaviorModulesInstaller : MonoInstaller
+namespace Game.Scripts.DIContainers
 {
-    public override void InstallBindings()
+    public class MLBehaviorModulesInstaller : MonoInstaller
     {
-        Container.Bind<IAgentManager>().To<AgentManager>().AsTransient();
-        Container.Bind<IObservationsCollector>().To<ObservationsCollector>().AsTransient();
-        Container.Bind<IActionResolver>().To<ActionResolver>().AsTransient();
+        public override void InstallBindings()
+        {
+            Container.Bind<IAgentManager>().To<AgentManager>().AsTransient();
+            Container.Bind<IObservationsCollector>().To<ObservationsCollector>().AsTransient();
+            Container.Bind<IActionResolver>().To<ActionResolver>().AsTransient();
+        }
     }
 }

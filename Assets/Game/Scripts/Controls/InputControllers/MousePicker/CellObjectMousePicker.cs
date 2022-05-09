@@ -1,5 +1,6 @@
 ﻿using System;
 using Game.Scripts.View.CellObjects;
+using Game.Scripts.View.CellObjects.ViewMono;
 
 namespace Game.Scripts.Controls.InputControllers.MousePicker
 {

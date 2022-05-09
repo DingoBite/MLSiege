@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class @GameControls : IInputActionCollection, IDisposable
+namespace Game.Scripts.Controls
 {
-    public InputActionAsset asset { get; }
-    public @GameControls()
+    public class @GameControls : IInputActionCollection, IDisposable
     {
-        asset = InputActionAsset.FromJson(@"{
+        public InputActionAsset asset { get; }
+        public @GameControls()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""name"": ""GameControls"",
     ""maps"": [
         {
@@ -228,239 +230,240 @@ public class @GameControls : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": []
 }");
+            // World
+            m_World = asset.FindActionMap("World", throwIfNotFound: true);
+            m_World_GlobalAction = m_World.FindAction("GlobalAction", throwIfNotFound: true);
+            // Agent
+            m_Agent = asset.FindActionMap("Agent", throwIfNotFound: true);
+            // CellObject
+            m_CellObject = asset.FindActionMap("CellObject", throwIfNotFound: true);
+            m_CellObject_Movement = m_CellObject.FindAction("Movement", throwIfNotFound: true);
+            // Block
+            m_Block = asset.FindActionMap("Block", throwIfNotFound: true);
+            // ObjectPicker
+            m_ObjectPicker = asset.FindActionMap("ObjectPicker", throwIfNotFound: true);
+            m_ObjectPicker_SelectObject = m_ObjectPicker.FindAction("SelectObject", throwIfNotFound: true);
+            m_ObjectPicker_PathFind = m_ObjectPicker.FindAction("PathFind", throwIfNotFound: true);
+        }
+
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
+
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
+
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
+
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
+
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Enable()
+        {
+            asset.Enable();
+        }
+
+        public void Disable()
+        {
+            asset.Disable();
+        }
+
         // World
-        m_World = asset.FindActionMap("World", throwIfNotFound: true);
-        m_World_GlobalAction = m_World.FindAction("GlobalAction", throwIfNotFound: true);
+        private readonly InputActionMap m_World;
+        private IWorldActions m_WorldActionsCallbackInterface;
+        private readonly InputAction m_World_GlobalAction;
+        public struct WorldActions
+        {
+            private @GameControls m_Wrapper;
+            public WorldActions(@GameControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @GlobalAction => m_Wrapper.m_World_GlobalAction;
+            public InputActionMap Get() { return m_Wrapper.m_World; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(WorldActions set) { return set.Get(); }
+            public void SetCallbacks(IWorldActions instance)
+            {
+                if (m_Wrapper.m_WorldActionsCallbackInterface != null)
+                {
+                    @GlobalAction.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnGlobalAction;
+                    @GlobalAction.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnGlobalAction;
+                    @GlobalAction.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnGlobalAction;
+                }
+                m_Wrapper.m_WorldActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @GlobalAction.started += instance.OnGlobalAction;
+                    @GlobalAction.performed += instance.OnGlobalAction;
+                    @GlobalAction.canceled += instance.OnGlobalAction;
+                }
+            }
+        }
+        public WorldActions @World => new WorldActions(this);
+
         // Agent
-        m_Agent = asset.FindActionMap("Agent", throwIfNotFound: true);
+        private readonly InputActionMap m_Agent;
+        private IAgentActions m_AgentActionsCallbackInterface;
+        public struct AgentActions
+        {
+            private @GameControls m_Wrapper;
+            public AgentActions(@GameControls wrapper) { m_Wrapper = wrapper; }
+            public InputActionMap Get() { return m_Wrapper.m_Agent; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(AgentActions set) { return set.Get(); }
+            public void SetCallbacks(IAgentActions instance)
+            {
+                if (m_Wrapper.m_AgentActionsCallbackInterface != null)
+                {
+                }
+                m_Wrapper.m_AgentActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                }
+            }
+        }
+        public AgentActions @Agent => new AgentActions(this);
+
         // CellObject
-        m_CellObject = asset.FindActionMap("CellObject", throwIfNotFound: true);
-        m_CellObject_Movement = m_CellObject.FindAction("Movement", throwIfNotFound: true);
+        private readonly InputActionMap m_CellObject;
+        private ICellObjectActions m_CellObjectActionsCallbackInterface;
+        private readonly InputAction m_CellObject_Movement;
+        public struct CellObjectActions
+        {
+            private @GameControls m_Wrapper;
+            public CellObjectActions(@GameControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Movement => m_Wrapper.m_CellObject_Movement;
+            public InputActionMap Get() { return m_Wrapper.m_CellObject; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(CellObjectActions set) { return set.Get(); }
+            public void SetCallbacks(ICellObjectActions instance)
+            {
+                if (m_Wrapper.m_CellObjectActionsCallbackInterface != null)
+                {
+                    @Movement.started -= m_Wrapper.m_CellObjectActionsCallbackInterface.OnMovement;
+                    @Movement.performed -= m_Wrapper.m_CellObjectActionsCallbackInterface.OnMovement;
+                    @Movement.canceled -= m_Wrapper.m_CellObjectActionsCallbackInterface.OnMovement;
+                }
+                m_Wrapper.m_CellObjectActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Movement.started += instance.OnMovement;
+                    @Movement.performed += instance.OnMovement;
+                    @Movement.canceled += instance.OnMovement;
+                }
+            }
+        }
+        public CellObjectActions @CellObject => new CellObjectActions(this);
+
         // Block
-        m_Block = asset.FindActionMap("Block", throwIfNotFound: true);
+        private readonly InputActionMap m_Block;
+        private IBlockActions m_BlockActionsCallbackInterface;
+        public struct BlockActions
+        {
+            private @GameControls m_Wrapper;
+            public BlockActions(@GameControls wrapper) { m_Wrapper = wrapper; }
+            public InputActionMap Get() { return m_Wrapper.m_Block; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(BlockActions set) { return set.Get(); }
+            public void SetCallbacks(IBlockActions instance)
+            {
+                if (m_Wrapper.m_BlockActionsCallbackInterface != null)
+                {
+                }
+                m_Wrapper.m_BlockActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                }
+            }
+        }
+        public BlockActions @Block => new BlockActions(this);
+
         // ObjectPicker
-        m_ObjectPicker = asset.FindActionMap("ObjectPicker", throwIfNotFound: true);
-        m_ObjectPicker_SelectObject = m_ObjectPicker.FindAction("SelectObject", throwIfNotFound: true);
-        m_ObjectPicker_PathFind = m_ObjectPicker.FindAction("PathFind", throwIfNotFound: true);
-    }
-
-    public void Dispose()
-    {
-        UnityEngine.Object.Destroy(asset);
-    }
-
-    public InputBinding? bindingMask
-    {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
-    }
-
-    public ReadOnlyArray<InputDevice>? devices
-    {
-        get => asset.devices;
-        set => asset.devices = value;
-    }
-
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-    public bool Contains(InputAction action)
-    {
-        return asset.Contains(action);
-    }
-
-    public IEnumerator<InputAction> GetEnumerator()
-    {
-        return asset.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public void Enable()
-    {
-        asset.Enable();
-    }
-
-    public void Disable()
-    {
-        asset.Disable();
-    }
-
-    // World
-    private readonly InputActionMap m_World;
-    private IWorldActions m_WorldActionsCallbackInterface;
-    private readonly InputAction m_World_GlobalAction;
-    public struct WorldActions
-    {
-        private @GameControls m_Wrapper;
-        public WorldActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @GlobalAction => m_Wrapper.m_World_GlobalAction;
-        public InputActionMap Get() { return m_Wrapper.m_World; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(WorldActions set) { return set.Get(); }
-        public void SetCallbacks(IWorldActions instance)
+        private readonly InputActionMap m_ObjectPicker;
+        private IObjectPickerActions m_ObjectPickerActionsCallbackInterface;
+        private readonly InputAction m_ObjectPicker_SelectObject;
+        private readonly InputAction m_ObjectPicker_PathFind;
+        public struct ObjectPickerActions
         {
-            if (m_Wrapper.m_WorldActionsCallbackInterface != null)
+            private @GameControls m_Wrapper;
+            public ObjectPickerActions(@GameControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SelectObject => m_Wrapper.m_ObjectPicker_SelectObject;
+            public InputAction @PathFind => m_Wrapper.m_ObjectPicker_PathFind;
+            public InputActionMap Get() { return m_Wrapper.m_ObjectPicker; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ObjectPickerActions set) { return set.Get(); }
+            public void SetCallbacks(IObjectPickerActions instance)
             {
-                @GlobalAction.started -= m_Wrapper.m_WorldActionsCallbackInterface.OnGlobalAction;
-                @GlobalAction.performed -= m_Wrapper.m_WorldActionsCallbackInterface.OnGlobalAction;
-                @GlobalAction.canceled -= m_Wrapper.m_WorldActionsCallbackInterface.OnGlobalAction;
-            }
-            m_Wrapper.m_WorldActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @GlobalAction.started += instance.OnGlobalAction;
-                @GlobalAction.performed += instance.OnGlobalAction;
-                @GlobalAction.canceled += instance.OnGlobalAction;
+                if (m_Wrapper.m_ObjectPickerActionsCallbackInterface != null)
+                {
+                    @SelectObject.started -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnSelectObject;
+                    @SelectObject.performed -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnSelectObject;
+                    @SelectObject.canceled -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnSelectObject;
+                    @PathFind.started -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnPathFind;
+                    @PathFind.performed -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnPathFind;
+                    @PathFind.canceled -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnPathFind;
+                }
+                m_Wrapper.m_ObjectPickerActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @SelectObject.started += instance.OnSelectObject;
+                    @SelectObject.performed += instance.OnSelectObject;
+                    @SelectObject.canceled += instance.OnSelectObject;
+                    @PathFind.started += instance.OnPathFind;
+                    @PathFind.performed += instance.OnPathFind;
+                    @PathFind.canceled += instance.OnPathFind;
+                }
             }
         }
-    }
-    public WorldActions @World => new WorldActions(this);
-
-    // Agent
-    private readonly InputActionMap m_Agent;
-    private IAgentActions m_AgentActionsCallbackInterface;
-    public struct AgentActions
-    {
-        private @GameControls m_Wrapper;
-        public AgentActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-        public InputActionMap Get() { return m_Wrapper.m_Agent; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(AgentActions set) { return set.Get(); }
-        public void SetCallbacks(IAgentActions instance)
+        public ObjectPickerActions @ObjectPicker => new ObjectPickerActions(this);
+        public interface IWorldActions
         {
-            if (m_Wrapper.m_AgentActionsCallbackInterface != null)
-            {
-            }
-            m_Wrapper.m_AgentActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-            }
+            void OnGlobalAction(InputAction.CallbackContext context);
         }
-    }
-    public AgentActions @Agent => new AgentActions(this);
-
-    // CellObject
-    private readonly InputActionMap m_CellObject;
-    private ICellObjectActions m_CellObjectActionsCallbackInterface;
-    private readonly InputAction m_CellObject_Movement;
-    public struct CellObjectActions
-    {
-        private @GameControls m_Wrapper;
-        public CellObjectActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_CellObject_Movement;
-        public InputActionMap Get() { return m_Wrapper.m_CellObject; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(CellObjectActions set) { return set.Get(); }
-        public void SetCallbacks(ICellObjectActions instance)
+        public interface IAgentActions
         {
-            if (m_Wrapper.m_CellObjectActionsCallbackInterface != null)
-            {
-                @Movement.started -= m_Wrapper.m_CellObjectActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_CellObjectActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_CellObjectActionsCallbackInterface.OnMovement;
-            }
-            m_Wrapper.m_CellObjectActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Movement.started += instance.OnMovement;
-                @Movement.performed += instance.OnMovement;
-                @Movement.canceled += instance.OnMovement;
-            }
         }
-    }
-    public CellObjectActions @CellObject => new CellObjectActions(this);
-
-    // Block
-    private readonly InputActionMap m_Block;
-    private IBlockActions m_BlockActionsCallbackInterface;
-    public struct BlockActions
-    {
-        private @GameControls m_Wrapper;
-        public BlockActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-        public InputActionMap Get() { return m_Wrapper.m_Block; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(BlockActions set) { return set.Get(); }
-        public void SetCallbacks(IBlockActions instance)
+        public interface ICellObjectActions
         {
-            if (m_Wrapper.m_BlockActionsCallbackInterface != null)
-            {
-            }
-            m_Wrapper.m_BlockActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-            }
+            void OnMovement(InputAction.CallbackContext context);
         }
-    }
-    public BlockActions @Block => new BlockActions(this);
-
-    // ObjectPicker
-    private readonly InputActionMap m_ObjectPicker;
-    private IObjectPickerActions m_ObjectPickerActionsCallbackInterface;
-    private readonly InputAction m_ObjectPicker_SelectObject;
-    private readonly InputAction m_ObjectPicker_PathFind;
-    public struct ObjectPickerActions
-    {
-        private @GameControls m_Wrapper;
-        public ObjectPickerActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @SelectObject => m_Wrapper.m_ObjectPicker_SelectObject;
-        public InputAction @PathFind => m_Wrapper.m_ObjectPicker_PathFind;
-        public InputActionMap Get() { return m_Wrapper.m_ObjectPicker; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ObjectPickerActions set) { return set.Get(); }
-        public void SetCallbacks(IObjectPickerActions instance)
+        public interface IBlockActions
         {
-            if (m_Wrapper.m_ObjectPickerActionsCallbackInterface != null)
-            {
-                @SelectObject.started -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnSelectObject;
-                @SelectObject.performed -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnSelectObject;
-                @SelectObject.canceled -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnSelectObject;
-                @PathFind.started -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnPathFind;
-                @PathFind.performed -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnPathFind;
-                @PathFind.canceled -= m_Wrapper.m_ObjectPickerActionsCallbackInterface.OnPathFind;
-            }
-            m_Wrapper.m_ObjectPickerActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @SelectObject.started += instance.OnSelectObject;
-                @SelectObject.performed += instance.OnSelectObject;
-                @SelectObject.canceled += instance.OnSelectObject;
-                @PathFind.started += instance.OnPathFind;
-                @PathFind.performed += instance.OnPathFind;
-                @PathFind.canceled += instance.OnPathFind;
-            }
         }
-    }
-    public ObjectPickerActions @ObjectPicker => new ObjectPickerActions(this);
-    public interface IWorldActions
-    {
-        void OnGlobalAction(InputAction.CallbackContext context);
-    }
-    public interface IAgentActions
-    {
-    }
-    public interface ICellObjectActions
-    {
-        void OnMovement(InputAction.CallbackContext context);
-    }
-    public interface IBlockActions
-    {
-    }
-    public interface IObjectPickerActions
-    {
-        void OnSelectObject(InputAction.CallbackContext context);
-        void OnPathFind(InputAction.CallbackContext context);
+        public interface IObjectPickerActions
+        {
+            void OnSelectObject(InputAction.CallbackContext context);
+            void OnPathFind(InputAction.CallbackContext context);
+        }
     }
 }

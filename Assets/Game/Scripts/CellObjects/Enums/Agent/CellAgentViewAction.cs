@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.CellularSpace.CellObjects.Enums.Agent
+﻿namespace Game.Scripts.CellObjects.Enums.Agent
 {
     public enum CellAgentViewAction
     {

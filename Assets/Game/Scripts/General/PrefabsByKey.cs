@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Scripts.General.Interfaces;
 using Game.Scripts.View.CellObjects;
+using Game.Scripts.View.CellObjects.ViewMono;
 
 namespace Game.Scripts.General
 {

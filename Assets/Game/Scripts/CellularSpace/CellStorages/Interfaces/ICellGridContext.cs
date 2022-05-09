@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Game.Scripts.CellularSpace.CellObjects;
-using Game.Scripts.CellularSpace.GridStep;
+using Game.Scripts.CellObjects;
+using Game.Scripts.PathFind;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages.Interfaces

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
 using Game.Scripts.View.CellObjects;
+using Game.Scripts.View.CellObjects.ViewMono;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.GridShape

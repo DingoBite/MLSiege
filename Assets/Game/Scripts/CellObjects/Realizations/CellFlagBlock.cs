@@ -1,11 +1,11 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
+using Game.Scripts.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellObjects.Enums.Block;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects.Realizations
+namespace Game.Scripts.CellObjects.Realizations
 {
     public class CellFlagBlock : AbstractChildCellObject
     {

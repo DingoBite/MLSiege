@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Game.Scripts.View.CellObjects;
+using Game.Scripts.View.CellObjects.ViewMono;
 
 namespace Game.Scripts.General.Interfaces
 {

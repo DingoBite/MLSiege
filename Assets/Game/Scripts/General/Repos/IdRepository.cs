@@ -55,5 +55,12 @@ namespace Game.Scripts.General.Repos
         }
 
         public IEnumerable<TValue> GetValues() => _values.Values;
+        
+        public void Clear()
+        {
+            _endId = 0;
+            _values.Clear();
+            _availableIds.Clear();
+        }
     }
 }

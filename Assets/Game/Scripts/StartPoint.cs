@@ -1,9 +1,12 @@
-﻿using Game.Scripts.Agents.Interfaces;
-using Game.Scripts.Agents.Learning;
+﻿using System;
 using Game.Scripts.CellularSpace;
 using Game.Scripts.ModulesStartPoints;
+using Game.Scripts.SiegeML;
+using Game.Scripts.SiegeML.ActionResolvers;
+using Game.Scripts.SiegeML.Learning;
+using Game.Scripts.SiegeML.ObservationsCollectors;
 using Game.Scripts.Time.Interfaces;
-using Game.Scripts.TurnManager.Interfaces;
+using Game.Scripts.Time.TurnManager.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -16,6 +19,8 @@ namespace Game.Scripts
         [SerializeField] private UIStartPoint _uiStartPoint;
 
         [SerializeField] private SiegeAgents _siegeAgents;
+
+        [SerializeField] private int _agentsNearGoalToWin;
         
         [Inject] private IGridFacade _gridFacade;
         
@@ -31,16 +36,17 @@ namespace Game.Scripts
             _gridLogicStartPoint.Init(_gridFacade, _turnManager);
             _uiStartPoint.Init();
             _inputHandlersStartPoint.Init(_gridFacade, _updateTicker);
-            _agentManager.Init(_gridFacade, _observationsCollector, _actionResolver, Win, Lose);
+            _agentManager.Init(_gridFacade, _observationsCollector, _actionResolver, _agentsNearGoalToWin, Win, Lose);
             _siegeAgents.Init(_agentManager);
         }
         
         private void Restart()
         {
+            Resources.UnloadUnusedAssets();
             _gridLogicStartPoint.ReInit();
             _agentManager.ReInit();
         }
-
+        
         private void Win()
         {
             Debug.Log("Win");

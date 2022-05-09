@@ -109,4 +109,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _monoCellObjectPrefab: {fileID: 2297454128435253035, guid: 4c15116d70bcbb94ca35e084a419bc2b, type: 3}
+  _maxDurability: 10
   _isModifiable: 1

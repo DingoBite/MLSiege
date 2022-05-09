@@ -1,4 +1,4 @@
-﻿using Game.Scripts.CellularSpace.CellObjects;
+﻿using Game.Scripts.CellObjects;
 using Game.Scripts.General.Interfaces;
 using UnityEngine;
 

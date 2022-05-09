@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
-using Game.Scripts.CellularSpace.GridStep;
+using Game.Scripts.PathFind;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics
+namespace Game.Scripts.CellObjects.CellObjectCharacteristics
 {
     public class FlagCharacteristic : ICharacteristics
     {

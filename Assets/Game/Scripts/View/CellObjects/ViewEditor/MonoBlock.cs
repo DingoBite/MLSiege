@@ -1,11 +1,11 @@
-﻿﻿using System;
- using Game.Scripts.CellularSpace.CellObjects;
- using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics;
- using Game.Scripts.CellularSpace.CellObjects.Enums;
- using Game.Scripts.CellularSpace.CellObjects.Realizations;
- using Game.Scripts.General.FlexibleDataApi;
+﻿using System;
+using Game.Scripts.CellObjects;
+using Game.Scripts.CellObjects.CellObjectCharacteristics;
+using Game.Scripts.CellObjects.Enums;
+using Game.Scripts.CellObjects.Realizations;
+using Game.Scripts.General.FlexibleDataApi;
 
-namespace Game.Scripts.View.CellObjects.Serialization
+namespace Game.Scripts.View.CellObjects.ViewEditor
 {
     public abstract class MonoBlock : MonoCellObject
     {

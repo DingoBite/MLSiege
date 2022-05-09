@@ -1,12 +1,12 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellObjects.ComplexCellObject;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
+using Game.Scripts.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellObjects.ComplexCellObject;
+using Game.Scripts.CellObjects.Enums;
+using Game.Scripts.CellObjects.Enums.Agent;
 using Game.Scripts.General.FlexibleDataApi;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects.Realizations
+namespace Game.Scripts.CellObjects.Realizations
 {
     public class CellAgentLegs : AbstractCellObjectPart
     {

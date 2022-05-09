@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Scripts.CellularSpace.CellObjects;
+using Game.Scripts.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.CoordsConverters.Interfaces;
 using Game.Scripts.CellularSpace.GridShape.Interfaces;
-using Game.Scripts.CellularSpace.GridStep;
+using Game.Scripts.General.Extensions;
 using Game.Scripts.General.Repos;
 using Game.Scripts.PathFind;
-using Game.Scripts.View.CellObjects.Serialization;
+using Game.Scripts.View.CellObjects.ViewEditor;
 using UnityEngine;
 
 namespace Game.Scripts.CellularSpace.CellStorages
@@ -26,6 +26,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
 
         public void Init(IGridLevelsManager gridLevelsManager, IGridCoordsConverter gridCoordsConverter, Grid gameGrid)
         {
+            _cellObjectsRepo.Clear();
             _gridCoordsConverter = gridCoordsConverter;
             _minFormingPoint = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
             _maxFormingPoint = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
@@ -91,13 +92,125 @@ namespace Game.Scripts.CellularSpace.CellStorages
             cell = cellMutable;
             return true;
         }
+        
+        // public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, Vector3Int coords)
+        // {
+        //     var startCoords = startCellObject.Coords;
+        //     (ICell, StepData)? minNeighborStepData = null;
+        //     var minMoveCost = float.MaxValue;
+        //     foreach (var neighborDirection in startCellObject.Characteristics.Neighbors)
+        //     {
+        //         var neighborCoords = startCoords + neighborDirection;
+        //         var heuristicValue = Heuristics.ManhattanHeuristic(neighborCoords, coords);
+        //         if (!TryGetCell(neighborCoords, out var neighborCell)) continue;
+        //         var stepData = startCellObject.Characteristics.StepFunc(startCellObject.ParentCell, neighborCell);
+        //         var moveCost = stepData.Cost + heuristicValue;
+        //         if (moveCost < minMoveCost)
+        //         {
+        //             minNeighborStepData = (neighborCell, stepData);
+        //             minMoveCost = moveCost;
+        //         }
+        //     }
+        //
+        //     if (minNeighborStepData == null || minNeighborStepData.Value.Item2.Cost == int.MaxValue)
+        //         return new List<(ICell, StepData)>();
+        //     return new[] {minNeighborStepData.Value};
+        // }
+        
+        private IEnumerable<(ICell, StepData)> FindPath(Vector3Int startCoords, Vector3Int endCoords,
+            Vector3Int[] neighbors,
+            Func<ICell, ICell, StepData> costFunc,
+            Func<Vector3Int, Vector3Int, float> heuristic)
+        {
+            if (!TryGetCell(startCoords, out var startCell))
+                throw new ArgumentException($"{nameof(startCoords)} ");
+            if(!TryGetCell(endCoords, out var endCell))
+                throw new ArgumentException($"{nameof(endCoords)} ");
 
-        public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, Vector3Int coords) =>
-            AStarPathFind.FindPath(startCellObject.Coords + Vector3Int.down, coords,
-                startCellObject.Characteristics.Neighbors, 
-                (g1, g2) => g1 + g2, TryGetCell, 
-                startCellObject.Characteristics.StepFunc, Heuristics.EuclidHeuristic, 
-                new StepData(0, Vector3Int.zero));
+            var unVisitedCells = new HashSet<ICell>();
+            var visitedCells = new Dictionary<ICell, (ICell, StepData, float)>
+            {
+                {startCell, (null, new StepData(0, Vector3Int.zero), heuristic(startCoords, endCoords))}
+            };
+
+            unVisitedCells.Add(startCell);
+            while (unVisitedCells.Count > 0)
+            {
+                var currentCell = unVisitedCells.MinBy(x =>
+                {
+                    var (_, stepData, distance) = visitedCells[x];
+                    return stepData.Cost + distance;
+                });
+                
+                var currentCost = visitedCells[currentCell].Item2;
+
+                if (currentCell.Equals(endCell))
+                {
+                    var resultPath = new LinkedList<(ICell, StepData)>(); 
+                    while (visitedCells.ContainsKey(currentCell))
+                    {
+                        var (fromCell, byStep, _) = visitedCells[currentCell];
+                        currentCell = fromCell;
+                        if (currentCell == null) break;
+                        resultPath.AddFirst((fromCell, byStep));
+                    }
+
+                    return resultPath;
+                }
+                
+                unVisitedCells.Remove(currentCell);
+                foreach (var neighbor in neighbors)
+                {
+                    var newCoords = currentCell.Coords + neighbor;
+                    if(!TryGetCell(newCoords, out var neighborCell)) continue;
+                    
+                    var stepDataChange = costFunc(currentCell, neighborCell);
+                    var stepData = currentCost + stepDataChange;
+                    
+                    if (visitedCells.ContainsKey(neighborCell))
+                    {
+                        var (_, neighborStepData, neighborDistance) = visitedCells[neighborCell];
+                        if (stepData.Cost >= neighborStepData.Cost) continue;
+                        visitedCells[neighborCell] = (currentCell, stepData, neighborDistance);
+                    }
+                    else visitedCells.Add(neighborCell, (currentCell, stepData, heuristic(newCoords, endCoords)));
+                    
+                    if (!unVisitedCells.Contains(neighborCell) && stepData.Cost < int.MaxValue)
+                        unVisitedCells.Add(neighborCell);
+                }
+            }
+            return null;
+        }
+        
+        public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, Vector3Int coords)
+        {
+            var path = FindPath(startCellObject.Coords + Vector3Int.down, coords,
+                startCellObject.Characteristics.Neighbors.ToArray(),
+                startCellObject.Characteristics.StepFunc,
+                Heuristics.EuclidHeuristic);
+            if (path != null) return path;
+            
+            var startCoords = startCellObject.Coords;
+            (ICell, StepData)? minNeighborStepData = null;
+            var minMoveCost = float.MaxValue;
+            foreach (var neighborDirection in startCellObject.Characteristics.Neighbors)
+            {
+                var neighborCoords = startCoords + neighborDirection;
+                var heuristicValue = Heuristics.ManhattanHeuristic(neighborCoords, coords);
+                if (!TryGetCell(neighborCoords, out var neighborCell)) continue;
+                var stepData = startCellObject.Characteristics.StepFunc(startCellObject.ParentCell, neighborCell);
+                var moveCost = stepData.Cost + heuristicValue;
+                if (moveCost < minMoveCost)
+                {
+                    minNeighborStepData = (neighborCell, stepData);
+                    minMoveCost = moveCost;
+                }
+            }
+            
+            if (minNeighborStepData == null || minNeighborStepData.Value.Item2.Cost == int.MaxValue)
+                return new List<(ICell, StepData)>();
+            return new[] {minNeighborStepData.Value};
+        }
 
         public IEnumerable<(ICell, StepData)> FindPath(AbstractCellObject startCellObject, AbstractCellObject targetCellObject) => 
             FindPath(startCellObject, targetCellObject.Coords);
@@ -226,8 +339,7 @@ namespace Game.Scripts.CellularSpace.CellStorages
             foreach (var monoCellObject in monoCellObjects)
             {
                 if (!IsInGrid(monoCellObject.Key))
-                    throw new ArgumentOutOfRangeException(
-                        $"Coords = {monoCellObject.Key} are not achievable in space");
+                    throw new ArgumentOutOfRangeException($"Coords = {monoCellObject.Key} are not achievable in space");
                 var coords = CoordsToIndex(monoCellObject.Key);
                 AllocateCellObject(coords, monoCellObject.Value, gameGrid);
             }

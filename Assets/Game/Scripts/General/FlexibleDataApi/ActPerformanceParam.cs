@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Agent;
-using Game.Scripts.CellularSpace.CellObjects.Enums.Block;
+using Game.Scripts.CellObjects.Enums;
+using Game.Scripts.CellObjects.Enums.Agent;
+using Game.Scripts.CellObjects.Enums.Block;
 using UnityEngine;
 
 namespace Game.Scripts.General.FlexibleDataApi

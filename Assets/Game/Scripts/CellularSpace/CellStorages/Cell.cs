@@ -1,5 +1,5 @@
 ﻿using System;
-using Game.Scripts.CellularSpace.CellObjects;
+using Game.Scripts.CellObjects;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
 using UnityEngine;
 

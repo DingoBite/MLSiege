@@ -1,31 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics.Interfaces;
-using Game.Scripts.CellularSpace.CellObjects.Enums;
+using Game.Scripts.CellObjects.CellObjectCharacteristics.Interfaces;
+using Game.Scripts.CellObjects.Enums;
 using Game.Scripts.CellularSpace.CellStorages.Interfaces;
-using Game.Scripts.CellularSpace.GridStep;
+using Game.Scripts.PathFind;
 using UnityEngine;
 
-namespace Game.Scripts.CellularSpace.CellObjects.CellObjectCharacteristics
+namespace Game.Scripts.CellObjects.CellObjectCharacteristics
 {
     public class AgentCharacteristic : ICharacteristics
     {
         public int Strength { get; private set; }
 
         public AgentCharacteristic(int strength, Func<ICell, ICell, StepData> stepFunc,
-            IEnumerable<Vector3Int> neighbors = null)
+            IEnumerable<Vector3Int> neighbors)
         {
-            if (neighbors == null)
-            {
-                neighbors = new[]
-                {
-                    Vector3Int.forward,
-                    Vector3Int.back,
-                    Vector3Int.left,
-                    Vector3Int.right
-                };
-            }
-            
             Neighbors = neighbors;
             Strength = strength;
             StepFunc = stepFunc;
